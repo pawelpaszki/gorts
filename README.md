@@ -20,5 +20,19 @@ kubectl wait --timeout=90s --for=condition=Available deployment -n default kuber
 
 ## Raw notes - README to be revised later in the development stage
 
+### Get all tests:
+
+Notes for the future:
+* gorts gets built and put to path - so it can be executed from any directory by using `gorts` command
+* the ideal place to collect and execute the tests is to run them from the directory in which they are normally executed, e.g. `<root_of_kuberay_repo>/ray-operator` - the tests' directories will also be simplified
+
+```
+./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/temp/tests.json
+```
+
+### git flow to be followed
+https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+
 ### experimentation cut-off
+first commit used: `d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1`
 last commit used for evaluation of kuberay is: `8fc4e2a0e644db392534927b7c03d15e3ab7bdbc`
