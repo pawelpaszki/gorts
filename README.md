@@ -1,6 +1,6 @@
-## WiP README for now
+# WiP README for now
 
-### kuberay deployment steps
+## kuberay deployment steps
 ```
 # create kind cluster and set kubectl context
 # docker setup skipped for now
@@ -17,3 +17,8 @@ kind load docker-image kuberay/submitter:nightly
 IMG=kuberay/operator:coverage make deploy-coverage
 kubectl wait --timeout=90s --for=condition=Available deployment -n default kuberay-operator
 ```
+
+## Raw notes - README to be revised later in the development stage
+
+### experimentation cut-off
+last commit used for evaluation of kuberay is: `8fc4e2a0e644db392534927b7c03d15e3ab7bdbc`

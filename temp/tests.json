@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-01-21T17:28:49.4513Z",
-  "commit_sha": "b8451500d4276e5c27a1025c732c562eaac04a37",
+  "generated_at": "2026-01-22T18:27:43.033591Z",
+  "commit_sha": "d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1",
   "test_suites": [
     {
       "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2e",
@@ -34,6 +34,65 @@
         "TestRayClusterAutoscalerWithDesiredState",
         "TestRayClusterAutoscalerMinReplicasUpdate",
         "TestRayClusterAutoscalerMaxReplicasUpdate"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter",
+      "tests": [
+        "TestRayJobSubmitter"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "tests": [
+        "TestRayServiceAuthToken",
+        "TestStaticRayService",
+        "TestAutoscalingRayService",
+        "TestRayServiceZeroDowntimeUpgrade",
+        "TestRayServiceGCSFaultTolerance",
+        "TestRayServiceRayClusterDeletionDelaySeconds",
+        "TestRayServiceInPlaceUpdate",
+        "TestUpdateServeConfigAndRayClusterSpec",
+        "TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled",
+        "TestRayServiceBecomesReadyBeforeTimeout",
+        "TestRayServiceInitializingTimeoutTerminalFailure",
+        "TestRedeployRayServe",
+        "TestOldHeadPodFailDuringUpgrade",
+        "TestRayServiceValidation"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade",
+      "tests": [
+        "TestZeroDowntimeUpgradeAfterOperatorUpgrade"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml",
+      "tests": [
+        "TestRayCluster",
+        "TestRayJob",
+        "TestRayJobInteractiveMode",
+        "TestRayService"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade",
+      "tests": [
+        "TestRayServiceIncrementalUpgrade"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob",
+      "tests": [
+        "TestRayJobWithClusterSelector",
+        "TestDeletionStrategy",
+        "TestRayJobLightWeightMode",
+        "TestRayJobRecovery",
+        "TestRayJobRetry",
+        "TestRayJobSidecarMode",
+        "TestRayJobSuspend",
+        "TestRayJob"
       ]
     }
   ]
