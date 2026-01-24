@@ -17,13 +17,7 @@ var testsCmd = &cobra.Command{
 	Long:  `List out all test names starting with 'Test' from comma-separated directories specified`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		directoriesInput, _ := cmd.Flags().GetString("directories")
-		if strings.TrimSpace(directoriesInput) == "" {
-			return fmt.Errorf("--directories parameter is required!")
-		}
 		outputDir, _ := cmd.Flags().GetString("output")
-		if strings.TrimSpace(outputDir) == "" {
-			return fmt.Errorf("--output parameter is required!")
-		}
 		directories := splitCsv(directoriesInput)
 		suiteMap := make(map[string][]string)
 
@@ -74,7 +68,9 @@ var testsCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(testsCmd)
 	testsCmd.Flags().String("directories", "", "Comma-separated test suite directories, e.g. `./test/e2e,./test/e2eautoscaler`")
-	testsCmd.Flags().String("output", "", "directory to save tests and directories names. It is recommended to save them in the same directory, from which the repo tests are executed")
+	testsCmd.Flags().String("output", "", "Path (directory + filename) to save tests and directories names")
+	testsCmd.MarkFlagRequired("directories")
+	testsCmd.MarkFlagRequired("output")
 }
 
 func splitCsv(s string) []string {

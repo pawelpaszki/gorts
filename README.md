@@ -30,6 +30,11 @@ Notes for the future:
 ./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/temp/tests.json
 ```
 
+### Run baseline (wip)
+```
+./gorts baseline --manifest temp/tests.json --output temp/baseline.json 
+```
+
 ### git flow to be followed
 https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
