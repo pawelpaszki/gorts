@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-01-22T18:27:43.033591Z",
+  "commit_sha": "d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1",
+  "test_suites": [
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2e",
+      "tests": [
+        "TestRayClusterAuthOptions",
+        "TestRayClusterGCSFaultTolerance",
+        "TestGcsFaultToleranceOptions"
+      ]
+    }
+  ]
+}

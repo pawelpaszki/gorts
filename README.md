@@ -27,12 +27,13 @@ Notes for the future:
 * the ideal place to collect and execute the tests is to run them from the directory in which they are normally executed, e.g. `<root_of_kuberay_repo>/ray-operator` - the tests' directories will also be simplified
 
 ```
-./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/temp/tests.json
+./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/.cov/tests.json
 ```
 
 ### Run baseline (wip)
 ```
-./gorts baseline --manifest temp/tests.json --output temp/baseline.json 
+./gorts baseline --manifest .cov/tests.json --output .cov/baseline.json \
+  --env KUBERAY_TEST_TIMEOUT_SHORT=5m,KUBERAY_TEST_TIMEOUT_MEDIUM=12m,KUBERAY_TEST_TIMEOUT_LONG=15m,KUBERAY_TEST_RAY_IMAGE=rayproject/ray:2.52.1
 ```
 
 ### git flow to be followed

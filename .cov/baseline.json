@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-01-25T13:59:46.003058Z",
+  "commit_sha": "d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1",
+  "test_suite_results": [
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2e",
+      "test_results": [
+        {
+          "test_name": "TestRayClusterAuthOptions",
+          "status": "pass",
+          "duration_ms": 136515
+        },
+        {
+          "test_name": "TestRayClusterGCSFaultTolerance",
+          "status": "pass",
+          "duration_ms": 267865
+        },
+        {
+          "test_name": "TestGcsFaultToleranceOptions",
+          "status": "pass",
+          "duration_ms": 192945
+        }
+      ]
+    }
+  ]
+}
