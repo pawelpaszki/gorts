@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-28T18:14:32.871466Z",
+  "generated_at": "2026-01-28T00:10:40.188444Z",
   "commit_sha": "d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1",
   "test_suite_results": [
     {
@@ -8,7 +8,7 @@
         {
           "test_name": "TestRayJobSubmitter",
           "status": "pass",
-          "duration_ms": 119522,
+          "duration_ms": 117566,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjobsubmitter/TestRayJobSubmitter"
         }
       ],
@@ -16,7 +16,7 @@
         "total": 1,
         "passed": 1,
         "failed": 0,
-        "duration_ms": 119522
+        "duration_ms": 117566
       }
     },
     {
@@ -45,43 +45,43 @@
         {
           "test_name": "TestRayJobWithClusterSelector",
           "status": "pass",
-          "duration_ms": 50693,
+          "duration_ms": 49233,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobWithClusterSelector"
         },
         {
           "test_name": "TestRayJobLightWeightMode",
           "status": "pass",
-          "duration_ms": 149747,
+          "duration_ms": 143254,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobLightWeightMode"
         },
         {
           "test_name": "TestRayJobRecovery",
           "status": "pass",
-          "duration_ms": 101565,
+          "duration_ms": 102102,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobRecovery"
         },
         {
           "test_name": "TestRayJobRetry",
           "status": "pass",
-          "duration_ms": 349102,
+          "duration_ms": 349097,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobRetry"
         },
         {
           "test_name": "TestRayJobSidecarMode",
           "status": "pass",
-          "duration_ms": 163355,
+          "duration_ms": 164457,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobSidecarMode"
         },
         {
           "test_name": "TestRayJobSuspend",
           "status": "pass",
-          "duration_ms": 93578,
+          "duration_ms": 91712,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJobSuspend"
         },
         {
           "test_name": "TestRayJob",
           "status": "pass",
-          "duration_ms": 432004,
+          "duration_ms": 424353,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayjob/TestRayJob"
         }
       ],
@@ -89,7 +89,7 @@
         "total": 7,
         "passed": 7,
         "failed": 0,
-        "duration_ms": 1340044
+        "duration_ms": 1324208
       }
     },
     {
@@ -98,85 +98,85 @@
         {
           "test_name": "TestRayServiceAuthToken",
           "status": "pass",
-          "duration_ms": 27632,
+          "duration_ms": 27118,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceAuthToken"
         },
         {
           "test_name": "TestStaticRayService",
           "status": "pass",
-          "duration_ms": 226630,
+          "duration_ms": 231842,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestStaticRayService"
         },
         {
           "test_name": "TestAutoscalingRayService",
           "status": "pass",
-          "duration_ms": 261836,
+          "duration_ms": 231814,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestAutoscalingRayService"
         },
         {
           "test_name": "TestRayServiceZeroDowntimeUpgrade",
           "status": "pass",
-          "duration_ms": 229282,
+          "duration_ms": 230381,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceZeroDowntimeUpgrade"
         },
         {
           "test_name": "TestRayServiceGCSFaultTolerance",
           "status": "pass",
-          "duration_ms": 255016,
+          "duration_ms": 256752,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceGCSFaultTolerance"
         },
         {
           "test_name": "TestRayServiceRayClusterDeletionDelaySeconds",
           "status": "pass",
-          "duration_ms": 82893,
+          "duration_ms": 82379,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceRayClusterDeletionDelaySeconds"
         },
         {
           "test_name": "TestRayServiceInPlaceUpdate",
           "status": "pass",
-          "duration_ms": 31504,
+          "duration_ms": 31206,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceInPlaceUpdate"
         },
         {
           "test_name": "TestUpdateServeConfigAndRayClusterSpec",
           "status": "pass",
-          "duration_ms": 49573,
+          "duration_ms": 54040,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestUpdateServeConfigAndRayClusterSpec"
         },
         {
           "test_name": "TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled",
           "status": "pass",
-          "duration_ms": 31579,
+          "duration_ms": 31162,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled"
         },
         {
           "test_name": "TestRayServiceBecomesReadyBeforeTimeout",
           "status": "pass",
-          "duration_ms": 27106,
+          "duration_ms": 25402,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceBecomesReadyBeforeTimeout"
         },
         {
           "test_name": "TestRayServiceInitializingTimeoutTerminalFailure",
           "status": "pass",
-          "duration_ms": 31862,
+          "duration_ms": 28389,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceInitializingTimeoutTerminalFailure"
         },
         {
           "test_name": "TestRedeployRayServe",
           "status": "pass",
-          "duration_ms": 44780,
+          "duration_ms": 60482,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRedeployRayServe"
         },
         {
           "test_name": "TestOldHeadPodFailDuringUpgrade",
           "status": "pass",
-          "duration_ms": 82668,
+          "duration_ms": 85730,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestOldHeadPodFailDuringUpgrade"
         },
         {
           "test_name": "TestRayServiceValidation",
           "status": "pass",
-          "duration_ms": 7061,
+          "duration_ms": 6525,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2erayservice/TestRayServiceValidation"
         }
       ],
@@ -184,7 +184,7 @@
         "total": 14,
         "passed": 14,
         "failed": 0,
-        "duration_ms": 1389422
+        "duration_ms": 1383222
       }
     },
     {
@@ -193,33 +193,34 @@
         {
           "test_name": "TestRayCluster",
           "status": "pass",
-          "duration_ms": 520325,
+          "duration_ms": 524460,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_sampleyaml/TestRayCluster"
         },
         {
           "test_name": "TestRayJob",
           "status": "pass",
-          "duration_ms": 169250,
+          "duration_ms": 167332,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_sampleyaml/TestRayJob"
         },
         {
           "test_name": "TestRayJobInteractiveMode",
           "status": "pass",
-          "duration_ms": 26789,
+          "duration_ms": 26726,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_sampleyaml/TestRayJobInteractiveMode"
         },
         {
           "test_name": "TestRayService",
-          "status": "pass",
-          "duration_ms": 97431,
+          "status": "fail",
+          "duration_ms": 1803894,
+          "error": "=== RUN   TestRayService\n=== RUN   TestRayService/ray-service.custom-serve-service.yaml\n    rayservice_test.go:40: [2026-01-27T22:28:48Z] Successfully applied /Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/config/samples/ray-service.custom-serve-service.yaml to namespace test-ns-xq47b\n    rayservice_test.go:46: [2026-01-27T22:28:48Z] Waiting for RayService test-ns-xq47b/rayservice-sample to be running\n    core.go:149: \n        \tError Trace:\t/Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/test/support/core.go:149\n        \t            \t\t\t\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/runtime/asm_arm64.s:1268\n        \tError:      \tReceived unexpected error:\n        \t            \tunable to listen on any of the requested ports: [{8265 8265}]\n        \tTest:       \tTestRayService/ray-service.custom-serve-service.yaml\npanic: test timed out after 30m0s\n\trunning tests:\n\t\tTestRayService (30m0s)\n\t\tTestRayService/ray-service.custom-serve-service.yaml (30m0s)\n\ngoroutine 163 [running]:\ntesting.(*M).startAlarm.func1()\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2682 +0x2b0\ncreated by time.goFunc\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/time/sleep.go:215 +0x38\n\ngoroutine 1 [chan receive, 30 minutes]:\ntesting.(*T).Run(0x14000503180, {0x10530e6a1?, 0x14000201b38?}, 0x10596bed8)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2005 +0x378\ntesting.runTests.func1(0x14000503180)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2477 +0x38\ntesting.tRunner(0x14000503180, 0x14000201c68)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:1934 +0xc8\ntesting.runTests(0x14000516a98, {0x10632fd60, 0x4, 0x4}, {0x14000300be0?, 0xf?, 0x10635b700?})\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2475 +0x3b8\ntesting.(*M).Run(0x140006081e0)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2337 +0x530\nmain.main()\n\t_testmain.go:51 +0x80\n\ngoroutine 70 [chan receive, 30 minutes]:\ntesting.(*T).Run(0x14000503340, {0x1053311f9?, 0x14000098f08?}, 0x14000516b10)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:2005 +0x378\ngithub.com/ray-project/kuberay/ray-operator/test/sampleyaml.TestRayService(0x14000503340)\n\t/Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/test/sampleyaml/rayservice_test.go:32 +0x94\ntesting.tRunner(0x14000503340, 0x10596bed8)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:1934 +0xc8\ncreated by testing.(*T).Run in goroutine 1\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:1997 +0x364\n\ngoroutine 71 [chan receive, 29 minutes]:\ngithub.com/ray-project/kuberay/ray-operator/test/support.SetupPortForward({0x105994000, 0x1400037ca00}, {0x1400012f2c0, 0x22}, {0x140003476e0, 0xd}, 0x2049, 0x2049)\n\t/Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/test/support/core.go:151 +0x338\ngithub.com/ray-project/kuberay/ray-operator/test/sampleyaml.TestRayService.func1.QueryDashboardGetAppStatus.6({0x10599bc00, 0x1400039f900})\n\t/Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/test/sampleyaml/support.go:72 +0xc0\nreflect.Value.call({0x105616cc0?, 0x14000607860?, 0x16?}, {0x10530291d, 0x4}, {0x140006008a0, 0x1, 0x140001da000?})\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/reflect/value.go:581 +0x960\nreflect.Value.Call({0x105616cc0?, 0x14000607860?, 0x14000503500?}, {0x140006008a0?, 0x105616cc0?, 0x14000607860?})\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/reflect/value.go:365 +0x94\ngithub.com/onsi/gomega/internal.(*AsyncAssertion).buildActualPoller.func3()\n\t/Users/pawelpaszki/go/pkg/mod/github.com/onsi/gomega@v1.38.3/internal/async_assertion.go:337 +0xb8\ngithub.com/onsi/gomega/internal.(*AsyncAssertion).match(0x1400026cd90, {0x105981a08, 0x1063865c0}, 0x1, {0x0, 0x0, 0x0})\n\t/Users/pawelpaszki/go/pkg/mod/github.com/onsi/gomega@v1.38.3/internal/async_assertion.go:410 +0xf0\ngithub.com/onsi/gomega/internal.(*AsyncAssertion).Should(0x1400026cd90, {0x105981a08, 0x1063865c0}, {0x0, 0x0, 0x0})\n\t/Users/pawelpaszki/go/pkg/mod/github.com/onsi/gomega@v1.38.3/internal/async_assertion.go:145 +0x7c\ngithub.com/ray-project/kuberay/ray-operator/test/sampleyaml.TestRayService.func1(0x14000503500)\n\t/Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator/test/sampleyaml/rayservice_test.go:72 +0x970\ntesting.tRunner(0x14000503500, 0x14000516b10)\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:1934 +0xc8\ncreated by testing.(*T).Run in goroutine 70\n\t/Users/pawelpaszki/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.25.0.darwin-arm64/src/testing/testing.go:1997 +0x364\nFAIL\tgithub.com/ray-project/kuberay/ray-operator/test/sampleyaml\t1800.507s\nFAIL\n",
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_sampleyaml/TestRayService"
         }
       ],
       "summary": {
         "total": 4,
-        "passed": 4,
-        "failed": 0,
-        "duration_ms": 813795
+        "passed": 3,
+        "failed": 1,
+        "duration_ms": 2522412
       }
     },
     {
@@ -228,61 +229,61 @@
         {
           "test_name": "TestRayClusterAuthOptions",
           "status": "pass",
-          "duration_ms": 37893,
+          "duration_ms": 37888,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterAuthOptions"
         },
         {
           "test_name": "TestRayClusterGCSFaultTolerance",
           "status": "pass",
-          "duration_ms": 174880,
+          "duration_ms": 157988,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterGCSFaultTolerance"
         },
         {
           "test_name": "TestGcsFaultToleranceOptions",
           "status": "pass",
-          "duration_ms": 152894,
+          "duration_ms": 144588,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestGcsFaultToleranceOptions"
         },
         {
           "test_name": "TestGcsFaultToleranceAnnotations",
           "status": "pass",
-          "duration_ms": 139303,
+          "duration_ms": 120609,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestGcsFaultToleranceAnnotations"
         },
         {
           "test_name": "TestRayClusterSingleHostMultiSlice",
           "status": "pass",
-          "duration_ms": 27652,
+          "duration_ms": 25540,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterSingleHostMultiSlice"
         },
         {
           "test_name": "TestRayClusterMultiHostMultiSlice",
           "status": "pass",
-          "duration_ms": 34677,
+          "duration_ms": 32510,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterMultiHostMultiSlice"
         },
         {
           "test_name": "TestRayClusterManagedBy",
           "status": "pass",
-          "duration_ms": 30009,
+          "duration_ms": 29636,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterManagedBy"
         },
         {
           "test_name": "TestRayClusterSuspend",
           "status": "pass",
-          "duration_ms": 84235,
+          "duration_ms": 84780,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterSuspend"
         },
         {
           "test_name": "TestRayClusterWithResourceQuota",
           "status": "pass",
-          "duration_ms": 7046,
+          "duration_ms": 6875,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterWithResourceQuota"
         },
         {
           "test_name": "TestRayClusterScalingDown",
           "status": "pass",
-          "duration_ms": 31381,
+          "duration_ms": 29194,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2e/TestRayClusterScalingDown"
         }
       ],
@@ -290,7 +291,7 @@
         "total": 10,
         "passed": 10,
         "failed": 0,
-        "duration_ms": 719970
+        "duration_ms": 669608
       }
     },
     {
@@ -299,79 +300,79 @@
         {
           "test_name": "TestRayClusterAutoscalerV2IdleTimeout",
           "status": "pass",
-          "duration_ms": 87729,
+          "duration_ms": 83943,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerV2IdleTimeout"
         },
         {
           "test_name": "TestRayClusterAutoscalerGPUNodesForCPUTasks",
           "status": "pass",
-          "duration_ms": 192032,
+          "duration_ms": 211950,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerGPUNodesForCPUTasks"
         },
         {
           "test_name": "TestRayClusterAutoscalerDoNotRemoveIdlesForPlacementGroup",
           "status": "pass",
-          "duration_ms": 142644,
+          "duration_ms": 158714,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerDoNotRemoveIdlesForPlacementGroup"
         },
         {
           "test_name": "TestRayClusterAutoscalerSDKRequestResources",
           "status": "pass",
-          "duration_ms": 42254,
+          "duration_ms": 75824,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerSDKRequestResources"
         },
         {
           "test_name": "TestRayClusterAutoscalerAddNewWorkerGroup",
           "status": "pass",
-          "duration_ms": 103489,
+          "duration_ms": 115498,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerAddNewWorkerGroup"
         },
         {
           "test_name": "TestRayClusterAutoscalerPlacementGroup",
           "status": "pass",
-          "duration_ms": 369055,
+          "duration_ms": 448997,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerPlacementGroup"
         },
         {
           "test_name": "TestRayClusterAutoscalerGCSFT",
           "status": "pass",
-          "duration_ms": 485386,
+          "duration_ms": 485913,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerGCSFT"
         },
         {
           "test_name": "TestRayClusterAutoscaler",
           "status": "pass",
-          "duration_ms": 339069,
+          "duration_ms": 354926,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscaler"
         },
         {
           "test_name": "TestRayClusterAutoscalerWithFakeGPU",
           "status": "pass",
-          "duration_ms": 187832,
+          "duration_ms": 205418,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerWithFakeGPU"
         },
         {
           "test_name": "TestRayClusterAutoscalerWithCustomResource",
           "status": "pass",
-          "duration_ms": 187639,
+          "duration_ms": 213309,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerWithCustomResource"
         },
         {
           "test_name": "TestRayClusterAutoscalerWithDesiredState",
           "status": "pass",
-          "duration_ms": 208830,
+          "duration_ms": 310924,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerWithDesiredState"
         },
         {
           "test_name": "TestRayClusterAutoscalerMinReplicasUpdate",
           "status": "pass",
-          "duration_ms": 66809,
+          "duration_ms": 112597,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerMinReplicasUpdate"
         },
         {
           "test_name": "TestRayClusterAutoscalerMaxReplicasUpdate",
           "status": "pass",
-          "duration_ms": 138069,
+          "duration_ms": 269152,
           "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/test_e2eautoscaler/TestRayClusterAutoscalerMaxReplicasUpdate"
         }
       ],
@@ -379,14 +380,14 @@
         "total": 13,
         "passed": 13,
         "failed": 0,
-        "duration_ms": 2550837
+        "duration_ms": 3047165
       }
     }
   ],
   "summary": {
     "total": 49,
-    "passed": 49,
-    "failed": 0,
-    "duration_ms": 6933590
+    "passed": 48,
+    "failed": 1,
+    "duration_ms": 9064181
   }
 }

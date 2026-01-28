@@ -31,7 +31,13 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 	}
 
 	start := time.Now()
-	cmd := exec.Command("go", "test", "-v", "-run", fmt.Sprintf("^%s$", testName), "./...")
+	cmd := exec.Command("go", "test", "-v",
+		"-timeout", "30m",
+		"-p", "1",
+		"-parallel", "1",
+		"-count", "1",
+		"-run", fmt.Sprintf("^%s$", testName),
+		"./...")
 	cmd.Dir = directory
 	cmd.Env = append(os.Environ(), r.Env...)
 

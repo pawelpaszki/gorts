@@ -1,0 +1,422 @@
+{
+  "generated_at": "2026-01-26T18:14:21.940315Z",
+  "commit_sha": "d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1",
+  "test_suite_results": [
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter",
+      "test_results": [
+        {
+          "test_name": "TestRayJobSubmitter",
+          "status": "pass",
+          "duration_ms": 199620,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjobsubmitter/TestRayJobSubmitter"
+        }
+      ],
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "duration_ms": 199620
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade",
+      "test_results": [
+        {
+          "test_name": "TestZeroDowntimeUpgradeAfterOperatorUpgrade",
+          "status": "fail",
+          "duration_ms": 38860,
+          "error": "=== RUN   TestZeroDowntimeUpgradeAfterOperatorUpgrade\n    rayservice_operator_upgrade_test.go:35: Detected upgrade version: v1.5.1\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n    rayservice_operator_upgrade_test.go:44: Waiting for RayService test-ns-8x7rc/rayservice-sample to be running\n    rayservice_operator_upgrade_test.go:57: Creating curl pod test-ns-8x7rc/curl-pod\n    core.go:183: [2026-01-26T15:20:57Z] Curl pod test-ns-8x7rc/curl-pod is running and ready\n    rayservice_operator_upgrade_test.go:62: Sending requests to the RayService to make sure it is ready to serve requests\n    core.go:89: [2026-01-26T15:20:57Z] Executing command: [curl -X POST -H Content-Type: application/json rayservice-sample-serve-svc.test-ns-8x7rc.svc.cluster.local:8000/fruit -d [\"MANGO\", 2]]\n    core.go:102: [2026-01-26T15:20:57Z] Command stdout: 6\n    core.go:103: [2026-01-26T15:20:57Z] Command stderr:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                         Dload  Upload   Total   Spent    Left  Speed\n        \r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100    13    0     1  100    12      1     12  0:00:01 --:--:--  0:00:01  1300\n    core.go:89: [2026-01-26T15:20:57Z] Executing command: [curl -X POST -H Content-Type: application/json rayservice-sample-serve-svc.test-ns-8x7rc.svc.cluster.local:8000/calc -d [\"MUL\", 3]]\n    core.go:102: [2026-01-26T15:20:57Z] Command stdout: 15 pizzas please!\n    core.go:103: [2026-01-26T15:20:57Z] Command stderr:   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                         Dload  Upload   Total   Spent    Left  Speed\n        \r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100    27    0    17  100    10     17     10  0:00:01 --:--:--  0:00:01  2454\n    rayservice_operator_upgrade_test.go:67: Checking that the K8s serve service rayservice-sample-serve-svc has two ready endpoints\n    rayservice_operator_upgrade_test.go:73: Upgrading the KubeRay operator to v1.5.1\n    rayservice_operator_upgrade_test.go:102: \n        Unexpected error:\n            \u003c*exec.ExitError | 0x140000a7a80\u003e: \n            exit status 1\n            {\n                ProcessState: {\n                    pid: 44836,\n                    status: 256,\n                    rusage: {\n                        Utime: {\n                            Sec: 0,\n                            Usec: 25541,\n                            Pad_cgo_0: [0, 0, 0, 0],\n                        },\n                        Stime: {\n                            Sec: 0,\n                            Usec: 27588,\n                            Pad_cgo_0: [0, 0, 0, 0],\n                        },\n                        Maxrss: 43859968,\n                        Ixrss: 0,\n                        Idrss: 0,\n                        Isrss: 0,\n                        Minflt: 1842,\n                        Majflt: 1457,\n                        Nswap: 0,\n                        Inblock: 0,\n                        Oublock: 0,\n                        Msgsnd: 0,\n                        Msgrcv: 0,\n                        Nsignals: 52,\n                        Nvcsw: 44,\n                        Nivcsw: 1140,\n                    },\n                },\n                Stderr: nil,\n            }\n        occurred\n    test.go:114: [2026-01-26T15:21:01Z] Retrieving Pod Container test-ns-8x7rc/curl-pod/curl-container logs\n    test.go:102: [2026-01-26T15:21:01Z] Creating ephemeral output directory as KUBERAY_TEST_OUTPUT_DIR env variable is unset\n    test.go:105: [2026-01-26T15:21:01Z] Output directory has been created at: /var/folders/7_/d9ngwy550tnd097vfkrqqjrh0000gn/T/TestZeroDowntimeUpgradeAfterOperatorUpgrade2217618223/001\n    test.go:114: [2026-01-26T15:21:01Z] Retrieving Pod Container test-ns-8x7rc/rayservice-sample-2pqnn-head-nrrr5/ray-head logs\n    test.go:114: [2026-01-26T15:21:01Z] Retrieving Pod Container test-ns-8x7rc/rayservice-sample-2pqnn-ray-worker-1-worker-kr6r4/ray-worker logs\n--- FAIL: TestZeroDowntimeUpgradeAfterOperatorUpgrade (32.89s)\nFAIL\nFAIL\tgithub.com/ray-project/kuberay/ray-operator/test/e2eupgrade\t33.618s\nFAIL\n",
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eupgrade/TestZeroDowntimeUpgradeAfterOperatorUpgrade"
+        }
+      ],
+      "summary": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "duration_ms": 38860
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade",
+      "test_results": [
+        {
+          "test_name": "TestRayServiceIncrementalUpgrade",
+          "status": "fail",
+          "duration_ms": 749443,
+          "error": "=== RUN   TestRayServiceIncrementalUpgrade\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n    rayservice_incremental_upgrade_test.go:55: [2026-01-26T15:21:26Z] Waiting for RayService test-ns-rsc4q/incremental-rayservice to be ready\n    rayservice_incremental_upgrade_test.go:64: [2026-01-26T15:21:52Z] Waiting for Gateway test-ns-rsc4q/incremental-rayservice-gateway to be ready\n    rayservice_incremental_upgrade_test.go:66: \n        Timed out after 720.001s.\n        The function passed to Eventually returned the following error:\n            \u003c*errors.StatusError | 0x140006be6e0\u003e: \n            gateways.gateway.networking.k8s.io \"incremental-rayservice-gateway\" not found\n            {\n                ErrStatus: {\n                    TypeMeta: {Kind: \"\", APIVersion: \"\"},\n                    ListMeta: {\n                        SelfLink: \"\",\n                        ResourceVersion: \"\",\n                        Continue: \"\",\n                        RemainingItemCount: nil,\n                    },\n                    Status: \"Failure\",\n                    Message: \"gateways.gateway.networking.k8s.io \\\"incremental-rayservice-gateway\\\" not found\",\n                    Reason: \"NotFound\",\n                    Details: {\n                        Name: \"incremental-rayservice-gateway\",\n                        Group: \"gateway.networking.k8s.io\",\n                        Kind: \"gateways\",\n                        UID: \"\",\n                        Causes: nil,\n                        RetryAfterSeconds: 0,\n                    },\n                    Code: 404,\n                },\n            }\n    test.go:114: [2026-01-26T15:33:52Z] Retrieving Pod Container test-ns-rsc4q/incremental-rayservice-gggs4-head-lxjst/ray-head logs\n    test.go:102: [2026-01-26T15:33:52Z] Creating ephemeral output directory as KUBERAY_TEST_OUTPUT_DIR env variable is unset\n    test.go:105: [2026-01-26T15:33:52Z] Output directory has been created at: /var/folders/7_/d9ngwy550tnd097vfkrqqjrh0000gn/T/TestRayServiceIncrementalUpgrade2928138142/001\n    test.go:114: [2026-01-26T15:33:52Z] Retrieving Pod Container test-ns-rsc4q/incremental-rayservice-gggs4-head-lxjst/autoscaler logs\n    test.go:114: [2026-01-26T15:33:52Z] Retrieving Pod Container test-ns-rsc4q/incremental-rayservice-gggs4-small-group-worker-lmc5h/ray-worker logs\n--- FAIL: TestRayServiceIncrementalUpgrade (745.26s)\nFAIL\nFAIL\tgithub.com/ray-project/kuberay/ray-operator/test/e2eincrementalupgrade\t746.004s\nFAIL\n",
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eincrementalupgrade/TestRayServiceIncrementalUpgrade"
+        }
+      ],
+      "summary": {
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "duration_ms": 749443
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob",
+      "test_results": [
+        {
+          "test_name": "TestRayJobWithClusterSelector",
+          "status": "pass",
+          "duration_ms": 51666,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobWithClusterSelector"
+        },
+        {
+          "test_name": "TestDeletionStrategy",
+          "status": "fail",
+          "duration_ms": 368600,
+          "error": "=== RUN   TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:28: [2026-01-26T15:35:30Z] Created ConfigMap test-ns-cttgs/jobs successfully\n=== RUN   TestDeletionStrategy/DeletionRules_with_DeleteWorkers_policy_should_delete_only_worker_pods\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:53: [2026-01-26T15:35:30Z] Created RayJob test-ns-cttgs/delete-workers-test successfully\n    rayjob_deletion_strategy_test.go:58: [2026-01-26T15:36:01Z] RayJob test-ns-cttgs/delete-workers-test completed successfully\n    rayjob_deletion_strategy_test.go:77: [2026-01-26T15:36:01Z] Found 1 worker pods initially\n    rayjob_deletion_strategy_test.go:80: [2026-01-26T15:36:01Z] Verifying resources persist during TTL wait period...\n    rayjob_deletion_strategy_test.go:95: [2026-01-26T15:36:09Z] Resources confirmed stable during TTL wait period\n    rayjob_deletion_strategy_test.go:98: [2026-01-26T15:36:09Z] Waiting for TTL to expire and workers to be deleted...\n    rayjob_deletion_strategy_test.go:107: [2026-01-26T15:36:18Z] Worker pods deleted successfully\n    rayjob_deletion_strategy_test.go:119: [2026-01-26T15:36:28Z] Head pod preserved as expected\n    rayjob_deletion_strategy_test.go:125: [2026-01-26T15:36:28Z] RayJob preserved as expected\n    rayjob_deletion_strategy_test.go:128: [2026-01-26T15:36:28Z] Cleaning up RayJob test-ns-cttgs/delete-workers-test after DeleteWorkers scenario\n    rayjob_deletion_strategy_test.go:137: [2026-01-26T15:36:29Z] Cleanup after DeleteWorkers scenario complete\n=== RUN   TestDeletionStrategy/DeletionRules_with_DeleteCluster_policy_should_delete_entire_cluster\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:162: [2026-01-26T15:36:29Z] Created RayJob test-ns-cttgs/delete-cluster-test successfully\n    rayjob_deletion_strategy_test.go:167: [2026-01-26T15:37:03Z] RayJob test-ns-cttgs/delete-cluster-test completed successfully\n    rayjob_deletion_strategy_test.go:180: [2026-01-26T15:37:03Z] Waiting for TTL to expire and cluster to be deleted...\n    rayjob_deletion_strategy_test.go:185: [2026-01-26T15:37:21Z] RayCluster deleted successfully\n    rayjob_deletion_strategy_test.go:191: [2026-01-26T15:37:21Z] RayJob preserved as expected\n    rayjob_deletion_strategy_test.go:194: [2026-01-26T15:37:21Z] Cleaning up RayJob test-ns-cttgs/delete-cluster-test after DeleteCluster scenario\n    rayjob_deletion_strategy_test.go:198: [2026-01-26T15:37:22Z] Cleanup after DeleteCluster scenario complete\n=== RUN   TestDeletionStrategy/DeletionRules_with_DeleteSelf_policy_should_delete_RayJob_and_cluster\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:223: [2026-01-26T15:37:22Z] Created RayJob test-ns-cttgs/delete-self-test successfully\n    rayjob_deletion_strategy_test.go:228: [2026-01-26T15:37:57Z] RayJob test-ns-cttgs/delete-self-test completed successfully\n    rayjob_deletion_strategy_test.go:237: [2026-01-26T15:37:57Z] Waiting for TTL to expire and RayJob to be deleted...\n    rayjob_deletion_strategy_test.go:242: [2026-01-26T15:38:15Z] RayJob deleted successfully\n    rayjob_deletion_strategy_test.go:249: [2026-01-26T15:38:15Z] Associated RayCluster deleted successfully\n=== RUN   TestDeletionStrategy/DeletionRules_with_DeleteNone_policy_should_preserve_all_resources\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:274: [2026-01-26T15:38:15Z] Created RayJob test-ns-cttgs/delete-none-test successfully\n    rayjob_deletion_strategy_test.go:279: [2026-01-26T15:38:52Z] RayJob test-ns-cttgs/delete-none-test completed successfully\n    rayjob_deletion_strategy_test.go:288: [2026-01-26T15:38:52Z] Waiting past TTL to verify resources are preserved...\n    rayjob_deletion_strategy_test.go:300: [2026-01-26T15:39:02Z] All resources preserved as expected with DeleteNone policy\n    rayjob_deletion_strategy_test.go:303: [2026-01-26T15:39:02Z] Cleaning up RayJob test-ns-cttgs/delete-none-test after DeleteNone scenario\n    rayjob_deletion_strategy_test.go:311: [2026-01-26T15:39:03Z] Cleanup after DeleteNone scenario complete\n=== RUN   TestDeletionStrategy/Multi-stage_deletion_should_execute_in_TTL_order:_Workers-\u003eCluster-\u003eSelf\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:346: [2026-01-26T15:39:03Z] Created RayJob test-ns-cttgs/multi-stage-test successfully\n    rayjob_deletion_strategy_test.go:351: [2026-01-26T15:39:39Z] RayJob test-ns-cttgs/multi-stage-test completed successfully\n    rayjob_deletion_strategy_test.go:364: [2026-01-26T15:39:39Z] Verifying all resources persist before any TTL expires...\n    rayjob_deletion_strategy_test.go:379: [2026-01-26T15:39:51Z] All resources confirmed stable before TTL expiration\n    rayjob_deletion_strategy_test.go:382: [2026-01-26T15:39:51Z] Stage 1: Waiting for workers to be deleted at 15s...\n    rayjob_deletion_strategy_test.go:391: [2026-01-26T15:40:03Z] Stage 1 complete: Workers deleted successfully\n    rayjob_deletion_strategy_test.go:404: [2026-01-26T15:40:03Z] Verifying cluster persists before stage 2 TTL expires...\n    rayjob_deletion_strategy_test.go:416: [2026-01-26T15:40:18Z] Cluster and job confirmed stable before stage 2 TTL\n    rayjob_deletion_strategy_test.go:419: [2026-01-26T15:40:18Z] Stage 2: Waiting for cluster to be deleted at 35s...\n    rayjob_deletion_strategy_test.go:424: [2026-01-26T15:40:22Z] Stage 2 complete: Cluster deleted successfully\n    rayjob_deletion_strategy_test.go:432: [2026-01-26T15:40:23Z] Verifying RayJob persists before stage 3 TTL expires...\n    rayjob_deletion_strategy_test.go:438: [2026-01-26T15:40:38Z] RayJob confirmed stable before stage 3 TTL\n    rayjob_deletion_strategy_test.go:441: [2026-01-26T15:40:38Z] Stage 3: Waiting for RayJob to be deleted at 55s...\n    rayjob_deletion_strategy_test.go:446: [2026-01-26T15:40:42Z] Stage 3 complete: RayJob deleted successfully\n    rayjob_deletion_strategy_test.go:447: [2026-01-26T15:40:42Z] Multi-stage deletion completed in correct order\n=== RUN   TestDeletionStrategy/Legacy_OnSuccess_DeleteCluster_should_still_work\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:470: [2026-01-26T15:40:42Z] Created legacy RayJob test-ns-cttgs/legacy-success-test successfully\n    rayjob_deletion_strategy_test.go:475: [2026-01-26T15:41:17Z] RayJob test-ns-cttgs/legacy-success-test completed successfully\n    rayjob_deletion_strategy_test.go:484: [2026-01-26T15:41:17Z] Waiting for legacy OnSuccess policy to delete cluster...\n    rayjob_deletion_strategy_test.go:489: [2026-01-26T15:41:34Z] Cluster deleted by legacy OnSuccess policy\n    rayjob_deletion_strategy_test.go:495: [2026-01-26T15:41:34Z] Legacy OnSuccess policy working correctly\n    rayjob_deletion_strategy_test.go:498: [2026-01-26T15:41:34Z] Cleaning up legacy success RayJob test-ns-cttgs/legacy-success-test\n    rayjob_deletion_strategy_test.go:502: [2026-01-26T15:41:35Z] Cleanup after legacy success scenario complete\n=== RUN   TestDeletionStrategy/DeletionRules_with_JobDeploymentStatus_Failed_and_DeleteWorkers_policy_should_delete_only_worker_pods\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n=== NAME  TestDeletionStrategy\n    rayjob_deletion_strategy_test.go:524: \n        Unexpected error:\n            \u003c*errors.StatusError | 0x140006fb220\u003e: \n            failed to create typed patch object (test-ns-cttgs/delete-workers-after-jobdeploymentstatus-failed; ray.io/v1, Kind=RayJob): .spec.deletionStrategy.deletionRules[0].condition.jobDeploymentStatus: field not declared in schema\n            {\n                ErrStatus: {\n                    TypeMeta: {Kind: \"\", APIVersion: \"\"},\n                    ListMeta: {\n                        SelfLink: \"\",\n                        ResourceVersion: \"\",\n                        Continue: \"\",\n                        RemainingItemCount: nil,\n                    },\n                    Status: \"Failure\",\n                    Message: \"failed to create typed patch object (test-ns-cttgs/delete-workers-after-jobdeploymentstatus-failed; ray.io/v1, Kind=RayJob): .spec.deletionStrategy.deletionRules[0].condition.jobDeploymentStatus: field not declared in schema\",\n                    Reason: \"\",\n                    Details: nil,\n                    Code: 500,\n                },\n            }\n        occurred\n=== NAME  TestDeletionStrategy/DeletionRules_with_JobDeploymentStatus_Failed_and_DeleteWorkers_policy_should_delete_only_worker_pods\n    testing.go:1811: test executed panic(nil) or runtime.Goexit: subtest may have called FailNow on a parent test\n=== NAME  TestDeletionStrategy\n    test.go:114: [2026-01-26T15:41:35Z] Retrieving Pod Container test-ns-cttgs/legacy-success-test-qg66h-head-2q447/ray-head logs\n    test.go:102: [2026-01-26T15:41:35Z] Creating ephemeral output directory as KUBERAY_TEST_OUTPUT_DIR env variable is unset\n    test.go:105: [2026-01-26T15:41:35Z] Output directory has been created at: /var/folders/7_/d9ngwy550tnd097vfkrqqjrh0000gn/T/TestDeletionStrategy1725722451/001\n--- FAIL: TestDeletionStrategy (365.23s)\n    --- PASS: TestDeletionStrategy/DeletionRules_with_DeleteWorkers_policy_should_delete_only_worker_pods (59.50s)\n    --- PASS: TestDeletionStrategy/DeletionRules_with_DeleteCluster_policy_should_delete_entire_cluster (52.51s)\n    --- PASS: TestDeletionStrategy/DeletionRules_with_DeleteSelf_policy_should_delete_RayJob_and_cluster (53.56s)\n    --- PASS: TestDeletionStrategy/DeletionRules_with_DeleteNone_policy_should_preserve_all_resources (47.37s)\n    --- PASS: TestDeletionStrategy/Multi-stage_deletion_should_execute_in_TTL_order:_Workers-\u003eCluster-\u003eSelf (98.72s)\n    --- PASS: TestDeletionStrategy/Legacy_OnSuccess_DeleteCluster_should_still_work (53.50s)\n    --- FAIL: TestDeletionStrategy/DeletionRules_with_JobDeploymentStatus_Failed_and_DeleteWorkers_policy_should_delete_only_worker_pods (0.01s)\nFAIL\nFAIL\tgithub.com/ray-project/kuberay/ray-operator/test/e2erayjob\t365.711s\nFAIL\n",
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestDeletionStrategy"
+        },
+        {
+          "test_name": "TestRayJobLightWeightMode",
+          "status": "pass",
+          "duration_ms": 183476,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobLightWeightMode"
+        },
+        {
+          "test_name": "TestRayJobRecovery",
+          "status": "pass",
+          "duration_ms": 107440,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobRecovery"
+        },
+        {
+          "test_name": "TestRayJobRetry",
+          "status": "pass",
+          "duration_ms": 393973,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobRetry"
+        },
+        {
+          "test_name": "TestRayJobSidecarMode",
+          "status": "pass",
+          "duration_ms": 856182,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobSidecarMode"
+        },
+        {
+          "test_name": "TestRayJobSuspend",
+          "status": "pass",
+          "duration_ms": 114887,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJobSuspend"
+        },
+        {
+          "test_name": "TestRayJob",
+          "status": "pass",
+          "duration_ms": 460128,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayjob/TestRayJob"
+        }
+      ],
+      "summary": {
+        "total": 8,
+        "passed": 7,
+        "failed": 1,
+        "duration_ms": 2536352
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_results": [
+        {
+          "test_name": "TestRayServiceAuthToken",
+          "status": "pass",
+          "duration_ms": 27892,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceAuthToken"
+        },
+        {
+          "test_name": "TestStaticRayService",
+          "status": "pass",
+          "duration_ms": 309094,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestStaticRayService"
+        },
+        {
+          "test_name": "TestAutoscalingRayService",
+          "status": "pass",
+          "duration_ms": 278923,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestAutoscalingRayService"
+        },
+        {
+          "test_name": "TestRayServiceZeroDowntimeUpgrade",
+          "status": "pass",
+          "duration_ms": 243391,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceZeroDowntimeUpgrade"
+        },
+        {
+          "test_name": "TestRayServiceGCSFaultTolerance",
+          "status": "pass",
+          "duration_ms": 291209,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceGCSFaultTolerance"
+        },
+        {
+          "test_name": "TestRayServiceRayClusterDeletionDelaySeconds",
+          "status": "pass",
+          "duration_ms": 97255,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceRayClusterDeletionDelaySeconds"
+        },
+        {
+          "test_name": "TestRayServiceInPlaceUpdate",
+          "status": "pass",
+          "duration_ms": 29999,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceInPlaceUpdate"
+        },
+        {
+          "test_name": "TestUpdateServeConfigAndRayClusterSpec",
+          "status": "pass",
+          "duration_ms": 46921,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestUpdateServeConfigAndRayClusterSpec"
+        },
+        {
+          "test_name": "TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled",
+          "status": "pass",
+          "duration_ms": 31159,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled"
+        },
+        {
+          "test_name": "TestRayServiceBecomesReadyBeforeTimeout",
+          "status": "pass",
+          "duration_ms": 25182,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceBecomesReadyBeforeTimeout"
+        },
+        {
+          "test_name": "TestRayServiceInitializingTimeoutTerminalFailure",
+          "status": "pass",
+          "duration_ms": 30710,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceInitializingTimeoutTerminalFailure"
+        },
+        {
+          "test_name": "TestRedeployRayServe",
+          "status": "pass",
+          "duration_ms": 47466,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRedeployRayServe"
+        },
+        {
+          "test_name": "TestOldHeadPodFailDuringUpgrade",
+          "status": "pass",
+          "duration_ms": 85094,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestOldHeadPodFailDuringUpgrade"
+        },
+        {
+          "test_name": "TestRayServiceValidation",
+          "status": "pass",
+          "duration_ms": 6846,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2erayservice/TestRayServiceValidation"
+        }
+      ],
+      "summary": {
+        "total": 14,
+        "passed": 14,
+        "failed": 0,
+        "duration_ms": 1551141
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml",
+      "test_results": [
+        {
+          "test_name": "TestRayCluster",
+          "status": "pass",
+          "duration_ms": 532072,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_sampleyaml/TestRayCluster"
+        },
+        {
+          "test_name": "TestRayJob",
+          "status": "pass",
+          "duration_ms": 167446,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_sampleyaml/TestRayJob"
+        },
+        {
+          "test_name": "TestRayJobInteractiveMode",
+          "status": "pass",
+          "duration_ms": 26273,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_sampleyaml/TestRayJobInteractiveMode"
+        },
+        {
+          "test_name": "TestRayService",
+          "status": "pass",
+          "duration_ms": 94355,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_sampleyaml/TestRayService"
+        }
+      ],
+      "summary": {
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "duration_ms": 820146
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2e",
+      "test_results": [
+        {
+          "test_name": "TestRayClusterAuthOptions",
+          "status": "pass",
+          "duration_ms": 48188,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterAuthOptions"
+        },
+        {
+          "test_name": "TestRayClusterGCSFaultTolerance",
+          "status": "pass",
+          "duration_ms": 251567,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterGCSFaultTolerance"
+        },
+        {
+          "test_name": "TestGcsFaultToleranceOptions",
+          "status": "pass",
+          "duration_ms": 216325,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestGcsFaultToleranceOptions"
+        },
+        {
+          "test_name": "TestGcsFaultToleranceAnnotations",
+          "status": "pass",
+          "duration_ms": 242993,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestGcsFaultToleranceAnnotations"
+        },
+        {
+          "test_name": "TestRayClusterSingleHostMultiSlice",
+          "status": "pass",
+          "duration_ms": 27748,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterSingleHostMultiSlice"
+        },
+        {
+          "test_name": "TestRayClusterMultiHostMultiSlice",
+          "status": "pass",
+          "duration_ms": 34074,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterMultiHostMultiSlice"
+        },
+        {
+          "test_name": "TestRayClusterManagedBy",
+          "status": "pass",
+          "duration_ms": 39922,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterManagedBy"
+        },
+        {
+          "test_name": "TestRayClusterSuspend",
+          "status": "pass",
+          "duration_ms": 68492,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterSuspend"
+        },
+        {
+          "test_name": "TestRayClusterWithResourceQuota",
+          "status": "pass",
+          "duration_ms": 6067,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterWithResourceQuota"
+        },
+        {
+          "test_name": "TestRayClusterScalingDown",
+          "status": "pass",
+          "duration_ms": 33837,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterScalingDown"
+        },
+        {
+          "test_name": "TestRayClusterUpgradeStrategy",
+          "status": "fail",
+          "duration_ms": 3657,
+          "error": "=== RUN   TestRayClusterUpgradeStrategy\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\nModified Ray Image to: rayproject/ray:2.52.1-aarch64 for ARM chips\n    raycluster_test.go:222: \n        Unexpected error:\n            \u003c*errors.StatusError | 0x14000490780\u003e: \n            failed to create typed patch object (test-ns-8p7dk/raycluster-upgrade-recreate; ray.io/v1, Kind=RayCluster): .spec.upgradeStrategy: field not declared in schema\n            {\n                ErrStatus: {\n                    TypeMeta: {Kind: \"\", APIVersion: \"\"},\n                    ListMeta: {\n                        SelfLink: \"\",\n                        ResourceVersion: \"\",\n                        Continue: \"\",\n                        RemainingItemCount: nil,\n                    },\n                    Status: \"Failure\",\n                    Message: \"failed to create typed patch object (test-ns-8p7dk/raycluster-upgrade-recreate; ray.io/v1, Kind=RayCluster): .spec.upgradeStrategy: field not declared in schema\",\n                    Reason: \"\",\n                    Details: nil,\n                    Code: 500,\n                },\n            }\n        occurred\n    test.go:102: [2026-01-26T17:25:20Z] Creating ephemeral output directory as KUBERAY_TEST_OUTPUT_DIR env variable is unset\n    test.go:105: [2026-01-26T17:25:20Z] Output directory has been created at: /var/folders/7_/d9ngwy550tnd097vfkrqqjrh0000gn/T/TestRayClusterUpgradeStrategy1546434824/001\n--- FAIL: TestRayClusterUpgradeStrategy (0.03s)\nFAIL\nFAIL\tgithub.com/ray-project/kuberay/ray-operator/test/e2e\t0.514s\nFAIL\n",
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2e/TestRayClusterUpgradeStrategy"
+        }
+      ],
+      "summary": {
+        "total": 11,
+        "passed": 10,
+        "failed": 1,
+        "duration_ms": 972870
+      }
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler",
+      "test_results": [
+        {
+          "test_name": "TestRayClusterAutoscalerV2IdleTimeout",
+          "status": "pass",
+          "duration_ms": 85392,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerV2IdleTimeout"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerGPUNodesForCPUTasks",
+          "status": "pass",
+          "duration_ms": 197654,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerGPUNodesForCPUTasks"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerDoNotRemoveIdlesForPlacementGroup",
+          "status": "pass",
+          "duration_ms": 171472,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerDoNotRemoveIdlesForPlacementGroup"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerSDKRequestResources",
+          "status": "pass",
+          "duration_ms": 35157,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerSDKRequestResources"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerAddNewWorkerGroup",
+          "status": "pass",
+          "duration_ms": 95751,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerAddNewWorkerGroup"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerPlacementGroup",
+          "status": "pass",
+          "duration_ms": 385368,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerPlacementGroup"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerGCSFT",
+          "status": "pass",
+          "duration_ms": 516089,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerGCSFT"
+        },
+        {
+          "test_name": "TestRayClusterAutoscaler",
+          "status": "pass",
+          "duration_ms": 339614,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscaler"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerWithFakeGPU",
+          "status": "pass",
+          "duration_ms": 198115,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerWithFakeGPU"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerWithCustomResource",
+          "status": "pass",
+          "duration_ms": 196268,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerWithCustomResource"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerWithDesiredState",
+          "status": "pass",
+          "duration_ms": 206892,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerWithDesiredState"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerMinReplicasUpdate",
+          "status": "pass",
+          "duration_ms": 76513,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerMinReplicasUpdate"
+        },
+        {
+          "test_name": "TestRayClusterAutoscalerMaxReplicasUpdate",
+          "status": "pass",
+          "duration_ms": 142109,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/.cov/coverage/.._.._rhoai_upstream_kuberay_ray-operator_test_e2eautoscaler/TestRayClusterAutoscalerMaxReplicasUpdate"
+        }
+      ],
+      "summary": {
+        "total": 13,
+        "passed": 13,
+        "failed": 0,
+        "duration_ms": 2646394
+      }
+    }
+  ],
+  "summary": {
+    "total": 53,
+    "passed": 49,
+    "failed": 4,
+    "duration_ms": 9514826
+  }
+}
