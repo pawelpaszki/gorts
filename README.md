@@ -32,7 +32,17 @@ Notes for the future:
 
 ### Run baseline (wip)
 ```
-./gorts baseline --manifest .cov/tests.json --output .cov/baseline.json \
+./gorts baseline \                                                                                                      26/02/1 1:01p.m.
+  --manifest .cov/tests.json \
+  --output .cov/baseline.json \
+  --coverage-dir .cov/coverage \
+  --retry 1 \
+  --skip TestZeroDowntimeUpgradeAfterOperatorUpgrade \
+  --skip TestRayServiceIncrementalUpgrade \
+  --skip TestDeletionStrategy \
+  --skip TestRayClusterUpgradeStrategy \
+  --pre-test "/Users/pawelpaszki/masters/gorts/scripts/cleanup_namespace.sh && kubectl exec -n default \$(kubectl get pod -n default -l app.kubernetes.io/name=kuberay -o jsonpath='{.items[0].metadata.name}') -- sh -c 'rm -rf /coverage/*'" \
+  --post-test "kubectl rollout restart deployment/kuberay-operator -n default && kubectl rollout status deployment/kuberay-operator -n default --timeout=120s && kubectl cp default/\$(kubectl get pod -n default -l app.kubernetes.io/name=kuberay -o jsonpath='{.items[0].metadata.name}'):/coverage/. {{COVERAGE_PATH}}" \
   --env KUBERAY_TEST_TIMEOUT_SHORT=5m,KUBERAY_TEST_TIMEOUT_MEDIUM=12m,KUBERAY_TEST_TIMEOUT_LONG=15m,KUBERAY_TEST_RAY_IMAGE=rayproject/ray:2.52.1
 ```
 

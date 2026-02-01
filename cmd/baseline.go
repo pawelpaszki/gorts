@@ -37,6 +37,7 @@ var baselineCmd = &cobra.Command{
 
 		r := runner.New()
 		r.Env = envVars
+		r.MaxRetries, _ = cmd.Flags().GetInt("retry")
 		preTestCmd, _ := cmd.Flags().GetString("pre-test")
 		postTestCmd, _ := cmd.Flags().GetString("post-test")
 		coverageDir, _ := cmd.Flags().GetString("coverage-dir")
@@ -154,4 +155,5 @@ func init() {
 	baselineCmd.Flags().String("post-test", "", "Command after each test")
 	baselineCmd.Flags().StringSlice("env", []string{}, "Env vars: KEY=val,KEY2=val2")
 	baselineCmd.Flags().StringSlice("skip", []string{}, "Tests to skip, e.g. --skip TestFoo --skip TestBar")
+	baselineCmd.Flags().Int("retry", 0, "Max retries per test on failure (default: 0)")
 }

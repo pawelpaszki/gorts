@@ -6,13 +6,17 @@ type Summary struct {
 	Total      int   `json:"total"`
 	Passed     int   `json:"passed"`
 	Failed     int   `json:"failed"`
+	Flaky      int   `json:"flaky"` // Tests that passed after retry
 	DurationMs int64 `json:"duration_ms"`
 }
 
 type TestResult struct {
+	Directory    string `json:"directory"`
 	TestName     string `json:"test_name"`
-	Status       string `json:"status"` // "pass", "fail"
+	Status       string `json:"status"`           // "pass", "fail"
 	DurationMs   int64  `json:"duration_ms"`
+	Retries      int    `json:"retries"`          // Number of retries needed
+	Flaky        bool   `json:"flaky"`            // True if passed only after retry
 	Error        string `json:"error,omitempty"`
 	CoveragePath string `json:"coverage_path,omitempty"`
 }
