@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 type Summary struct {
 	Total      int   `json:"total"`
@@ -13,10 +16,10 @@ type Summary struct {
 type TestResult struct {
 	Directory    string `json:"directory"`
 	TestName     string `json:"test_name"`
-	Status       string `json:"status"`           // "pass", "fail"
+	Status       string `json:"status"` // "pass", "fail"
 	DurationMs   int64  `json:"duration_ms"`
-	Retries      int    `json:"retries"`          // Number of retries needed
-	Flaky        bool   `json:"flaky"`            // True if passed only after retry
+	Retries      int    `json:"retries"` // Number of retries needed
+	Flaky        bool   `json:"flaky"`   // True if passed only after retry
 	Error        string `json:"error,omitempty"`
 	CoveragePath string `json:"coverage_path,omitempty"`
 }
@@ -32,4 +35,20 @@ type BaselineManifest struct {
 	CommitSHA        string            `json:"commit_sha"`
 	TestSuiteResults []TestSuiteResult `json:"test_suite_results"`
 	Summary          Summary           `json:"summary"`
+}
+
+func ValidateBaselineManifest(m *BaselineManifest) error {
+	if m.GeneratedAt.IsZero() {
+		return fmt.Errorf("missing generated_at")
+	}
+	if m.CommitSHA == "" {
+		return fmt.Errorf("missing commit_sha")
+	}
+	if len(m.TestSuiteResults) == 0 {
+		return fmt.Errorf("missing test_suite_results")
+	}
+	if m.Summary.Total == 0 {
+		return fmt.Errorf("summary is empty: no tests were run")
+	}
+	return nil
 }

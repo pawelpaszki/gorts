@@ -59,6 +59,26 @@ func SaveBaseline(path string, baseline *model.BaselineManifest) error {
 	return nil
 }
 
+func LoadBaseline(path string) (*model.BaselineManifest, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var baselineManifest model.BaselineManifest
+	decoder := json.NewDecoder(f)
+	// next line throws an error if unknown field is present in the json data
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&baselineManifest); err != nil {
+		return nil, fmt.Errorf("invalid baseline manifest JSON: %w", err)
+	}
+	if err := model.ValidateBaselineManifest(&baselineManifest); err != nil {
+		return nil, fmt.Errorf("invalid baseline manifest: %w", err)
+	}
+	return &baselineManifest, nil
+}
+
 func createDirectoryIfNotPresent(path string) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return fmt.Errorf("failed to create directory: %w", err)
