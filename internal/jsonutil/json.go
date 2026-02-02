@@ -79,6 +79,17 @@ func LoadBaseline(path string) (*model.BaselineManifest, error) {
 	return &baselineManifest, nil
 }
 
+func SaveMapping(path string, mapping *model.CoverageMapping) error {
+	createDirectoryIfNotPresent(path)
+	data, err := json.MarshalIndent(mapping, "", "  ")
+	if err != nil {
+		return err
+	}
+	saveFile(path, data)
+	fmt.Printf("[Info] Saved mapping to %s\n", path)
+	return nil
+}
+
 func createDirectoryIfNotPresent(path string) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return fmt.Errorf("failed to create directory: %w", err)
@@ -86,6 +97,7 @@ func createDirectoryIfNotPresent(path string) error {
 	return nil
 }
 
+// TODO - cleanup functions using this one and handle errors properly
 func saveFile(path string, data []byte) error {
 	if err := os.WriteFile(path, data, 0644); err != nil {
 		return err
