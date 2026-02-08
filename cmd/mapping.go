@@ -192,6 +192,5 @@ func init() {
 	mappingCmd.Flags().String("baseline", ".cov/baseline.json", "Path to baseline.json")
 	mappingCmd.Flags().String("output", ".cov/mapping.json", "Output path for mapping")
 	mappingCmd.Flags().String("module", "", "parameter normalizes coverage file paths to relative paths, enabling accurate correlation between instrumented code coverage data and source control change detection")
-	mappingCmd.MarkFlagRequired("mapping")
 	mappingCmd.MarkFlagRequired("module")
 }

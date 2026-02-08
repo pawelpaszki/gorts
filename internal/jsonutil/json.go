@@ -79,6 +79,25 @@ func LoadBaseline(path string) (*model.BaselineManifest, error) {
 	return &baselineManifest, nil
 }
 
+func LoadMapping(path string) (*model.CoverageMapping, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	var covMapping model.CoverageMapping
+	decoder := json.NewDecoder(f)
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&covMapping); err != nil { // ← Add this!
+		return nil, fmt.Errorf("invalid mapping JSON: %w", err)
+	}
+	if err := model.ValidateCoverageMapping(&covMapping); err != nil {
+		return nil, fmt.Errorf("invalid coverage mapping manifest: %w", err)
+	}
+	return &covMapping, nil
+}
+
 func SaveMapping(path string, mapping *model.CoverageMapping) error {
 	createDirectoryIfNotPresent(path)
 	data, err := json.MarshalIndent(mapping, "", "  ")
@@ -87,6 +106,17 @@ func SaveMapping(path string, mapping *model.CoverageMapping) error {
 	}
 	saveFile(path, data)
 	fmt.Printf("[Info] Saved mapping to %s\n", path)
+	return nil
+}
+
+func SaveSelection(path string, selection *model.Selection) error {
+	createDirectoryIfNotPresent(path)
+	data, err := json.MarshalIndent(selection, "", "  ")
+	if err != nil {
+		return err
+	}
+	saveFile(path, data)
+	fmt.Printf("[Info] Saved selection to %s\n", path)
 	return nil
 }
 

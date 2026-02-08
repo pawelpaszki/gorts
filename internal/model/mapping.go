@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // CoverageMapping holds the bidirectional mapping between files and tests
 type CoverageMapping struct {
@@ -16,4 +19,23 @@ type MappingStats struct {
 	TotalFiles      int     `json:"total_files"`
 	AvgFilesPerTest float64 `json:"avg_files_per_test"`
 	AvgTestsPerFile float64 `json:"avg_tests_per_file"`
+}
+
+func ValidateCoverageMapping(m *CoverageMapping) error {
+	if m.GeneratedAt.IsZero() {
+		return fmt.Errorf("missing generated_at")
+	}
+	if m.CommitSHA == "" {
+		return fmt.Errorf("missing commit_sha")
+	}
+	if len(m.FileToTests) == 0 {
+		return fmt.Errorf("file_to_tests mapping is empty")
+	}
+	if m.Stats.TotalTests == 0 {
+		return fmt.Errorf("invalid stats: total_tests is 0")
+	}
+	if m.Stats.TotalFiles == 0 {
+		return fmt.Errorf("invalid stats: total_files is 0")
+	}
+	return nil
 }
