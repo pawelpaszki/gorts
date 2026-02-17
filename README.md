@@ -51,6 +51,11 @@ Notes for the future:
 ./gorts mapping --baseline .cov/baseline.json --module "github.com/ray-project/kuberay/ray-operator"
 ```
 
+### select command example
+```
+./gorts select --baseline .cov/baseline.json --mapping .cov/mapping.json --output .cov/selection.json --repo /Users/pawelpaszki/rhoai/upstream/kuberay/ray-operator --strip-prefix ray-operator/ --run-all-on A,B,C # or --run-all-on "somefileA somefileB" 
+```
+
 ### git flow to be followed
 https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 

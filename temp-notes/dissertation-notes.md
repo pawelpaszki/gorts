@@ -13,4 +13,4 @@ observations
 - allow to check with forked repo changes (for CI/ PRs)
 https://stackoverflow.com/questions/20808892/git-diff-between-current-branch-and-master-but-not-including-unmerged-master-com
 this is actually not needed and will be skipped - it should work without any modifications for checking current PR against baseline commitSHA
-- 
+- force retest all (mention Ekstazi and probably fine more (istqb - environment/ impact analysis?)) - there potentially is a value in allowing to run all tests for changes in particular files (safety)

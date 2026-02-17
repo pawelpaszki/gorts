@@ -71,25 +71,46 @@ var selectCmd = &cobra.Command{
 			return nil
 		}
 
-		// Select tests based on changed files
-		selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
+		// Get run-all patterns/ filenames, etc
+		runAllPatterns, _ := cmd.Flags().GetStringSlice("run-all-on")
 
-		for _, file := range changedFiles {
-			if tests, ok := mapping.FileToTests[file]; ok {
-				for _, qualifiedName := range tests {
-					selectedTestsMap[qualifiedName] = true
+		// Check if any changed file triggers run-all
+		runAll, triggerFile := model.CheckRunAllTrigger(changedFiles, runAllPatterns)
+
+		var selectedTests []model.SelectedTest
+
+		if runAll {
+			// Run all tests
+			fmt.Printf("[Info] Run-all triggered by: %s\n", triggerFile)
+
+			// Get all tests from mapping
+			for qualifiedName := range mapping.TestToFiles {
+				dir, testName := model.ParseQualifiedTest(qualifiedName)
+				selectedTests = append(selectedTests, model.SelectedTest{
+					Directory: dir,
+					TestName:  testName,
+				})
+			}
+		} else {
+			// Select tests based on changed files
+			selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
+
+			for _, file := range changedFiles {
+				if tests, ok := mapping.FileToTests[file]; ok {
+					for _, qualifiedName := range tests {
+						selectedTestsMap[qualifiedName] = true
+					}
 				}
 			}
-		}
 
-		// Build selected tests slice
-		var selectedTests []model.SelectedTest
-		for qualifiedName := range selectedTestsMap {
-			dir, testName := model.ParseQualifiedTest(qualifiedName)
-			selectedTests = append(selectedTests, model.SelectedTest{
-				Directory: dir,
-				TestName:  testName,
-			})
+			// Build selected tests slice
+			for qualifiedName := range selectedTestsMap {
+				dir, testName := model.ParseQualifiedTest(qualifiedName)
+				selectedTests = append(selectedTests, model.SelectedTest{
+					Directory: dir,
+					TestName:  testName,
+				})
+			}
 		}
 
 		// Calculate stats
@@ -126,6 +147,9 @@ var selectCmd = &cobra.Command{
 		fmt.Printf("  From commit:    %s\n", selection.FromCommit[:12])
 		fmt.Printf("  To commit:      %s\n", selection.ToCommit[:12])
 		fmt.Printf("  Changed files:  %d\n", len(changedFiles))
+		if runAll {
+			fmt.Printf("  [Warning] RUN-ALL triggered by: %s\n", triggerFile)
+		}
 		fmt.Printf("  Selected tests: %d/%d (%.1f%% reduction)\n",
 			selectedCount, totalTests, reductionPercent)
 		fmt.Printf("  Output:         %s\n", outputPath)
@@ -177,9 +201,9 @@ func init() {
 	selectCmd.Flags().String("output", ".cov/selection.json", "Output path for tests selection structure")
 	selectCmd.Flags().String("repo", "", "Path to tested git repository from where the tests are executed")
 	selectCmd.Flags().String("strip-prefix", "", "Prefix to strip from git diff paths (e.g., ray-operator/)")
+	selectCmd.Flags().StringSlice("run-all-on", []string{}, "Patterns that trigger full test run (e.g., go.mod,go.sum,Makefile)")
 	selectCmd.MarkFlagRequired("baseline")
 	selectCmd.MarkFlagRequired("mapping")
 	selectCmd.MarkFlagRequired("repo")
 	selectCmd.MarkFlagRequired("strip-prefix")
-
 }
