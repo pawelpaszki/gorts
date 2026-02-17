@@ -76,14 +76,15 @@ var mappingCmd = &cobra.Command{
 					}
 				}
 
-				// Build mappings
-				testToFiles[result.TestName] = uniqueFiles
+				// Build mappings with fq names
+				qualifiedName := model.QualifyTestName(result.Directory, result.TestName)
+				testToFiles[qualifiedName] = uniqueFiles
 				for _, file := range uniqueFiles {
-					fileToTests[file] = appendUnique(fileToTests[file], result.TestName)
+					fileToTests[file] = appendUnique(fileToTests[file], qualifiedName)
 				}
 
 				testsProcessed++
-				fmt.Printf("[Info] %s covers %d files\n", result.TestName, len(uniqueFiles))
+				fmt.Printf("[Info] %s covers %d files\n", qualifiedName, len(uniqueFiles))
 			}
 		}
 

@@ -41,6 +41,11 @@ var selectCmd = &cobra.Command{
 		}
 		currentCommit = strings.TrimSpace(currentCommit)
 
+		if baseline.CommitSHA != mapping.CommitSHA {
+			fmt.Printf("[Warn] Baseline commit (%s) differs from mapping commit (%s)\n",
+				baseline.CommitSHA[:12], mapping.CommitSHA[:12])
+		}
+
 		fmt.Printf("DEBUG: mapping.CommitSHA=[%s] len=%d\n", mapping.CommitSHA, len(mapping.CommitSHA))
 		fmt.Printf("DEBUG: currentCommit=[%s] len=%d\n", currentCommit, len(currentCommit))
 
@@ -67,20 +72,20 @@ var selectCmd = &cobra.Command{
 		}
 
 		// Select tests based on changed files
-		selectedTestsMap := make(map[string]string) // testName -> directory
+		selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
+
 		for _, file := range changedFiles {
 			if tests, ok := mapping.FileToTests[file]; ok {
-				for _, testName := range tests {
-					// Find directory from baseline
-					dir := findTestDirectory(baseline, testName)
-					selectedTestsMap[testName] = dir
+				for _, qualifiedName := range tests {
+					selectedTestsMap[qualifiedName] = true
 				}
 			}
 		}
 
 		// Build selected tests slice
 		var selectedTests []model.SelectedTest
-		for testName, dir := range selectedTestsMap {
+		for qualifiedName := range selectedTestsMap {
+			dir, testName := model.ParseQualifiedTest(qualifiedName)
 			selectedTests = append(selectedTests, model.SelectedTest{
 				Directory: dir,
 				TestName:  testName,
