@@ -29,10 +29,16 @@ func (s SelectedTest) ForGoTestRun() string {
 	return fmt.Sprintf("^%s$", s.TestName)
 }
 
+// since coverage does not detect new tests
+// this needs to be handled separately
+// each git diff between the baseline commit and current commit
+// might also include new tests, hence ChangedTestFiles and NewTests are needed
 type SelectionStats struct {
 	TotalTests       int     `json:"total_tests"`
 	SelectedTests    int     `json:"selected_tests"`
 	ChangedFiles     int     `json:"changed_files"`
+	ChangedTestFiles int     `json:"changed_test_files"`
+	NewTests         int     `json:"new_tests"`
 	ReductionPercent float64 `json:"reduction_percent"`
 }
 

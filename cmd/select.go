@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -46,9 +47,6 @@ var selectCmd = &cobra.Command{
 				baseline.CommitSHA[:12], mapping.CommitSHA[:12])
 		}
 
-		fmt.Printf("DEBUG: mapping.CommitSHA=[%s] len=%d\n", mapping.CommitSHA, len(mapping.CommitSHA))
-		fmt.Printf("DEBUG: currentCommit=[%s] len=%d\n", currentCommit, len(currentCommit))
-
 		// Check if commits are the same
 		if mapping.CommitSHA == currentCommit {
 			fmt.Println("==================================================")
@@ -78,6 +76,8 @@ var selectCmd = &cobra.Command{
 		runAll, triggerFile := model.CheckRunAllTrigger(changedFiles, runAllPatterns)
 
 		var selectedTests []model.SelectedTest
+		var changedTestFilesCount int
+		var newTestsCount int
 
 		if runAll {
 			// Run all tests
@@ -92,14 +92,52 @@ var selectCmd = &cobra.Command{
 				})
 			}
 		} else {
+			// Separate changed files into source files and test files
+			var sourceFiles []string
+			var testFiles []string
+			for _, file := range changedFiles {
+				if strings.HasSuffix(file, "_test.go") {
+					testFiles = append(testFiles, file)
+				} else {
+					sourceFiles = append(sourceFiles, file)
+				}
+			}
+			changedTestFilesCount = len(testFiles)
+
 			// Select tests based on changed files
 			selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
 
-			for _, file := range changedFiles {
+			// Coverage-based selection for source files
+			for _, file := range sourceFiles {
 				if tests, ok := mapping.FileToTests[file]; ok {
 					for _, qualifiedName := range tests {
 						selectedTestsMap[qualifiedName] = true
 					}
+				}
+			}
+
+			// For changed _test.go files, select ALL tests in that package
+			for _, testFile := range testFiles {
+				pkgDir := filepath.Dir(testFile)
+				for qualifiedName := range mapping.TestToFiles {
+					dir, _ := model.ParseQualifiedTest(qualifiedName)
+					if dir == pkgDir {
+						selectedTestsMap[qualifiedName] = true
+					}
+				}
+			}
+
+			// Discover new tests not in the baseline mapping
+			newTests, err := discoverNewTests(repoPath, mapping, baseline)
+			if err != nil {
+				fmt.Printf("[Warn] Failed to discover new tests: %v\n", err)
+			} else {
+				for _, qualifiedName := range newTests {
+					selectedTestsMap[qualifiedName] = true
+				}
+				newTestsCount = len(newTests)
+				if newTestsCount > 0 {
+					fmt.Printf("[Info] Discovered %d new test(s) not in baseline\n", newTestsCount)
 				}
 			}
 
@@ -132,6 +170,8 @@ var selectCmd = &cobra.Command{
 				TotalTests:       totalTests,
 				SelectedTests:    selectedCount,
 				ChangedFiles:     len(changedFiles),
+				ChangedTestFiles: changedTestFilesCount,
+				NewTests:         newTestsCount,
 				ReductionPercent: reductionPercent,
 			},
 		}
@@ -147,6 +187,12 @@ var selectCmd = &cobra.Command{
 		fmt.Printf("  From commit:    %s\n", selection.FromCommit[:12])
 		fmt.Printf("  To commit:      %s\n", selection.ToCommit[:12])
 		fmt.Printf("  Changed files:  %d\n", len(changedFiles))
+		if changedTestFilesCount > 0 {
+			fmt.Printf("  Test files:     %d (all tests in affected packages selected)\n", changedTestFilesCount)
+		}
+		if newTestsCount > 0 {
+			fmt.Printf("  New tests:      %d (not in baseline, selected automatically)\n", newTestsCount)
+		}
 		if runAll {
 			fmt.Printf("  [Warning] RUN-ALL triggered by: %s\n", triggerFile)
 		}
@@ -192,6 +238,66 @@ func findTestDirectory(baseline *model.BaselineManifest, testName string) string
 		}
 	}
 	return "" // Unknown directory
+}
+
+// discoverNewTests finds tests that exist in the repo but are not in the baseline mapping
+func discoverNewTests(repoPath string, mapping *model.CoverageMapping, baseline *model.BaselineManifest) ([]string, error) {
+	var newTests []string
+
+	// Get unique directories from baseline
+	directories := make(map[string]bool)
+	for _, suite := range baseline.TestSuiteResults {
+		directories[suite.Directory] = true
+	}
+
+	// Run go test -list for each directory to discover current tests
+	for dir := range directories {
+		testDir := dir
+		if !strings.HasPrefix(testDir, "./") {
+			testDir = "./" + testDir
+		}
+
+		stdout, _, err := exec.Run(repoPath, "go", "test", "-list", ".*", testDir)
+		if err != nil {
+			continue
+		}
+
+		// Parse output to get test names
+		currentTests := parseGoTestList(stdout, dir)
+
+		// Find tests not in mapping
+		for _, qualifiedName := range currentTests {
+			if _, exists := mapping.TestToFiles[qualifiedName]; !exists {
+				newTests = append(newTests, qualifiedName)
+			}
+		}
+	}
+
+	return newTests, nil
+}
+
+// parseGoTestList parses the output of `go test -list` and returns qualified test names
+func parseGoTestList(output, directory string) []string {
+	var tests []string
+	lines := strings.Split(output, "\n")
+
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line == "" {
+			continue
+		}
+		// go test -list outputs test names, then "ok <package> <time>" or "? <package> [no test files]"
+		if strings.HasPrefix(line, "ok ") || strings.HasPrefix(line, "? ") {
+			continue
+		}
+		// Valid test names start with "Test", "Benchmark", "Example", or "Fuzz"
+		if strings.HasPrefix(line, "Test") || strings.HasPrefix(line, "Benchmark") ||
+			strings.HasPrefix(line, "Example") || strings.HasPrefix(line, "Fuzz") {
+			qualifiedName := model.QualifyTestName(directory, line)
+			tests = append(tests, qualifiedName)
+		}
+	}
+	return tests
 }
 
 func init() {

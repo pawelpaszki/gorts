@@ -103,15 +103,26 @@ func parseTextCoverage(path string) ([]string, error) {
 	return files, nil
 }
 
-// NormalizeFilePath removes module prefix to get relative path
+// NormalizeFilePath converts a coverage profile path to a relative path.
+//
+// Coverage profiles contain paths like:
+//   - "github.com/ray-project/kuberay/ray-operator/controllers/ray/raycluster_controller.go" (standard)
+//   - "/go/src/github.com/ray-project/kuberay/ray-operator/controllers/ray/raycluster_controller.go" (container with GOPATH)
+//   - "/app/github.com/ray-project/kuberay/ray-operator/controllers/ray/raycluster_controller.go" (container with custom mount)
+//   - "/home/user/go/src/github.com/ray-project/kuberay/ray-operator/controllers/ray/raycluster_controller.go" (local GOPATH)
+//
+// This function finds the module path within the full path and strips everything
+// before it (including the module path itself), returning just the relative path
+// within the module (e.g., "controllers/ray/raycluster_controller.go").
 func NormalizeFilePath(fullPath, modulePath string) string {
-	// Strip container path prefix first
-	fullPath = strings.TrimPrefix(fullPath, "/go/src/")
-
-	// Then strip module path
-	if strings.HasPrefix(fullPath, modulePath) {
-		return strings.TrimPrefix(fullPath, modulePath+"/")
+	idx := strings.Index(fullPath, modulePath)
+	if idx != -1 {
+		// Strip everything up to and including the module path
+		relativePath := fullPath[idx+len(modulePath):]
+		// Remove leading slash if present
+		return strings.TrimPrefix(relativePath, "/")
 	}
+	// Fallback: return as-is if module path not found
 	return fullPath
 }
 
