@@ -75,9 +75,18 @@ var selectCmd = &cobra.Command{
 		// Check if any changed file triggers run-all
 		runAll, triggerFile := model.CheckRunAllTrigger(changedFiles, runAllPatterns)
 
-		var selectedTests []model.SelectedTest
+		// Initialize to empty slice (not nil) for cleaner JSON output
+		selectedTests := []model.SelectedTest{}
 		var changedTestFilesCount int
+		var outOfScopeTestFilesCount int
+		var outOfScopeTestFiles []string
 		var newTestsCount int
+
+		// Build set of baseline directories for scope checking
+		baselineDirs := make(map[string]bool)
+		for _, suite := range baseline.TestSuiteResults {
+			baselineDirs[suite.Directory] = true
+		}
 
 		if runAll {
 			// Run all tests
@@ -94,15 +103,22 @@ var selectCmd = &cobra.Command{
 		} else {
 			// Separate changed files into source files and test files
 			var sourceFiles []string
-			var testFiles []string
+			var inScopeTestFiles []string
 			for _, file := range changedFiles {
 				if strings.HasSuffix(file, "_test.go") {
-					testFiles = append(testFiles, file)
+					// Check if this test file is in baseline scope
+					pkgDir := filepath.Dir(file)
+					if baselineDirs[pkgDir] {
+						inScopeTestFiles = append(inScopeTestFiles, file)
+					} else {
+						outOfScopeTestFiles = append(outOfScopeTestFiles, file)
+					}
 				} else {
 					sourceFiles = append(sourceFiles, file)
 				}
 			}
-			changedTestFilesCount = len(testFiles)
+			changedTestFilesCount = len(inScopeTestFiles)
+			outOfScopeTestFilesCount = len(outOfScopeTestFiles)
 
 			// Select tests based on changed files
 			selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
@@ -116,8 +132,8 @@ var selectCmd = &cobra.Command{
 				}
 			}
 
-			// For changed _test.go files, select ALL tests in that package
-			for _, testFile := range testFiles {
+			// For changed _test.go files (in scope), select ALL tests in that package
+			for _, testFile := range inScopeTestFiles {
 				pkgDir := filepath.Dir(testFile)
 				for qualifiedName := range mapping.TestToFiles {
 					dir, _ := model.ParseQualifiedTest(qualifiedName)
@@ -161,18 +177,20 @@ var selectCmd = &cobra.Command{
 
 		// Build selection result
 		selection := &model.Selection{
-			GeneratedAt:   time.Now().UTC(),
-			FromCommit:    mapping.CommitSHA,
-			ToCommit:      currentCommit,
-			ChangedFiles:  changedFiles,
-			SelectedTests: selectedTests,
+			GeneratedAt:         time.Now().UTC(),
+			FromCommit:          mapping.CommitSHA,
+			ToCommit:            currentCommit,
+			ChangedFiles:        changedFiles,
+			SelectedTests:       selectedTests,
+			OutOfScopeTestFiles: outOfScopeTestFiles,
 			Stats: model.SelectionStats{
-				TotalTests:       totalTests,
-				SelectedTests:    selectedCount,
-				ChangedFiles:     len(changedFiles),
-				ChangedTestFiles: changedTestFilesCount,
-				NewTests:         newTestsCount,
-				ReductionPercent: reductionPercent,
+				TotalTests:          totalTests,
+				SelectedTests:       selectedCount,
+				ChangedFiles:        len(changedFiles),
+				ChangedTestFiles:    changedTestFilesCount,
+				OutOfScopeTestFiles: outOfScopeTestFilesCount,
+				NewTests:            newTestsCount,
+				ReductionPercent:    reductionPercent,
 			},
 		}
 
@@ -188,7 +206,13 @@ var selectCmd = &cobra.Command{
 		fmt.Printf("  To commit:      %s\n", selection.ToCommit[:12])
 		fmt.Printf("  Changed files:  %d\n", len(changedFiles))
 		if changedTestFilesCount > 0 {
-			fmt.Printf("  Test files:     %d (all tests in affected packages selected)\n", changedTestFilesCount)
+			fmt.Printf("  Test files:     %d (in scope, all tests in affected packages selected)\n", changedTestFilesCount)
+		}
+		if outOfScopeTestFilesCount > 0 {
+			fmt.Printf("  [Warn] Out-of-scope test files: %d (not in baseline, ignored by RTS)\n", outOfScopeTestFilesCount)
+			for _, f := range outOfScopeTestFiles {
+				fmt.Printf("         - %s\n", f)
+			}
 		}
 		if newTestsCount > 0 {
 			fmt.Printf("  New tests:      %d (not in baseline, selected automatically)\n", newTestsCount)

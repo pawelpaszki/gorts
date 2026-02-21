@@ -5,13 +5,15 @@ import (
 	"time"
 )
 
+// OutOfScopeTestFiles contains ignored tests (not in the baseline - likely unit tests)
 type Selection struct {
-	GeneratedAt   time.Time      `json:"generated_at"`
-	FromCommit    string         `json:"from_commit"`
-	ToCommit      string         `json:"to_commit"`
-	ChangedFiles  []string       `json:"changed_files"`
-	SelectedTests []SelectedTest `json:"selected_tests"`
-	Stats         SelectionStats `json:"stats"`
+	GeneratedAt         time.Time      `json:"generated_at"`
+	FromCommit          string         `json:"from_commit"`
+	ToCommit            string         `json:"to_commit"`
+	ChangedFiles        []string       `json:"changed_files"`
+	SelectedTests       []SelectedTest `json:"selected_tests"`
+	OutOfScopeTestFiles []string       `json:"out_of_scope_test_files,omitempty"`
+	Stats               SelectionStats `json:"stats"`
 }
 
 type SelectedTest struct {
@@ -33,13 +35,16 @@ func (s SelectedTest) ForGoTestRun() string {
 // this needs to be handled separately
 // each git diff between the baseline commit and current commit
 // might also include new tests, hence ChangedTestFiles and NewTests are needed
+// additionaly - we only care about directories from the baseline - there might be some
+// tests (unit and/ or e2e) that we ignore (no baseline entry)
 type SelectionStats struct {
-	TotalTests       int     `json:"total_tests"`
-	SelectedTests    int     `json:"selected_tests"`
-	ChangedFiles     int     `json:"changed_files"`
-	ChangedTestFiles int     `json:"changed_test_files"`
-	NewTests         int     `json:"new_tests"`
-	ReductionPercent float64 `json:"reduction_percent"`
+	TotalTests          int     `json:"total_tests"`
+	SelectedTests       int     `json:"selected_tests"`
+	ChangedFiles        int     `json:"changed_files"`
+	ChangedTestFiles    int     `json:"changed_test_files"`
+	OutOfScopeTestFiles int     `json:"out_of_scope_test_files"`
+	NewTests            int     `json:"new_tests"`
+	ReductionPercent    float64 `json:"reduction_percent"`
 }
 
 func ValidateSelection(s *Selection) error {
