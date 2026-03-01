@@ -5,7 +5,7 @@ observations
 - skipping tests (due to complicated setup (kuberay))
 - pre/post test hooks (go coverage flushing/ operator restart (kuberay))
 - serial test execution (coverage in isolation)
-- coverage (https://go.dev/blog/integration-test-coverage)
+- coverage (https://go.dev/blog/integration-test-coverage) and more coverage (https://pkg.go.dev/cmd/covdata)
 - path normalization
 
 ## improvements phase
@@ -21,3 +21,20 @@ this is actually not needed and will be skipped - it should work without any mod
 
 ## safety/ recall
 re-read rustyRTS (and/ or similar) with their approach for artificial breaking test changes
+
+## notes to self - function level
+* use checksums for functions and the following to get coverage data for functions:
+```
+go tool covdata func -i=.cov/coverage/test_e2e/TestGcsFaultToleranceAnnotations
+```
+
+### go AST references:
+- [go/ast package](https://pkg.go.dev/go/ast)
+- [go/parser package](https://pkg.go.dev/go/parser)
+- [go/printer package](https://pkg.go.dev/go/printer)
+- [go/token package](https://pkg.go.dev/go/token)
+- [ASTs in Go](https://blog.bradleygore.com/2022/04/18/ast-in-go-p1/)
+
+function level decisions:
+* changed function (checksum) - select all tests that cover that function
+* new function - ?select all tests covering a file containing the function?

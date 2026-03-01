@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/pawelpaszki/gorts/internal/coverage"
+	"github.com/pawelpaszki/gorts/internal/gitutil"
 	"github.com/pawelpaszki/gorts/internal/jsonutil"
 	"github.com/pawelpaszki/gorts/internal/model"
 	"github.com/spf13/cobra"
@@ -31,6 +32,19 @@ var mappingCmd = &cobra.Command{
 			return fmt.Errorf("loading baseline: %w", err)
 		}
 
+		repoPath, _ := cmd.Flags().GetString("repo")
+
+		if repoPath != "" {
+			if err := gitutil.VerifyAtCommit(repoPath, baseline.CommitSHA); err != nil {
+				return fmt.Errorf("commit mismatch: %w", err)
+			}
+
+			// Safeguard 2: Verify no uncommitted Go file changes
+			if err := gitutil.VerifyCleanRepo(repoPath); err != nil {
+				return fmt.Errorf("repo not clean: %w", err)
+			}
+		}
+
 		// Initialize maps
 		fileToTests := make(map[string][]string)
 		testToFiles := make(map[string][]string)
@@ -38,7 +52,7 @@ var mappingCmd = &cobra.Command{
 		testsProcessed := 0
 		testsSkipped := 0
 
-		// Process each test result
+		// Process each test result (file level)
 		for _, suite := range baseline.TestSuiteResults {
 			for _, result := range suite.TestResults {
 				// Skip if no coverage path or test failed
@@ -91,13 +105,73 @@ var mappingCmd = &cobra.Command{
 		// Calculate stats
 		stats := calculateStats(fileToTests, testToFiles)
 
+		// function level analysis
+		functionToTests := make(map[string][]string)
+		testToFunctions := make(map[string][]string)
+		var allCoveredFiles []string // Collect all files for checksum computation
+
+		for _, suite := range baseline.TestSuiteResults {
+			for _, result := range suite.TestResults {
+				if result.CoveragePath == "" {
+					continue
+				}
+
+				qualifiedTestName := model.QualifyTestName(result.Directory, result.TestName)
+
+				// Parse function-level coverage
+				funcCoverage, err := coverage.ParseFunctionCoverage(result.CoveragePath)
+				if err != nil {
+					fmt.Printf("[Warn] Failed to parse function coverage for %s: %v\n", result.TestName, err)
+					continue
+				}
+
+				for _, fc := range funcCoverage {
+					qualifiedFunc := coverage.QualifyFunction(fc.FilePath, fc.FunctionName, modulePath)
+
+					// Build function→test mapping
+					functionToTests[qualifiedFunc] = appendUnique(functionToTests[qualifiedFunc], qualifiedTestName)
+
+					// Build test→function mapping
+					testToFunctions[qualifiedTestName] = appendUnique(testToFunctions[qualifiedTestName], qualifiedFunc)
+
+					// Collect file for checksum computation
+					relFile := coverage.NormalizeFilePath(fc.FilePath, modulePath)
+					allCoveredFiles = appendUnique(allCoveredFiles, relFile)
+				}
+			}
+		}
+
+		// Compute function checksums
+		var functionChecksums map[string]string
+		if repoPath != "" {
+			functionChecksums, err = coverage.ComputeAllChecksums(repoPath, allCoveredFiles)
+			if err != nil {
+				fmt.Printf("[Warn] Failed to compute function checksums: %v\n", err)
+			} else {
+				fmt.Printf("[Info] Computed checksums for %d functions\n", len(functionChecksums))
+			}
+		}
+
+		// Update stats
+		stats.TotalFunctions = len(functionToTests)
+		if stats.TotalTests > 0 {
+			totalFuncsPerTest := 0
+			for _, funcs := range testToFunctions {
+				totalFuncsPerTest += len(funcs)
+			}
+			stats.AvgFunctionsPerTest = float64(totalFuncsPerTest) / float64(stats.TotalTests)
+		}
+
 		// Build mapping struct
 		mapping := &model.CoverageMapping{
-			GeneratedAt: time.Now().UTC(),
-			CommitSHA:   baseline.CommitSHA,
-			FileToTests: fileToTests,
-			TestToFiles: testToFiles,
-			Stats:       stats,
+			GeneratedAt:       time.Now().UTC(),
+			CommitSHA:         baseline.CommitSHA,
+			FileToTests:       fileToTests,
+			TestToFiles:       testToFiles,
+			FunctionToTests:   functionToTests,
+			TestToFunctions:   testToFunctions,
+			FunctionChecksums: functionChecksums,
+			Stats:             stats,
 		}
 
 		// Save
@@ -193,5 +267,6 @@ func init() {
 	mappingCmd.Flags().String("baseline", ".cov/baseline.json", "Path to baseline.json")
 	mappingCmd.Flags().String("output", ".cov/mapping.json", "Output path for mapping")
 	mappingCmd.Flags().String("module", "", "parameter normalizes coverage file paths to relative paths, enabling accurate correlation between instrumented code coverage data and source control change detection")
+	mappingCmd.Flags().String("repo", "", "Path to git repository (required for function-level checksums)")
 	mappingCmd.MarkFlagRequired("module")
 }

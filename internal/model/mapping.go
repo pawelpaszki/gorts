@@ -7,18 +7,28 @@ import (
 
 // CoverageMapping holds the bidirectional mapping between files and tests
 type CoverageMapping struct {
-	GeneratedAt time.Time           `json:"generated_at"`
-	CommitSHA   string              `json:"commit_sha"`
-	FileToTests map[string][]string `json:"file_to_tests"` // file.go → [Test1, Test2]
-	TestToFiles map[string][]string `json:"test_to_files"` // Test1 → [file1.go, file2.go]
-	Stats       MappingStats        `json:"stats"`
+	GeneratedAt time.Time `json:"generated_at"`
+	CommitSHA   string    `json:"commit_sha"`
+
+	// file level mapping
+	FileToTests map[string][]string `json:"file_to_tests"` // all tests covering given file
+	TestToFiles map[string][]string `json:"test_to_files"` // all files covered by given test
+
+	// function level mapping
+	FunctionToTests   map[string][]string `json:"function_to_tests,omitempty"`
+	TestToFunctions   map[string][]string `json:"test_to_functions,omitempty"`
+	FunctionChecksums map[string]string   `json:"function_checksums,omitempty"`
+
+	Stats MappingStats `json:"stats"`
 }
 
 type MappingStats struct {
-	TotalTests      int     `json:"total_tests"`
-	TotalFiles      int     `json:"total_files"`
-	AvgFilesPerTest float64 `json:"avg_files_per_test"`
-	AvgTestsPerFile float64 `json:"avg_tests_per_file"`
+	TotalTests          int     `json:"total_tests"`
+	TotalFiles          int     `json:"total_files"`
+	TotalFunctions      int     `json:"total_functions,omitempty"`
+	AvgFilesPerTest     float64 `json:"avg_files_per_test"`
+	AvgTestsPerFile     float64 `json:"avg_tests_per_file"`
+	AvgFunctionsPerTest float64 `json:"avg_functions_per_test,omitempty"`
 }
 
 func ValidateCoverageMapping(m *CoverageMapping) error {

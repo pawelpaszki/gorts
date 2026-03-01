@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pawelpaszki/gorts/internal/coverage"
 	"github.com/pawelpaszki/gorts/internal/exec"
 	"github.com/pawelpaszki/gorts/internal/jsonutil"
 	"github.com/pawelpaszki/gorts/internal/model"
@@ -22,6 +23,7 @@ var selectCmd = &cobra.Command{
 		outputPath, _ := cmd.Flags().GetString("output")
 		repoPath, _ := cmd.Flags().GetString("repo")
 		stripPrefix, _ := cmd.Flags().GetString("strip-prefix")
+		granularity, _ := cmd.Flags().GetString("granularity")
 
 		// Load baseline (for directory info and validation)
 		baseline, err := jsonutil.LoadBaseline(baselinePath)
@@ -124,10 +126,25 @@ var selectCmd = &cobra.Command{
 			selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
 
 			// Coverage-based selection for source files
-			for _, file := range sourceFiles {
-				if tests, ok := mapping.FileToTests[file]; ok {
-					for _, qualifiedName := range tests {
-						selectedTestsMap[qualifiedName] = true
+			if granularity == "function" && len(mapping.FunctionChecksums) > 0 {
+				// Function-level selection: compare checksums to find changed functions
+				changedFunctions := findChangedFunctions(repoPath, sourceFiles, mapping.FunctionChecksums)
+				fmt.Printf("[Info] Function-level analysis: %d changed functions detected\n", len(changedFunctions))
+
+				for _, qualifiedFunc := range changedFunctions {
+					if tests, ok := mapping.FunctionToTests[qualifiedFunc]; ok {
+						for _, qualifiedName := range tests {
+							selectedTestsMap[qualifiedName] = true
+						}
+					}
+				}
+			} else {
+				// File-level selection (default)
+				for _, file := range sourceFiles {
+					if tests, ok := mapping.FileToTests[file]; ok {
+						for _, qualifiedName := range tests {
+							selectedTestsMap[qualifiedName] = true
+						}
 					}
 				}
 			}
@@ -324,6 +341,53 @@ func parseGoTestList(output, directory string) []string {
 	return tests
 }
 
+// findChangedFunctions compares current function checksums against baseline checksums
+// to find functions that have changed
+func findChangedFunctions(repoPath string, changedFiles []string, baselineChecksums map[string]string) []string {
+	var changedFunctions []string
+
+	// Compute current checksums for changed files
+	currentChecksums, err := coverage.ComputeAllChecksums(repoPath, changedFiles)
+	if err != nil {
+		return changedFunctions
+	}
+
+	// Compare with baseline checksums
+	for qualifiedFunc, currentHash := range currentChecksums {
+		baselineHash, exists := baselineChecksums[qualifiedFunc]
+		if !exists {
+			// New function - consider it changed
+			changedFunctions = append(changedFunctions, qualifiedFunc)
+		} else if currentHash != baselineHash {
+			// Function checksum changed
+			changedFunctions = append(changedFunctions, qualifiedFunc)
+		}
+	}
+
+	// Also check for deleted functions (in baseline but not in current)
+	for qualifiedFunc := range baselineChecksums {
+		// Extract file from qualified name (file.go::FuncName)
+		parts := strings.Split(qualifiedFunc, "::")
+		if len(parts) < 2 {
+			continue
+		}
+		file := parts[0]
+
+		// Only check functions from changed files
+		for _, changedFile := range changedFiles {
+			if file == changedFile {
+				if _, exists := currentChecksums[qualifiedFunc]; !exists {
+					// Function was deleted - select tests that covered it
+					changedFunctions = append(changedFunctions, qualifiedFunc)
+				}
+				break
+			}
+		}
+	}
+
+	return changedFunctions
+}
+
 func init() {
 	rootCmd.AddCommand(selectCmd)
 	selectCmd.Flags().String("baseline", ".cov/baseline.json", "Path to baseline.json")
@@ -331,6 +395,7 @@ func init() {
 	selectCmd.Flags().String("output", ".cov/selection.json", "Output path for tests selection structure")
 	selectCmd.Flags().String("repo", "", "Path to tested git repository from where the tests are executed")
 	selectCmd.Flags().String("strip-prefix", "", "Prefix to strip from git diff paths (e.g., ray-operator/)")
+	selectCmd.Flags().String("granularity", "file", "Selection granularity: 'file' or 'function'")
 	selectCmd.Flags().StringSlice("run-all-on", []string{}, "Patterns that trigger full test run (e.g., go.mod,go.sum,Makefile)")
 	selectCmd.MarkFlagRequired("baseline")
 	selectCmd.MarkFlagRequired("mapping")
