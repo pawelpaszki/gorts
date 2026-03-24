@@ -60,22 +60,34 @@ var selectCmd = &cobra.Command{
 			return nil
 		}
 
-		// Get changed files between baseline commit and current
-		changedFiles, err := getChangedFiles(repoPath, mapping.CommitSHA, currentCommit, stripPrefix)
+		// Get ALL changed files between baseline commit and current (including non-.go files)
+		allChangedFiles, err := getAllChangedFiles(repoPath, mapping.CommitSHA, currentCommit, stripPrefix)
 		if err != nil {
 			return fmt.Errorf("failed to get changed files: %w", err)
 		}
 
-		if len(changedFiles) == 0 {
-			fmt.Println("No source files changed (only non-code files modified)")
+		if len(allChangedFiles) == 0 {
+			fmt.Println("No files changed between commits")
 			return nil
 		}
 
-		// Get run-all patterns/ filenames, etc
+		// Check run-all patterns BEFORE filtering to .go files
 		runAllPatterns, _ := cmd.Flags().GetStringSlice("run-all-on")
+		runAll, triggerFile := model.CheckRunAllTrigger(allChangedFiles, runAllPatterns)
 
-		// Check if any changed file triggers run-all
-		runAll, triggerFile := model.CheckRunAllTrigger(changedFiles, runAllPatterns)
+		// Filter to .go files for normal selection
+		var changedFiles []string
+		for _, f := range allChangedFiles {
+			if strings.HasSuffix(f, ".go") {
+				changedFiles = append(changedFiles, f)
+			}
+		}
+
+		// If no .go files changed and no run-all trigger, nothing to do
+		if !runAll && len(changedFiles) == 0 {
+			fmt.Println("No source files changed (only non-code files modified)")
+			return nil
+		}
 
 		// Initialize to empty slice (not nil) for cleaner JSON output
 		selectedTests := []model.SelectedTest{}
@@ -246,7 +258,8 @@ var selectCmd = &cobra.Command{
 	},
 }
 
-func getChangedFiles(repoPath, fromCommit, toCommit, stripPrefix string) ([]string, error) {
+// getAllChangedFiles returns all changed files (not just .go) for run-all pattern matching
+func getAllChangedFiles(repoPath, fromCommit, toCommit, stripPrefix string) ([]string, error) {
 	fromCommit = strings.TrimSpace(fromCommit)
 	toCommit = strings.TrimSpace(toCommit)
 
@@ -259,8 +272,7 @@ func getChangedFiles(repoPath, fromCommit, toCommit, stripPrefix string) ([]stri
 	var files []string
 	for _, line := range lines {
 		line = strings.TrimSpace(line)
-		if line != "" && strings.HasSuffix(line, ".go") {
-			// Strip prefix if provided
+		if line != "" {
 			if stripPrefix != "" {
 				line = strings.TrimPrefix(line, stripPrefix)
 			}
