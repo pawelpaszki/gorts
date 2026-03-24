@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"time"
 
 	"github.com/pawelpaszki/gorts/internal/model"
@@ -13,10 +14,12 @@ type PreHook func(directory, testName string) error
 type PostHook func(directory, testName string, result *model.TestResult) error
 
 type Runner struct {
-	PreHook    PreHook
-	PostHook   PostHook
-	Env        []string // e.g., []string{"KEY=value", "FOO=bar"}
-	MaxRetries int      // Max retry attempts per test (0 = no retries)
+	PreHook     PreHook
+	PostHook    PostHook
+	Env         []string
+	MaxRetries  int
+	TestBinary  string // Path to pre-built test binary
+	CoverageDir string // Base directory for coverage output (used with TestBinary)
 }
 
 func New() *Runner {
@@ -38,26 +41,43 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 	for attempt := 0; attempt <= r.MaxRetries; attempt++ {
 		if attempt > 0 {
 			fmt.Printf("    [Retry %d/%d] %s\n", attempt, r.MaxRetries, testName)
-			time.Sleep(5 * time.Second) // Brief delay before retry
+			time.Sleep(5 * time.Second)
 		}
 
 		// Pre-hook (run before each attempt)
 		if r.PreHook != nil {
 			if err := r.PreHook(directory, testName); err != nil {
 				fmt.Printf("    [Warn] Pre-hook failed: %v\n", err)
-				// Continue anyway - test might still work
 			}
 		}
 
-		// Run the test
-		cmd := exec.Command("go", "test", "-v",
-			"-timeout", "30m",
-			"-p", "1",
-			"-parallel", "1",
-			"-count", "1",
-			"-run", fmt.Sprintf("^%s$", testName),
-			"./...")
-		cmd.Dir = directory
+		// Build the command based on mode
+		var cmd *exec.Cmd
+
+		if r.TestBinary != "" {
+			// Instrumented binary mode - coverage collected automatically
+			covPath := r.buildCoveragePath(directory, testName)
+			result.CoveragePath = covPath
+
+			cmd = exec.Command(r.TestBinary,
+				"-test.v",
+				"-test.timeout", "30m",
+				"-test.run", fmt.Sprintf("^%s$", testName),
+				"-test.gocoverdir", covPath,
+			)
+			cmd.Dir = directory
+		} else {
+			// Standard mode - no coverage (hooks SHOULD handle it)
+			cmd = exec.Command("go", "test", "-v",
+				"-timeout", "30m",
+				"-p", "1",
+				"-parallel", "1",
+				"-count", "1",
+				"-run", fmt.Sprintf("^%s$", testName),
+				"./...")
+			cmd.Dir = directory
+		}
+
 		cmd.Env = append(os.Environ(), r.Env...)
 
 		output, err := cmd.CombinedOutput()
@@ -71,26 +91,44 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 		}
 
 		if err == nil {
-			// Test passed
 			result.Status = "pass"
 			result.Retries = attempt
-			result.Flaky = attempt > 0 // Flaky if needed any retry to pass
+			result.Flaky = attempt > 0
 			result.DurationMs = time.Since(totalStart).Milliseconds()
 			return result, nil
 		}
 
-		// Test failed, will retry if attempts remain
 		fmt.Printf("    [Attempt %d failed]\n", attempt+1)
 	}
 
-	// All attempts exhausted - test failed
+	// All attempts exhausted
 	result.Status = "fail"
 	result.Retries = r.MaxRetries
 	result.Flaky = false
-	result.Error = truncateOutput(lastOutput, 2000) // Limit error size
+	result.Error = truncateOutput(lastOutput, 2000)
 	result.DurationMs = time.Since(totalStart).Milliseconds()
 
 	return result, nil
+}
+
+// buildCoveragePath creates and returns the coverage directory for a test
+func (r *Runner) buildCoveragePath(directory, testName string) string {
+	if r.CoverageDir == "" {
+		return ""
+	}
+
+	// Sanitize directory name for path
+	sanitized := filepath.Base(directory)
+	parent := filepath.Base(filepath.Dir(directory))
+	if parent != "." && parent != "/" {
+		sanitized = parent + "_" + sanitized
+	}
+
+	covPath := filepath.Join(r.CoverageDir, sanitized, testName)
+	covPath, _ = filepath.Abs(covPath)
+	os.MkdirAll(covPath, 0755)
+
+	return covPath
 }
 
 // truncateOutput limits output length for storage
