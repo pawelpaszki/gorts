@@ -13,6 +13,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type selectionResult struct {
+	selectedTests       []model.SelectedTest
+	outOfScopeTestFiles []string
+	changedTestFiles    int
+	newTestsCount       int
+}
+
 var selectCmd = &cobra.Command{
 	Use:   "select",
 	Short: "Select tests using gorts",
@@ -24,43 +31,25 @@ var selectCmd = &cobra.Command{
 		repoPath, _ := cmd.Flags().GetString("repo")
 		stripPrefix, _ := cmd.Flags().GetString("strip-prefix")
 		granularity, _ := cmd.Flags().GetString("granularity")
+		runAllPatterns, _ := cmd.Flags().GetStringSlice("run-all-on")
 
-		// Load baseline (for directory info and validation)
-		baseline, err := jsonutil.LoadBaseline(baselinePath)
+		baseline, mapping, err := loadBaselineAndMapping(baselinePath, mappingPath)
 		if err != nil {
-			return fmt.Errorf("failed to load baseline: %w", err)
+			return err
 		}
 
-		// Load mapping
-		mapping, err := jsonutil.LoadMapping(mappingPath)
+		currentCommit, err := getCurrentCommit(repoPath)
 		if err != nil {
-			return fmt.Errorf("failed to load mapping: %w", err)
+			return err
 		}
 
-		// Get current commit SHA from repo
-		currentCommit, _, err := exec.Run(repoPath, "git", "rev-parse", "HEAD")
-		if err != nil {
-			return fmt.Errorf("failed to get current commit: %w", err)
-		}
-		currentCommit = strings.TrimSpace(currentCommit)
+		warnIfCommitMismatch(baseline, mapping)
 
-		if baseline.CommitSHA != mapping.CommitSHA {
-			fmt.Printf("[Warn] Baseline commit (%s) differs from mapping commit (%s)\n",
-				baseline.CommitSHA[:12], mapping.CommitSHA[:12])
-		}
-
-		// Check if commits are the same
 		if mapping.CommitSHA == currentCommit {
-			fmt.Println("==================================================")
-			fmt.Println("No changes detected!")
-			fmt.Printf("  Baseline commit: %s\n", mapping.CommitSHA)
-			fmt.Printf("  Current commit:  %s\n", currentCommit)
-			fmt.Println("  Recommendation: No tests need to be run")
-			fmt.Println("==================================================")
+			printNoChangesDetected(mapping.CommitSHA, currentCommit)
 			return nil
 		}
 
-		// Get ALL changed files between baseline commit and current (including non-.go files)
 		allChangedFiles, err := getAllChangedFiles(repoPath, mapping.CommitSHA, currentCommit, stripPrefix)
 		if err != nil {
 			return fmt.Errorf("failed to get changed files: %w", err)
@@ -71,191 +60,271 @@ var selectCmd = &cobra.Command{
 			return nil
 		}
 
-		// Check run-all patterns BEFORE filtering to .go files
-		runAllPatterns, _ := cmd.Flags().GetStringSlice("run-all-on")
 		runAll, triggerFile := model.CheckRunAllTrigger(allChangedFiles, runAllPatterns)
+		changedGoFiles := filterGoFiles(allChangedFiles)
 
-		// Filter to .go files for normal selection
-		var changedFiles []string
-		for _, f := range allChangedFiles {
-			if strings.HasSuffix(f, ".go") {
-				changedFiles = append(changedFiles, f)
-			}
-		}
-
-		// If no .go files changed and no run-all trigger, nothing to do
-		if !runAll && len(changedFiles) == 0 {
+		if !runAll && len(changedGoFiles) == 0 {
 			fmt.Println("No source files changed (only non-code files modified)")
 			return nil
 		}
 
-		// Initialize to empty slice (not nil) for cleaner JSON output
-		selectedTests := []model.SelectedTest{}
-		var changedTestFilesCount int
-		var outOfScopeTestFilesCount int
-		var outOfScopeTestFiles []string
-		var newTestsCount int
+		baselineDirs := buildBaselineDirs(baseline)
 
-		// Build set of baseline directories for scope checking
-		baselineDirs := make(map[string]bool)
-		for _, suite := range baseline.TestSuiteResults {
-			baselineDirs[suite.Directory] = true
-		}
-
+		var result selectionResult
 		if runAll {
-			// Run all tests
 			fmt.Printf("[Info] Run-all triggered by: %s\n", triggerFile)
-
-			// Get all tests from mapping
-			for qualifiedName := range mapping.TestToFiles {
-				dir, testName := model.ParseQualifiedTest(qualifiedName)
-				selectedTests = append(selectedTests, model.SelectedTest{
-					Directory: dir,
-					TestName:  testName,
-				})
-			}
+			result.selectedTests = selectAllTests(mapping)
 		} else {
-			// Separate changed files into source files and test files
-			var sourceFiles []string
-			var inScopeTestFiles []string
-			for _, file := range changedFiles {
-				if strings.HasSuffix(file, "_test.go") {
-					// Check if this test file is in baseline scope
-					pkgDir := filepath.Dir(file)
-					if baselineDirs[pkgDir] {
-						inScopeTestFiles = append(inScopeTestFiles, file)
-					} else {
-						outOfScopeTestFiles = append(outOfScopeTestFiles, file)
-					}
-				} else {
-					sourceFiles = append(sourceFiles, file)
-				}
-			}
-			changedTestFilesCount = len(inScopeTestFiles)
-			outOfScopeTestFilesCount = len(outOfScopeTestFiles)
-
-			// Select tests based on changed files
-			selectedTestsMap := make(map[string]bool) // qualifiedName -> selected
-
-			// Coverage-based selection for source files
-			if granularity == "function" && len(mapping.FunctionChecksums) > 0 {
-				// Function-level selection: compare checksums to find changed functions
-				changedFunctions := findChangedFunctions(repoPath, sourceFiles, mapping.FunctionChecksums)
-				fmt.Printf("[Info] Function-level analysis: %d changed functions detected\n", len(changedFunctions))
-
-				for _, qualifiedFunc := range changedFunctions {
-					if tests, ok := mapping.FunctionToTests[qualifiedFunc]; ok {
-						for _, qualifiedName := range tests {
-							selectedTestsMap[qualifiedName] = true
-						}
-					}
-				}
-			} else {
-				// File-level selection (default)
-				for _, file := range sourceFiles {
-					if tests, ok := mapping.FileToTests[file]; ok {
-						for _, qualifiedName := range tests {
-							selectedTestsMap[qualifiedName] = true
-						}
-					}
-				}
-			}
-
-			// For changed _test.go files (in scope), select ALL tests in that package
-			for _, testFile := range inScopeTestFiles {
-				pkgDir := filepath.Dir(testFile)
-				for qualifiedName := range mapping.TestToFiles {
-					dir, _ := model.ParseQualifiedTest(qualifiedName)
-					if dir == pkgDir {
-						selectedTestsMap[qualifiedName] = true
-					}
-				}
-			}
-
-			// Discover new tests not in the baseline mapping
-			newTests, err := discoverNewTests(repoPath, mapping, baseline)
-			if err != nil {
-				fmt.Printf("[Warn] Failed to discover new tests: %v\n", err)
-			} else {
-				for _, qualifiedName := range newTests {
-					selectedTestsMap[qualifiedName] = true
-				}
-				newTestsCount = len(newTests)
-				if newTestsCount > 0 {
-					fmt.Printf("[Info] Discovered %d new test(s) not in baseline\n", newTestsCount)
-				}
-			}
-
-			// Build selected tests slice
-			for qualifiedName := range selectedTestsMap {
-				dir, testName := model.ParseQualifiedTest(qualifiedName)
-				selectedTests = append(selectedTests, model.SelectedTest{
-					Directory: dir,
-					TestName:  testName,
-				})
-			}
+			result = performTestSelection(repoPath, changedGoFiles, baselineDirs, mapping, baseline, granularity)
 		}
 
-		// Calculate stats
-		totalTests := mapping.Stats.TotalTests
-		selectedCount := len(selectedTests)
-		reductionPercent := 0.0
-		if totalTests > 0 {
-			reductionPercent = float64(totalTests-selectedCount) / float64(totalTests) * 100
-		}
+		selection := buildSelection(mapping.CommitSHA, currentCommit, changedGoFiles, result, mapping.Stats.TotalTests)
 
-		// Build selection result
-		selection := &model.Selection{
-			GeneratedAt:         time.Now().UTC(),
-			FromCommit:          mapping.CommitSHA,
-			ToCommit:            currentCommit,
-			ChangedFiles:        changedFiles,
-			SelectedTests:       selectedTests,
-			OutOfScopeTestFiles: outOfScopeTestFiles,
-			Stats: model.SelectionStats{
-				TotalTests:          totalTests,
-				SelectedTests:       selectedCount,
-				ChangedFiles:        len(changedFiles),
-				ChangedTestFiles:    changedTestFilesCount,
-				OutOfScopeTestFiles: outOfScopeTestFilesCount,
-				NewTests:            newTestsCount,
-				ReductionPercent:    reductionPercent,
-			},
-		}
-
-		// Save selection
 		if err := jsonutil.SaveSelection(outputPath, selection); err != nil {
 			return fmt.Errorf("failed to save selection: %w", err)
 		}
 
-		// Print summary
-		fmt.Println(strings.Repeat("=", 50))
-		fmt.Println("Selection Complete!")
-		fmt.Printf("  From commit:    %s\n", selection.FromCommit[:12])
-		fmt.Printf("  To commit:      %s\n", selection.ToCommit[:12])
-		fmt.Printf("  Changed files:  %d\n", len(changedFiles))
-		if changedTestFilesCount > 0 {
-			fmt.Printf("  Test files:     %d (in scope, all tests in affected packages selected)\n", changedTestFilesCount)
-		}
-		if outOfScopeTestFilesCount > 0 {
-			fmt.Printf("  [Warn] Out-of-scope test files: %d (not in baseline, ignored by RTS)\n", outOfScopeTestFilesCount)
-			for _, f := range outOfScopeTestFiles {
-				fmt.Printf("         - %s\n", f)
-			}
-		}
-		if newTestsCount > 0 {
-			fmt.Printf("  New tests:      %d (not in baseline, selected automatically)\n", newTestsCount)
-		}
-		if runAll {
-			fmt.Printf("  [Warning] RUN-ALL triggered by: %s\n", triggerFile)
-		}
-		fmt.Printf("  Selected tests: %d/%d (%.1f%% reduction)\n",
-			selectedCount, totalTests, reductionPercent)
-		fmt.Printf("  Output:         %s\n", outputPath)
-		fmt.Println(strings.Repeat("=", 50))
-
+		printSelectionSummary(selection, outputPath, runAll, triggerFile)
 		return nil
 	},
+}
+
+func loadBaselineAndMapping(baselinePath, mappingPath string) (*model.BaselineManifest, *model.CoverageMapping, error) {
+	baseline, err := jsonutil.LoadBaseline(baselinePath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to load baseline: %w", err)
+	}
+
+	mapping, err := jsonutil.LoadMapping(mappingPath)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to load mapping: %w", err)
+	}
+
+	return baseline, mapping, nil
+}
+
+func getCurrentCommit(repoPath string) (string, error) {
+	stdout, _, err := exec.Run(repoPath, "git", "rev-parse", "HEAD")
+	if err != nil {
+		return "", fmt.Errorf("failed to get current commit: %w", err)
+	}
+	return strings.TrimSpace(stdout), nil
+}
+
+func warnIfCommitMismatch(baseline *model.BaselineManifest, mapping *model.CoverageMapping) {
+	if baseline.CommitSHA != mapping.CommitSHA {
+		fmt.Printf("[Warn] Baseline commit (%s) differs from mapping commit (%s)\n",
+			baseline.CommitSHA[:12], mapping.CommitSHA[:12])
+	}
+}
+
+func printNoChangesDetected(baselineCommit, currentCommit string) {
+	fmt.Println("==================================================")
+	fmt.Println("No changes detected!")
+	fmt.Printf("  Baseline commit: %s\n", baselineCommit)
+	fmt.Printf("  Current commit:  %s\n", currentCommit)
+	fmt.Println("  Recommendation: No tests need to be run")
+	fmt.Println("==================================================")
+}
+
+func filterGoFiles(files []string) []string {
+	var goFiles []string
+	for _, f := range files {
+		if strings.HasSuffix(f, ".go") {
+			goFiles = append(goFiles, f)
+		}
+	}
+	return goFiles
+}
+
+func buildBaselineDirs(baseline *model.BaselineManifest) map[string]bool {
+	dirs := make(map[string]bool)
+	for _, suite := range baseline.TestSuiteResults {
+		dirs[suite.Directory] = true
+	}
+	return dirs
+}
+
+func selectAllTests(mapping *model.CoverageMapping) []model.SelectedTest {
+	var tests []model.SelectedTest
+	for qualifiedName := range mapping.TestToFiles {
+		dir, testName := model.ParseQualifiedTest(qualifiedName)
+		tests = append(tests, model.SelectedTest{
+			Directory: dir,
+			TestName:  testName,
+		})
+	}
+	return tests
+}
+
+func performTestSelection(
+	repoPath string,
+	changedGoFiles []string,
+	baselineDirs map[string]bool,
+	mapping *model.CoverageMapping,
+	baseline *model.BaselineManifest,
+	granularity string,
+) selectionResult {
+	sourceFiles, inScopeTestFiles, outOfScopeTestFiles := categorizeChangedFiles(changedGoFiles, baselineDirs)
+
+	selectedTestsMap := make(map[string]bool)
+
+	if granularity == "function" && len(mapping.FunctionChecksums) > 0 {
+		selectByFunction(repoPath, sourceFiles, mapping, selectedTestsMap)
+	} else {
+		selectByFile(sourceFiles, mapping, selectedTestsMap)
+	}
+
+	selectFromChangedTestFiles(inScopeTestFiles, mapping, selectedTestsMap)
+
+	newTestsCount := discoverAndSelectNewTests(repoPath, mapping, baseline, selectedTestsMap)
+
+	return selectionResult{
+		selectedTests:       buildSelectedTestsSlice(selectedTestsMap),
+		outOfScopeTestFiles: outOfScopeTestFiles,
+		changedTestFiles:    len(inScopeTestFiles),
+		newTestsCount:       newTestsCount,
+	}
+}
+
+func categorizeChangedFiles(changedFiles []string, baselineDirs map[string]bool) (sourceFiles, inScopeTestFiles, outOfScopeTestFiles []string) {
+	for _, file := range changedFiles {
+		if strings.HasSuffix(file, "_test.go") {
+			pkgDir := filepath.Dir(file)
+			if baselineDirs[pkgDir] {
+				inScopeTestFiles = append(inScopeTestFiles, file)
+			} else {
+				outOfScopeTestFiles = append(outOfScopeTestFiles, file)
+			}
+		} else {
+			sourceFiles = append(sourceFiles, file)
+		}
+	}
+	return
+}
+
+func selectByFunction(repoPath string, sourceFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) {
+	changedFunctions := findChangedFunctions(repoPath, sourceFiles, mapping.FunctionChecksums)
+	fmt.Printf("[Info] Function-level analysis: %d changed functions detected\n", len(changedFunctions))
+
+	for _, qualifiedFunc := range changedFunctions {
+		if tests, ok := mapping.FunctionToTests[qualifiedFunc]; ok {
+			for _, qualifiedName := range tests {
+				selectedTestsMap[qualifiedName] = true
+			}
+		}
+	}
+}
+
+func selectByFile(sourceFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) {
+	for _, file := range sourceFiles {
+		if tests, ok := mapping.FileToTests[file]; ok {
+			for _, qualifiedName := range tests {
+				selectedTestsMap[qualifiedName] = true
+			}
+		}
+	}
+}
+
+func selectFromChangedTestFiles(inScopeTestFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) {
+	for _, testFile := range inScopeTestFiles {
+		pkgDir := filepath.Dir(testFile)
+		for qualifiedName := range mapping.TestToFiles {
+			dir, _ := model.ParseQualifiedTest(qualifiedName)
+			if dir == pkgDir {
+				selectedTestsMap[qualifiedName] = true
+			}
+		}
+	}
+}
+
+func discoverAndSelectNewTests(repoPath string, mapping *model.CoverageMapping, baseline *model.BaselineManifest, selectedTestsMap map[string]bool) int {
+	newTests, err := discoverNewTests(repoPath, mapping, baseline)
+	if err != nil {
+		fmt.Printf("[Warn] Failed to discover new tests: %v\n", err)
+		return 0
+	}
+
+	for _, qualifiedName := range newTests {
+		selectedTestsMap[qualifiedName] = true
+	}
+
+	if len(newTests) > 0 {
+		fmt.Printf("[Info] Discovered %d new test(s) not in baseline\n", len(newTests))
+	}
+
+	return len(newTests)
+}
+
+func buildSelectedTestsSlice(selectedTestsMap map[string]bool) []model.SelectedTest {
+	tests := make([]model.SelectedTest, 0, len(selectedTestsMap))
+	for qualifiedName := range selectedTestsMap {
+		dir, testName := model.ParseQualifiedTest(qualifiedName)
+		tests = append(tests, model.SelectedTest{
+			Directory: dir,
+			TestName:  testName,
+		})
+	}
+	return tests
+}
+
+func buildSelection(fromCommit, toCommit string, changedFiles []string, result selectionResult, totalTests int) *model.Selection {
+	selectedCount := len(result.selectedTests)
+	reductionPercent := calculateReductionPercent(totalTests, selectedCount)
+
+	return &model.Selection{
+		GeneratedAt:         time.Now().UTC(),
+		FromCommit:          fromCommit,
+		ToCommit:            toCommit,
+		ChangedFiles:        changedFiles,
+		SelectedTests:       result.selectedTests,
+		OutOfScopeTestFiles: result.outOfScopeTestFiles,
+		Stats: model.SelectionStats{
+			TotalTests:          totalTests,
+			SelectedTests:       selectedCount,
+			ChangedFiles:        len(changedFiles),
+			ChangedTestFiles:    result.changedTestFiles,
+			OutOfScopeTestFiles: len(result.outOfScopeTestFiles),
+			NewTests:            result.newTestsCount,
+			ReductionPercent:    reductionPercent,
+		},
+	}
+}
+
+func calculateReductionPercent(total, selected int) float64 {
+	if total <= 0 {
+		return 0.0
+	}
+	return float64(total-selected) / float64(total) * 100
+}
+
+func printSelectionSummary(selection *model.Selection, outputPath string, runAll bool, triggerFile string) {
+	fmt.Println(strings.Repeat("=", 50))
+	fmt.Println("Selection Complete!")
+	fmt.Printf("  From commit:    %s\n", selection.FromCommit[:12])
+	fmt.Printf("  To commit:      %s\n", selection.ToCommit[:12])
+	fmt.Printf("  Changed files:  %d\n", selection.Stats.ChangedFiles)
+
+	if selection.Stats.ChangedTestFiles > 0 {
+		fmt.Printf("  Test files:     %d (in scope, all tests in affected packages selected)\n", selection.Stats.ChangedTestFiles)
+	}
+	if selection.Stats.OutOfScopeTestFiles > 0 {
+		fmt.Printf("  [Warn] Out-of-scope test files: %d (not in baseline, ignored by RTS)\n", selection.Stats.OutOfScopeTestFiles)
+		for _, f := range selection.OutOfScopeTestFiles {
+			fmt.Printf("         - %s\n", f)
+		}
+	}
+	if selection.Stats.NewTests > 0 {
+		fmt.Printf("  New tests:      %d (not in baseline, selected automatically)\n", selection.Stats.NewTests)
+	}
+	if runAll {
+		fmt.Printf("  [Warning] RUN-ALL triggered by: %s\n", triggerFile)
+	}
+
+	fmt.Printf("  Selected tests: %d/%d (%.1f%% reduction)\n",
+		selection.Stats.SelectedTests, selection.Stats.TotalTests, selection.Stats.ReductionPercent)
+	fmt.Printf("  Output:         %s\n", outputPath)
+	fmt.Println(strings.Repeat("=", 50))
 }
 
 // getAllChangedFiles returns all changed files (not just .go) for run-all pattern matching

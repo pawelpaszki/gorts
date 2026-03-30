@@ -10,6 +10,8 @@ import (
 	"github.com/pawelpaszki/gorts/internal/model"
 )
 
+const retryDelay = 5 * time.Second
+
 type PreHook func(directory, testName string) error
 type PostHook func(directory, testName string, result *model.TestResult) error
 
@@ -18,8 +20,8 @@ type Runner struct {
 	PostHook    PostHook
 	Env         []string
 	MaxRetries  int
-	TestBinary  string // Path to pre-built test binary
-	CoverageDir string // Base directory for coverage output (used with TestBinary)
+	TestBinary  string
+	CoverageDir string
 }
 
 func New() *Runner {
@@ -34,81 +36,108 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 		Flaky:     false,
 	}
 
-	var lastOutput string
-	totalStart := time.Now()
+	if r.TestBinary != "" {
+		result.CoveragePath = r.buildCoveragePath(directory, testName)
+	}
 
-	// Retry loop
+	totalStart := time.Now()
+	lastOutput, attempt := r.executeWithRetries(directory, testName, result)
+
+	result.DurationMs = time.Since(totalStart).Milliseconds()
+
+	if result.Status == "" {
+		result.Status = "fail"
+		result.Retries = r.MaxRetries
+		result.Flaky = false
+		result.Error = truncateOutput(lastOutput, 2000)
+	} else {
+		result.Retries = attempt
+		result.Flaky = attempt > 0
+	}
+
+	return result, nil
+}
+
+func (r *Runner) executeWithRetries(directory, testName string, result *model.TestResult) (string, int) {
+	var lastOutput string
+
 	for attempt := 0; attempt <= r.MaxRetries; attempt++ {
 		if attempt > 0 {
 			fmt.Printf("    [Retry %d/%d] %s\n", attempt, r.MaxRetries, testName)
-			time.Sleep(5 * time.Second)
+			time.Sleep(retryDelay)
 		}
 
-		// Pre-hook (run before each attempt)
-		if r.PreHook != nil {
-			if err := r.PreHook(directory, testName); err != nil {
-				fmt.Printf("    [Warn] Pre-hook failed: %v\n", err)
-			}
-		}
+		r.runPreHook(directory, testName)
 
-		// Build the command based on mode
-		var cmd *exec.Cmd
-
-		if r.TestBinary != "" {
-			// Instrumented binary mode - coverage collected automatically
-			covPath := r.buildCoveragePath(directory, testName)
-			result.CoveragePath = covPath
-
-			cmd = exec.Command(r.TestBinary,
-				"-test.v",
-				"-test.timeout", "30m",
-				"-test.run", fmt.Sprintf("^%s$", testName),
-				"-test.gocoverdir", covPath,
-			)
-			cmd.Dir = directory
-		} else {
-			// Standard mode - no coverage (hooks SHOULD handle it)
-			cmd = exec.Command("go", "test", "-v",
-				"-timeout", "30m",
-				"-p", "1",
-				"-parallel", "1",
-				"-count", "1",
-				"-run", fmt.Sprintf("^%s$", testName),
-				"./...")
-			cmd.Dir = directory
-		}
-
-		cmd.Env = append(os.Environ(), r.Env...)
-
+		cmd := r.buildCommand(directory, testName, result.CoveragePath)
 		output, err := cmd.CombinedOutput()
 		lastOutput = string(output)
 
-		// Post-hook (run after each attempt)
-		if r.PostHook != nil {
-			if hookErr := r.PostHook(directory, testName, result); hookErr != nil {
-				fmt.Printf("    [Warn] Post-hook failed: %v\n", hookErr)
-			}
-		}
+		r.runPostHook(directory, testName, result)
 
 		if err == nil {
 			result.Status = "pass"
-			result.Retries = attempt
-			result.Flaky = attempt > 0
-			result.DurationMs = time.Since(totalStart).Milliseconds()
-			return result, nil
+			return lastOutput, attempt
 		}
 
 		fmt.Printf("    [Attempt %d failed]\n", attempt+1)
 	}
 
-	// All attempts exhausted
-	result.Status = "fail"
-	result.Retries = r.MaxRetries
-	result.Flaky = false
-	result.Error = truncateOutput(lastOutput, 2000)
-	result.DurationMs = time.Since(totalStart).Milliseconds()
+	return lastOutput, r.MaxRetries
+}
 
-	return result, nil
+func (r *Runner) buildCommand(directory, testName, coveragePath string) *exec.Cmd {
+	var cmd *exec.Cmd
+
+	if r.TestBinary != "" {
+		cmd = r.buildTestBinaryCommand(directory, testName, coveragePath)
+	} else {
+		cmd = r.buildGoTestCommand(directory, testName)
+	}
+
+	cmd.Env = append(os.Environ(), r.Env...)
+	return cmd
+}
+
+func (r *Runner) buildTestBinaryCommand(directory, testName, coveragePath string) *exec.Cmd {
+	cmd := exec.Command(r.TestBinary,
+		"-test.v",
+		"-test.timeout", "30m",
+		"-test.run", fmt.Sprintf("^%s$", testName),
+		"-test.gocoverdir", coveragePath,
+	)
+	cmd.Dir = directory
+	return cmd
+}
+
+func (r *Runner) buildGoTestCommand(directory, testName string) *exec.Cmd {
+	cmd := exec.Command("go", "test", "-v",
+		"-timeout", "30m",
+		"-p", "1",
+		"-parallel", "1",
+		"-count", "1",
+		"-run", fmt.Sprintf("^%s$", testName),
+		"./...")
+	cmd.Dir = directory
+	return cmd
+}
+
+func (r *Runner) runPreHook(directory, testName string) {
+	if r.PreHook == nil {
+		return
+	}
+	if err := r.PreHook(directory, testName); err != nil {
+		fmt.Printf("    [Warn] Pre-hook failed: %v\n", err)
+	}
+}
+
+func (r *Runner) runPostHook(directory, testName string, result *model.TestResult) {
+	if r.PostHook == nil {
+		return
+	}
+	if err := r.PostHook(directory, testName, result); err != nil {
+		fmt.Printf("    [Warn] Post-hook failed: %v\n", err)
+	}
 }
 
 // buildCoveragePath creates and returns the coverage directory for a test

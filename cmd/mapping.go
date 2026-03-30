@@ -13,185 +13,223 @@ import (
 	"github.com/spf13/cobra"
 )
 
-/* details about how go coverage works
-https://pkg.go.dev/golang.org/x/tools/cover
-*/
+type fileLevelResult struct {
+	fileToTests    map[string][]string
+	testToFiles    map[string][]string
+	testsProcessed int
+	testsSkipped   int
+}
+
+type functionLevelResult struct {
+	functionToTests   map[string][]string
+	testToFunctions   map[string][]string
+	allCoveredFiles   []string
+	functionChecksums map[string]string
+}
 
 var mappingCmd = &cobra.Command{
 	Use:   "mapping",
 	Short: "Build mapping from baseline coverage data",
-	Long:  "TODO",
+	Long:  "Build test-to-file and file-to-test mappings from baseline coverage data",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		baselinePath, _ := cmd.Flags().GetString("baseline")
 		outputPath, _ := cmd.Flags().GetString("output")
 		modulePath, _ := cmd.Flags().GetString("module")
+		repoPath, _ := cmd.Flags().GetString("repo")
 
-		// Load baseline
 		baseline, err := jsonutil.LoadBaseline(baselinePath)
 		if err != nil {
 			return fmt.Errorf("loading baseline: %w", err)
 		}
 
-		repoPath, _ := cmd.Flags().GetString("repo")
-
-		if repoPath != "" {
-			if err := gitutil.VerifyAtCommit(repoPath, baseline.CommitSHA); err != nil {
-				return fmt.Errorf("commit mismatch: %w", err)
-			}
-
-			// Safeguard 2: Verify no uncommitted Go file changes
-			if err := gitutil.VerifyCleanRepo(repoPath); err != nil {
-				return fmt.Errorf("repo not clean: %w", err)
-			}
+		if err := verifyRepoState(repoPath, baseline.CommitSHA); err != nil {
+			return err
 		}
 
-		// Initialize maps
-		fileToTests := make(map[string][]string)
-		testToFiles := make(map[string][]string)
+		fileResult := buildFileLevelMapping(baseline, modulePath)
+		stats := calculateStats(fileResult.fileToTests, fileResult.testToFiles)
 
-		testsProcessed := 0
-		testsSkipped := 0
+		funcResult := buildFunctionLevelMapping(baseline, modulePath, repoPath)
+		updateFunctionStats(&stats, funcResult)
 
-		// Process each test result (file level)
-		for _, suite := range baseline.TestSuiteResults {
-			for _, result := range suite.TestResults {
-				// Skip if no coverage path or test failed
-				if result.CoveragePath == "" {
-					testsSkipped++
-					continue
-				}
-
-				// Find coverage files in the coverage path directory
-				coverageFiles, err := findCoverageInPath(result.CoveragePath)
-				if err != nil || len(coverageFiles) == 0 {
-					fmt.Printf("[Warn] No coverage files for %s in %s\n", result.TestName, result.CoveragePath)
-					testsSkipped++
-					continue
-				}
-
-				// Parse all coverage files for this test
-				var allCoveredFiles []string
-				for _, covFile := range coverageFiles {
-					files, err := coverage.ParseCoverageFile(covFile)
-					if err != nil {
-						fmt.Printf("[Warn] Failed to parse %s: %v\n", covFile, err)
-						continue
-					}
-					allCoveredFiles = append(allCoveredFiles, files...)
-				}
-
-				// Deduplicate and normalize
-				uniqueFiles := deduplicate(allCoveredFiles)
-				if modulePath != "" {
-					for i, f := range uniqueFiles {
-						// this is required, so that the files appear as if they were
-						// shown from the root directory, from which the tests are executed
-						uniqueFiles[i] = coverage.NormalizeFilePath(f, modulePath)
-					}
-				}
-
-				// Build mappings with fq names
-				qualifiedName := model.QualifyTestName(result.Directory, result.TestName)
-				testToFiles[qualifiedName] = uniqueFiles
-				for _, file := range uniqueFiles {
-					fileToTests[file] = appendUnique(fileToTests[file], qualifiedName)
-				}
-
-				testsProcessed++
-				fmt.Printf("[Info] %s covers %d files\n", qualifiedName, len(uniqueFiles))
-			}
-		}
-
-		// Calculate stats
-		stats := calculateStats(fileToTests, testToFiles)
-
-		// function level analysis
-		functionToTests := make(map[string][]string)
-		testToFunctions := make(map[string][]string)
-		var allCoveredFiles []string // Collect all files for checksum computation
-
-		for _, suite := range baseline.TestSuiteResults {
-			for _, result := range suite.TestResults {
-				if result.CoveragePath == "" {
-					continue
-				}
-
-				qualifiedTestName := model.QualifyTestName(result.Directory, result.TestName)
-
-				// Parse function-level coverage
-				funcCoverage, err := coverage.ParseFunctionCoverage(result.CoveragePath)
-				if err != nil {
-					fmt.Printf("[Warn] Failed to parse function coverage for %s: %v\n", result.TestName, err)
-					continue
-				}
-
-				for _, fc := range funcCoverage {
-					qualifiedFunc := coverage.QualifyFunction(fc.FilePath, fc.FunctionName, modulePath)
-
-					// Build function→test mapping
-					functionToTests[qualifiedFunc] = appendUnique(functionToTests[qualifiedFunc], qualifiedTestName)
-
-					// Build test→function mapping
-					testToFunctions[qualifiedTestName] = appendUnique(testToFunctions[qualifiedTestName], qualifiedFunc)
-
-					// Collect file for checksum computation
-					relFile := coverage.NormalizeFilePath(fc.FilePath, modulePath)
-					allCoveredFiles = appendUnique(allCoveredFiles, relFile)
-				}
-			}
-		}
-
-		// Compute function checksums
-		var functionChecksums map[string]string
-		if repoPath != "" {
-			functionChecksums, err = coverage.ComputeAllChecksums(repoPath, allCoveredFiles)
-			if err != nil {
-				fmt.Printf("[Warn] Failed to compute function checksums: %v\n", err)
-			} else {
-				fmt.Printf("[Info] Computed checksums for %d functions\n", len(functionChecksums))
-			}
-		}
-
-		// Update stats
-		stats.TotalFunctions = len(functionToTests)
-		if stats.TotalTests > 0 {
-			totalFuncsPerTest := 0
-			for _, funcs := range testToFunctions {
-				totalFuncsPerTest += len(funcs)
-			}
-			stats.AvgFunctionsPerTest = float64(totalFuncsPerTest) / float64(stats.TotalTests)
-		}
-
-		// Build mapping struct
 		mapping := &model.CoverageMapping{
 			GeneratedAt:       time.Now().UTC(),
 			CommitSHA:         baseline.CommitSHA,
-			FileToTests:       fileToTests,
-			TestToFiles:       testToFiles,
-			FunctionToTests:   functionToTests,
-			TestToFunctions:   testToFunctions,
-			FunctionChecksums: functionChecksums,
+			FileToTests:       fileResult.fileToTests,
+			TestToFiles:       fileResult.testToFiles,
+			FunctionToTests:   funcResult.functionToTests,
+			TestToFunctions:   funcResult.testToFunctions,
+			FunctionChecksums: funcResult.functionChecksums,
 			Stats:             stats,
 		}
 
-		// Save
 		if err := jsonutil.SaveMapping(outputPath, mapping); err != nil {
 			return fmt.Errorf("saving mapping: %w", err)
 		}
 
-		// Print summary
-		fmt.Println(strings.Repeat("=", 50))
-		fmt.Printf("Mapping Complete!\n")
-		fmt.Printf("  Tests processed: %d\n", testsProcessed)
-		fmt.Printf("  Tests skipped:   %d\n", testsSkipped)
-		fmt.Printf("  Total files:     %d\n", stats.TotalFiles)
-		fmt.Printf("  Avg files/test:  %.1f\n", stats.AvgFilesPerTest)
-		fmt.Printf("  Avg tests/file:  %.1f\n", stats.AvgTestsPerFile)
-		fmt.Printf("  Output:          %s\n", outputPath)
-		fmt.Println(strings.Repeat("=", 50))
-
+		printMappingSummary(fileResult, stats, outputPath)
 		return nil
 	},
+}
+
+func verifyRepoState(repoPath, commitSHA string) error {
+	if repoPath == "" {
+		return nil
+	}
+
+	if err := gitutil.VerifyAtCommit(repoPath, commitSHA); err != nil {
+		return fmt.Errorf("commit mismatch: %w", err)
+	}
+
+	if err := gitutil.VerifyCleanRepo(repoPath); err != nil {
+		return fmt.Errorf("repo not clean: %w", err)
+	}
+
+	return nil
+}
+
+func buildFileLevelMapping(baseline *model.BaselineManifest, modulePath string) fileLevelResult {
+	fileToTests := make(map[string][]string)
+	testToFiles := make(map[string][]string)
+	testsProcessed := 0
+	testsSkipped := 0
+
+	for _, suite := range baseline.TestSuiteResults {
+		for _, result := range suite.TestResults {
+			if result.CoveragePath == "" {
+				testsSkipped++
+				continue
+			}
+
+			coveredFiles, ok := parseCoverageForTest(result, modulePath)
+			if !ok {
+				testsSkipped++
+				continue
+			}
+
+			qualifiedName := model.QualifyTestName(result.Directory, result.TestName)
+			testToFiles[qualifiedName] = coveredFiles
+
+			for _, file := range coveredFiles {
+				fileToTests[file] = appendUnique(fileToTests[file], qualifiedName)
+			}
+
+			testsProcessed++
+			fmt.Printf("[Info] %s covers %d files\n", qualifiedName, len(coveredFiles))
+		}
+	}
+
+	return fileLevelResult{
+		fileToTests:    fileToTests,
+		testToFiles:    testToFiles,
+		testsProcessed: testsProcessed,
+		testsSkipped:   testsSkipped,
+	}
+}
+
+func parseCoverageForTest(result model.TestResult, modulePath string) ([]string, bool) {
+	coverageFiles, err := findCoverageInPath(result.CoveragePath)
+	if err != nil || len(coverageFiles) == 0 {
+		fmt.Printf("[Warn] No coverage files for %s in %s\n", result.TestName, result.CoveragePath)
+		return nil, false
+	}
+
+	var allCoveredFiles []string
+	for _, covFile := range coverageFiles {
+		files, err := coverage.ParseCoverageFile(covFile)
+		if err != nil {
+			fmt.Printf("[Warn] Failed to parse %s: %v\n", covFile, err)
+			continue
+		}
+		allCoveredFiles = append(allCoveredFiles, files...)
+	}
+
+	uniqueFiles := deduplicate(allCoveredFiles)
+	if modulePath != "" {
+		for i, f := range uniqueFiles {
+			uniqueFiles[i] = coverage.NormalizeFilePath(f, modulePath)
+		}
+	}
+
+	return uniqueFiles, true
+}
+
+func buildFunctionLevelMapping(baseline *model.BaselineManifest, modulePath, repoPath string) functionLevelResult {
+	functionToTests := make(map[string][]string)
+	testToFunctions := make(map[string][]string)
+	var allCoveredFiles []string
+
+	for _, suite := range baseline.TestSuiteResults {
+		for _, result := range suite.TestResults {
+			if result.CoveragePath == "" {
+				continue
+			}
+
+			qualifiedTestName := model.QualifyTestName(result.Directory, result.TestName)
+			funcCoverage, err := coverage.ParseFunctionCoverage(result.CoveragePath)
+			if err != nil {
+				fmt.Printf("[Warn] Failed to parse function coverage for %s: %v\n", result.TestName, err)
+				continue
+			}
+
+			for _, fc := range funcCoverage {
+				qualifiedFunc := coverage.QualifyFunction(fc.FilePath, fc.FunctionName, modulePath)
+				functionToTests[qualifiedFunc] = appendUnique(functionToTests[qualifiedFunc], qualifiedTestName)
+				testToFunctions[qualifiedTestName] = appendUnique(testToFunctions[qualifiedTestName], qualifiedFunc)
+
+				relFile := coverage.NormalizeFilePath(fc.FilePath, modulePath)
+				allCoveredFiles = appendUnique(allCoveredFiles, relFile)
+			}
+		}
+	}
+
+	functionChecksums := computeFunctionChecksums(repoPath, allCoveredFiles)
+
+	return functionLevelResult{
+		functionToTests:   functionToTests,
+		testToFunctions:   testToFunctions,
+		allCoveredFiles:   allCoveredFiles,
+		functionChecksums: functionChecksums,
+	}
+}
+
+func computeFunctionChecksums(repoPath string, allCoveredFiles []string) map[string]string {
+	if repoPath == "" {
+		return nil
+	}
+
+	checksums, err := coverage.ComputeAllChecksums(repoPath, allCoveredFiles)
+	if err != nil {
+		fmt.Printf("[Warn] Failed to compute function checksums: %v\n", err)
+		return nil
+	}
+
+	fmt.Printf("[Info] Computed checksums for %d functions\n", len(checksums))
+	return checksums
+}
+
+func updateFunctionStats(stats *model.MappingStats, funcResult functionLevelResult) {
+	stats.TotalFunctions = len(funcResult.functionToTests)
+
+	if stats.TotalTests > 0 {
+		totalFuncsPerTest := 0
+		for _, funcs := range funcResult.testToFunctions {
+			totalFuncsPerTest += len(funcs)
+		}
+		stats.AvgFunctionsPerTest = float64(totalFuncsPerTest) / float64(stats.TotalTests)
+	}
+}
+
+func printMappingSummary(result fileLevelResult, stats model.MappingStats, outputPath string) {
+	fmt.Println(strings.Repeat("=", 50))
+	fmt.Printf("Mapping Complete!\n")
+	fmt.Printf("  Tests processed: %d\n", result.testsProcessed)
+	fmt.Printf("  Tests skipped:   %d\n", result.testsSkipped)
+	fmt.Printf("  Total files:     %d\n", stats.TotalFiles)
+	fmt.Printf("  Avg files/test:  %.1f\n", stats.AvgFilesPerTest)
+	fmt.Printf("  Avg tests/file:  %.1f\n", stats.AvgTestsPerFile)
+	fmt.Printf("  Output:          %s\n", outputPath)
+	fmt.Println(strings.Repeat("=", 50))
 }
 
 // findCoverageInPath looks for coverage files in the given path

@@ -41,3 +41,9 @@ function level decisions:
 
 ## pre-release testing
 mention running all tests in a prod-like environment
+
+## tagging tests
+https://mickey.dev/posts/go-build-tags-testing/
+
+## writing unit tests
+https://betterstack.com/community/guides/scaling-go/golang-testify/

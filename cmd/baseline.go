@@ -14,6 +14,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+type baselineConfig struct {
+	manifestPath string
+	outputPath   string
+	coverageDir  string
+	testBinary   string
+	preTestCmd   string
+	postTestCmd  string
+	skipSet      map[string]bool
+	envVars      []string
+	maxRetries   int
+}
+
 var baselineCmd = &cobra.Command{
 	Use:   "baseline",
 	Short: "Run tests and collect coverage",
@@ -31,169 +43,253 @@ Examples:
   gorts baseline --manifest tests.json --post-test "kubectl cp pod:/cov {{COVERAGE_PATH}}" --coverage-dir .cov/coverage --output baseline.json
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		manifestPath, _ := cmd.Flags().GetString("manifest")
-		outputPath, _ := cmd.Flags().GetString("output")
-		coverageDir, _ := cmd.Flags().GetString("coverage-dir")
-		testBinary, _ := cmd.Flags().GetString("test-binary")
-		preTestCmd, _ := cmd.Flags().GetString("pre-test")
-		postTestCmd, _ := cmd.Flags().GetString("post-test")
+		cfg := parseBaselineFlags(cmd)
 
-		// Validate mutual exclusivity (hooks and test-binary)
-		if testBinary != "" && (preTestCmd != "" || postTestCmd != "") {
-			return fmt.Errorf("--test-binary and --pre-test/--post-test are mutually exclusive\n" +
-				"  Use --test-binary for standard Go tests with instrumented binary\n" +
-				"  Use --pre-test/--post-test for kuberay-style external coverage collection")
+		if err := validateBaselineFlags(cfg); err != nil {
+			return err
 		}
 
-		// Validate test binary exists if specified
-		if testBinary != "" {
-			if _, err := os.Stat(testBinary); os.IsNotExist(err) {
-				return fmt.Errorf("test binary not found: %s\n"+
-					"  Build it with: go test -c -cover -coverpkg=./... -o %s ./test/...", testBinary, testBinary)
-			}
-			if coverageDir == "" {
-				return fmt.Errorf("--coverage-dir is required when using --test-binary")
-			}
-		}
-
-		skipTests, _ := cmd.Flags().GetStringSlice("skip")
-		skipSet := make(map[string]bool)
-		for _, t := range skipTests {
-			skipSet[t] = true
-		}
-
-		manifest, err := jsonutil.LoadManifest(manifestPath)
+		manifest, err := jsonutil.LoadManifest(cfg.manifestPath)
 		if err != nil {
 			return err
 		}
 
-		envVars, _ := cmd.Flags().GetStringSlice("env")
+		r := configureRunner(cfg)
 
-		r := runner.New()
-		r.Env = envVars
-		r.MaxRetries, _ = cmd.Flags().GetInt("retry")
-
-		// Configure runner based on mode
-		if testBinary != "" {
-			// test binary mode
-			r.TestBinary = testBinary
-			r.CoverageDir = coverageDir
-			fmt.Printf("[Info] Using test binary mode: %s\n", testBinary)
-		} else {
-			// Hook mode
-			r.PreHook = func(dir, testName string) error {
-				if preTestCmd == "" {
-					return nil
-				}
-				expanded := strings.ReplaceAll(preTestCmd, "{{DIR}}", dir)
-				expanded = strings.ReplaceAll(expanded, "{{TEST}}", testName)
-				fmt.Printf("[Pre] %s\n", expanded)
-				_, stderr, err := exec.Run(dir, "sh", "-c", expanded)
-				if err != nil {
-					return fmt.Errorf("pre-test failed: %s", stderr)
-				}
-				return nil
-			}
-
-			r.PostHook = func(dir, testName string, result *model.TestResult) error {
-				if postTestCmd == "" {
-					return nil
-				}
-				covPath := ""
-				if coverageDir != "" {
-					parts := strings.Split(filepath.Clean(dir), string(filepath.Separator))
-					var sanitized string
-					if len(parts) >= 2 {
-						sanitized = parts[len(parts)-2] + "_" + parts[len(parts)-1]
-					} else {
-						sanitized = parts[len(parts)-1]
-					}
-					covPath = filepath.Join(coverageDir, sanitized, testName)
-					covPath, _ = filepath.Abs(covPath)
-					os.MkdirAll(covPath, 0755)
-					result.CoveragePath = covPath
-				}
-
-				expanded := strings.ReplaceAll(postTestCmd, "{{DIR}}", dir)
-				expanded = strings.ReplaceAll(expanded, "{{TEST}}", testName)
-				expanded = strings.ReplaceAll(expanded, "{{COVERAGE_PATH}}", covPath)
-				fmt.Printf("[Post] %s\n", expanded)
-				_, stderr, err := exec.Run(dir, "sh", "-c", expanded)
-				if err != nil {
-					fmt.Printf("[Warn] post-test failed: %s\n", stderr)
-				}
-				return nil
-			}
-		}
-
-		var suiteResults []model.TestSuiteResult
-		var overallSummary model.Summary
-
-		for _, suite := range manifest.TestSuites {
-			var testResults []model.TestResult
-			var suiteSummary model.Summary
-
-			for _, testName := range suite.Tests {
-				if skipSet[testName] {
-					fmt.Printf("[Skip] %s\n", testName)
-					continue
-				}
-				fmt.Printf("[Info] Running: %s/%s\n", suite.Directory, testName)
-				result, err := r.RunSingleTest(suite.Directory, testName)
-				if err != nil {
-					return fmt.Errorf("failed to run %s: %w", testName, err)
-				}
-				testResults = append(testResults, *result)
-
-				suiteSummary.Total++
-				suiteSummary.DurationMs += result.DurationMs
-				if result.Status == "pass" {
-					suiteSummary.Passed++
-				} else {
-					suiteSummary.Failed++
-				}
-
-				fmt.Printf("[Info] %s/%s: %s (%dms)\n", suite.Directory, testName, result.Status, result.DurationMs)
-			}
-
-			suiteResults = append(suiteResults, model.TestSuiteResult{
-				Directory:   suite.Directory,
-				TestResults: testResults,
-				Summary:     suiteSummary,
-			})
-
-			overallSummary.Total += suiteSummary.Total
-			overallSummary.Passed += suiteSummary.Passed
-			overallSummary.Failed += suiteSummary.Failed
-			overallSummary.DurationMs += suiteSummary.DurationMs
-		}
-
-		commitSha, _, _ := exec.Run(manifest.TestSuites[0].Directory, "git", "rev-parse", "HEAD")
-
-		baseline := &model.BaselineManifest{
-			GeneratedAt:      time.Now().UTC(),
-			CommitSHA:        strings.TrimSpace(commitSha),
-			TestSuiteResults: suiteResults,
-			Summary:          overallSummary,
-		}
-
-		if err := jsonutil.SaveBaseline(outputPath, baseline); err != nil {
+		suiteResults, overallSummary, err := runTestSuites(manifest, r, cfg.skipSet)
+		if err != nil {
 			return err
 		}
 
-		fmt.Printf("\n==================================================\n")
-		fmt.Printf("Baseline Complete!\n")
-		fmt.Printf("Tests: %d passed, %d failed, %d total\n",
-			overallSummary.Passed, overallSummary.Failed, overallSummary.Total)
-		fmt.Printf("Duration: %dms\n", overallSummary.DurationMs)
-		fmt.Printf("Output: %s\n", outputPath)
-		if coverageDir != "" {
-			fmt.Printf("Coverage: %s\n", coverageDir)
-		}
-		fmt.Printf("==================================================\n")
+		baseline := buildBaselineManifest(manifest, suiteResults, overallSummary)
 
+		if err := jsonutil.SaveBaseline(cfg.outputPath, baseline); err != nil {
+			return err
+		}
+
+		printBaselineSummary(overallSummary, cfg.outputPath, cfg.coverageDir)
 		return nil
 	},
+}
+
+func parseBaselineFlags(cmd *cobra.Command) baselineConfig {
+	skipTests, _ := cmd.Flags().GetStringSlice("skip")
+	skipSet := make(map[string]bool)
+	for _, t := range skipTests {
+		skipSet[t] = true
+	}
+
+	envVars, _ := cmd.Flags().GetStringSlice("env")
+	maxRetries, _ := cmd.Flags().GetInt("retry")
+
+	manifestPath, _ := cmd.Flags().GetString("manifest")
+	outputPath, _ := cmd.Flags().GetString("output")
+	coverageDir, _ := cmd.Flags().GetString("coverage-dir")
+	testBinary, _ := cmd.Flags().GetString("test-binary")
+	preTestCmd, _ := cmd.Flags().GetString("pre-test")
+	postTestCmd, _ := cmd.Flags().GetString("post-test")
+
+	return baselineConfig{
+		manifestPath: manifestPath,
+		outputPath:   outputPath,
+		coverageDir:  coverageDir,
+		testBinary:   testBinary,
+		preTestCmd:   preTestCmd,
+		postTestCmd:  postTestCmd,
+		skipSet:      skipSet,
+		envVars:      envVars,
+		maxRetries:   maxRetries,
+	}
+}
+
+func validateBaselineFlags(cfg baselineConfig) error {
+	if cfg.testBinary != "" && (cfg.preTestCmd != "" || cfg.postTestCmd != "") {
+		return fmt.Errorf("--test-binary and --pre-test/--post-test are mutually exclusive\n" +
+			"  Use --test-binary for standard Go tests with instrumented binary\n" +
+			"  Use --pre-test/--post-test for kuberay-style external coverage collection")
+	}
+
+	if cfg.testBinary != "" {
+		if _, err := os.Stat(cfg.testBinary); os.IsNotExist(err) {
+			return fmt.Errorf("test binary not found: %s\n"+
+				"  Build it with: go test -c -cover -coverpkg=./... -o %s ./test/...", cfg.testBinary, cfg.testBinary)
+		}
+		if cfg.coverageDir == "" {
+			return fmt.Errorf("--coverage-dir is required when using --test-binary")
+		}
+	}
+
+	return nil
+}
+
+func configureRunner(cfg baselineConfig) *runner.Runner {
+	r := runner.New()
+	r.Env = cfg.envVars
+	r.MaxRetries = cfg.maxRetries
+
+	if cfg.testBinary != "" {
+		configureTestBinaryMode(r, cfg)
+	} else {
+		configureHookMode(r, cfg)
+	}
+
+	return r
+}
+
+func configureTestBinaryMode(r *runner.Runner, cfg baselineConfig) {
+	r.TestBinary = cfg.testBinary
+	r.CoverageDir = cfg.coverageDir
+	fmt.Printf("[Info] Using test binary mode: %s\n", cfg.testBinary)
+}
+
+func configureHookMode(r *runner.Runner, cfg baselineConfig) {
+	r.PreHook = createPreHook(cfg.preTestCmd)
+	r.PostHook = createPostHook(cfg.postTestCmd, cfg.coverageDir)
+}
+
+func createPreHook(preTestCmd string) runner.PreHook {
+	return func(dir, testName string) error {
+		if preTestCmd == "" {
+			return nil
+		}
+		expanded := expandHookCommand(preTestCmd, dir, testName, "")
+		fmt.Printf("[Pre] %s\n", expanded)
+		_, stderr, err := exec.Run(dir, "sh", "-c", expanded)
+		if err != nil {
+			return fmt.Errorf("pre-test failed: %s", stderr)
+		}
+		return nil
+	}
+}
+
+func createPostHook(postTestCmd, coverageDir string) runner.PostHook {
+	return func(dir, testName string, result *model.TestResult) error {
+		if postTestCmd == "" {
+			return nil
+		}
+
+		covPath := buildCoveragePath(dir, testName, coverageDir)
+		if covPath != "" {
+			result.CoveragePath = covPath
+		}
+
+		expanded := expandHookCommand(postTestCmd, dir, testName, covPath)
+		fmt.Printf("[Post] %s\n", expanded)
+		_, stderr, err := exec.Run(dir, "sh", "-c", expanded)
+		if err != nil {
+			fmt.Printf("[Warn] post-test failed: %s\n", stderr)
+		}
+		return nil
+	}
+}
+
+func expandHookCommand(cmd, dir, testName, coveragePath string) string {
+	expanded := strings.ReplaceAll(cmd, "{{DIR}}", dir)
+	expanded = strings.ReplaceAll(expanded, "{{TEST}}", testName)
+	expanded = strings.ReplaceAll(expanded, "{{COVERAGE_PATH}}", coveragePath)
+	return expanded
+}
+
+func buildCoveragePath(dir, testName, coverageDir string) string {
+	if coverageDir == "" {
+		return ""
+	}
+
+	parts := strings.Split(filepath.Clean(dir), string(filepath.Separator))
+	var sanitized string
+	if len(parts) >= 2 {
+		sanitized = parts[len(parts)-2] + "_" + parts[len(parts)-1]
+	} else {
+		sanitized = parts[len(parts)-1]
+	}
+
+	covPath := filepath.Join(coverageDir, sanitized, testName)
+	covPath, _ = filepath.Abs(covPath)
+	os.MkdirAll(covPath, 0755)
+	return covPath
+}
+
+func runTestSuites(manifest *model.TestManifest, r *runner.Runner, skipSet map[string]bool) ([]model.TestSuiteResult, model.Summary, error) {
+	var suiteResults []model.TestSuiteResult
+	var overallSummary model.Summary
+
+	for _, suite := range manifest.TestSuites {
+		suiteResult, err := runSingleSuite(suite, r, skipSet)
+		if err != nil {
+			return nil, model.Summary{}, err
+		}
+
+		suiteResults = append(suiteResults, suiteResult)
+		overallSummary.Total += suiteResult.Summary.Total
+		overallSummary.Passed += suiteResult.Summary.Passed
+		overallSummary.Failed += suiteResult.Summary.Failed
+		overallSummary.DurationMs += suiteResult.Summary.DurationMs
+	}
+
+	return suiteResults, overallSummary, nil
+}
+
+func runSingleSuite(suite model.TestSuite, r *runner.Runner, skipSet map[string]bool) (model.TestSuiteResult, error) {
+	var testResults []model.TestResult
+	var suiteSummary model.Summary
+
+	for _, testName := range suite.Tests {
+		if skipSet[testName] {
+			fmt.Printf("[Skip] %s\n", testName)
+			continue
+		}
+
+		fmt.Printf("[Info] Running: %s/%s\n", suite.Directory, testName)
+		result, err := r.RunSingleTest(suite.Directory, testName)
+		if err != nil {
+			return model.TestSuiteResult{}, fmt.Errorf("failed to run %s: %w", testName, err)
+		}
+
+		testResults = append(testResults, *result)
+		updateSuiteSummary(&suiteSummary, result)
+
+		fmt.Printf("[Info] %s/%s: %s (%dms)\n", suite.Directory, testName, result.Status, result.DurationMs)
+	}
+
+	return model.TestSuiteResult{
+		Directory:   suite.Directory,
+		TestResults: testResults,
+		Summary:     suiteSummary,
+	}, nil
+}
+
+func updateSuiteSummary(summary *model.Summary, result *model.TestResult) {
+	summary.Total++
+	summary.DurationMs += result.DurationMs
+	if result.Status == "pass" {
+		summary.Passed++
+	} else {
+		summary.Failed++
+	}
+}
+
+func buildBaselineManifest(manifest *model.TestManifest, suiteResults []model.TestSuiteResult, summary model.Summary) *model.BaselineManifest {
+	commitSha, _, _ := exec.Run(manifest.TestSuites[0].Directory, "git", "rev-parse", "HEAD")
+
+	return &model.BaselineManifest{
+		GeneratedAt:      time.Now().UTC(),
+		CommitSHA:        strings.TrimSpace(commitSha),
+		TestSuiteResults: suiteResults,
+		Summary:          summary,
+	}
+}
+
+func printBaselineSummary(summary model.Summary, outputPath, coverageDir string) {
+	fmt.Printf("\n==================================================\n")
+	fmt.Printf("Baseline Complete!\n")
+	fmt.Printf("Tests: %d passed, %d failed, %d total\n",
+		summary.Passed, summary.Failed, summary.Total)
+	fmt.Printf("Duration: %dms\n", summary.DurationMs)
+	fmt.Printf("Output: %s\n", outputPath)
+	if coverageDir != "" {
+		fmt.Printf("Coverage: %s\n", coverageDir)
+	}
+	fmt.Printf("==================================================\n")
 }
 
 func init() {
