@@ -38,3 +38,6 @@ go tool covdata func -i=.cov/coverage/test_e2e/TestGcsFaultToleranceAnnotations
 function level decisions:
 * changed function (checksum) - select all tests that cover that function
 * new function - ?select all tests covering a file containing the function?
+
+## pre-release testing
+mention running all tests in a prod-like environment
