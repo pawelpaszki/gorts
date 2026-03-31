@@ -1,5 +1,5 @@
 .PHONY: test
 
-# Run unit tests (untagged test files only)
+# Run unit tests (untagged test files only, no cache)
 test:
-	go test ./...
+	go test -count=1 ./...
