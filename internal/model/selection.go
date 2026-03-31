@@ -3,6 +3,8 @@ package model
 import (
 	"fmt"
 	"time"
+
+	"github.com/pawelpaszki/gorts/internal/helpers"
 )
 
 // OutOfScopeTestFiles contains ignored tests (not in the baseline - likely unit tests)
@@ -23,7 +25,7 @@ type SelectedTest struct {
 
 // Qualified returns the unique identifier "directory/TestName"
 func (s SelectedTest) Qualified() string {
-	return QualifyTestName(s.Directory, s.TestName)
+	return helpers.QualifyTestName(s.Directory, s.TestName)
 }
 
 // ForGoTestRun returns the -run flag pattern

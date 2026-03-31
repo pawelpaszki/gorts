@@ -8,6 +8,7 @@ import (
 
 	"github.com/pawelpaszki/gorts/internal/coverage"
 	"github.com/pawelpaszki/gorts/internal/gitutil"
+	"github.com/pawelpaszki/gorts/internal/helpers"
 	"github.com/pawelpaszki/gorts/internal/jsonutil"
 	"github.com/pawelpaszki/gorts/internal/model"
 	"github.com/spf13/cobra"
@@ -107,7 +108,7 @@ func buildFileLevelMapping(baseline *model.BaselineManifest, modulePath string) 
 				continue
 			}
 
-			qualifiedName := model.QualifyTestName(result.Directory, result.TestName)
+			qualifiedName := helpers.QualifyTestName(result.Directory, result.TestName)
 			testToFiles[qualifiedName] = coveredFiles
 
 			for _, file := range coveredFiles {
@@ -165,7 +166,7 @@ func buildFunctionLevelMapping(baseline *model.BaselineManifest, modulePath, rep
 				continue
 			}
 
-			qualifiedTestName := model.QualifyTestName(result.Directory, result.TestName)
+			qualifiedTestName := helpers.QualifyTestName(result.Directory, result.TestName)
 			funcCoverage, err := coverage.ParseFunctionCoverage(result.CoveragePath)
 			if err != nil {
 				fmt.Printf("[Warn] Failed to parse function coverage for %s: %v\n", result.TestName, err)

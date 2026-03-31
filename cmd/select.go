@@ -8,6 +8,7 @@ import (
 
 	"github.com/pawelpaszki/gorts/internal/coverage"
 	"github.com/pawelpaszki/gorts/internal/exec"
+	"github.com/pawelpaszki/gorts/internal/helpers"
 	"github.com/pawelpaszki/gorts/internal/jsonutil"
 	"github.com/pawelpaszki/gorts/internal/model"
 	"github.com/spf13/cobra"
@@ -60,7 +61,7 @@ var selectCmd = &cobra.Command{
 			return nil
 		}
 
-		runAll, triggerFile := model.CheckRunAllTrigger(allChangedFiles, runAllPatterns)
+		runAll, triggerFile := helpers.CheckRunAllTrigger(allChangedFiles, runAllPatterns)
 		changedGoFiles := filterGoFiles(allChangedFiles)
 
 		if !runAll && len(changedGoFiles) == 0 {
@@ -148,7 +149,7 @@ func buildBaselineDirs(baseline *model.BaselineManifest) map[string]bool {
 func selectAllTests(mapping *model.CoverageMapping) []model.SelectedTest {
 	var tests []model.SelectedTest
 	for qualifiedName := range mapping.TestToFiles {
-		dir, testName := model.ParseQualifiedTest(qualifiedName)
+		dir, testName := helpers.ParseQualifiedTest(qualifiedName)
 		tests = append(tests, model.SelectedTest{
 			Directory: dir,
 			TestName:  testName,
@@ -230,7 +231,7 @@ func selectFromChangedTestFiles(inScopeTestFiles []string, mapping *model.Covera
 	for _, testFile := range inScopeTestFiles {
 		pkgDir := filepath.Dir(testFile)
 		for qualifiedName := range mapping.TestToFiles {
-			dir, _ := model.ParseQualifiedTest(qualifiedName)
+			dir, _ := helpers.ParseQualifiedTest(qualifiedName)
 			if dir == pkgDir {
 				selectedTestsMap[qualifiedName] = true
 			}
@@ -259,7 +260,7 @@ func discoverAndSelectNewTests(repoPath string, mapping *model.CoverageMapping, 
 func buildSelectedTestsSlice(selectedTestsMap map[string]bool) []model.SelectedTest {
 	tests := make([]model.SelectedTest, 0, len(selectedTestsMap))
 	for qualifiedName := range selectedTestsMap {
-		dir, testName := model.ParseQualifiedTest(qualifiedName)
+		dir, testName := helpers.ParseQualifiedTest(qualifiedName)
 		tests = append(tests, model.SelectedTest{
 			Directory: dir,
 			TestName:  testName,
@@ -415,7 +416,7 @@ func parseGoTestList(output, directory string) []string {
 		// Valid test names start with "Test", "Benchmark", "Example", or "Fuzz"
 		if strings.HasPrefix(line, "Test") || strings.HasPrefix(line, "Benchmark") ||
 			strings.HasPrefix(line, "Example") || strings.HasPrefix(line, "Fuzz") {
-			qualifiedName := model.QualifyTestName(directory, line)
+			qualifiedName := helpers.QualifyTestName(directory, line)
 			tests = append(tests, qualifiedName)
 		}
 	}

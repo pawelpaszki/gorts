@@ -1,4 +1,4 @@
-package model
+package helpers
 
 import (
 	"path/filepath"
