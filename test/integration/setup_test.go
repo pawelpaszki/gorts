@@ -21,6 +21,9 @@ var (
 // fixed temp directory (local and GitHub execution compatible)
 const tempDir = "/tmp/gorts-test"
 
+// pinned commit SHA for gorts-demo (ensures tests are stable)
+const gortsDemoCommit = "579a4e856c9aa4752637ffad15b4b7a296927f22"
+
 func TestMain(m *testing.M) {
 	// clean up repo (if exists)
 	os.RemoveAll(tempDir)
@@ -29,10 +32,16 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	// clone gorts-demo to have controlled repo with known commit history
+	// clone gorts-demo and checkout pinned commit
+	// to have controlled repo with known commit history
 	testRepoPath = filepath.Join(tempDir, "gorts-demo")
 	if err := gitClone("https://github.com/pawelpaszki/gorts-demo.git", testRepoPath); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to clone gorts-demo: %v\n", err)
+		os.RemoveAll(tempDir)
+		os.Exit(1)
+	}
+	if err := gitCheckout(testRepoPath, gortsDemoCommit); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to checkout commit %s: %v\n", gortsDemoCommit, err)
 		os.RemoveAll(tempDir)
 		os.Exit(1)
 	}
@@ -62,7 +71,18 @@ func TestMain(m *testing.M) {
 
 // gitClone clones desired directory into the specified location
 func gitClone(url, dest string) error {
-	cmd := exec.Command("git", "clone", "--depth=1", url, dest)
+	cmd := exec.Command("git", "clone", url, dest)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%v: %s", err, output)
+	}
+	return nil
+}
+
+// gitCheckout checks out a specific commit in the repository
+func gitCheckout(repoPath, commitSHA string) error {
+	cmd := exec.Command("git", "checkout", commitSHA)
+	cmd.Dir = repoPath
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("%v: %s", err, output)
@@ -98,6 +118,13 @@ func outputDir(t *testing.T) string {
 		t.Fatalf("failed to create output dir: %v", err)
 	}
 	return dir
+}
+
+// fixtureFile returns the absolute path to a fixture file in testdata/
+func fixtureFile(t *testing.T, name string) string {
+	t.Helper()
+	_, thisFile, _, _ := runtime.Caller(0)
+	return filepath.Join(filepath.Dir(thisFile), "testdata", name)
 }
 
 // runGortsInDir executes gorts from a specific working directory with specifid parameters
