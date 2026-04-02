@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -173,6 +174,10 @@ func TestTestsCmd_EmptyTestsDirectory(t *testing.T) {
 	if stderr == "" {
 		t.Error("expected error message in stderr")
 	}
+
+	if !strings.Contains(stderr, "failed to list tests") {
+		t.Errorf("expected 'failed to list tests' in stderr, got: %s", stderr)
+	}
 }
 
 func TestTestsCmd_InvalidDirectory(t *testing.T) {
@@ -194,6 +199,10 @@ func TestTestsCmd_InvalidDirectory(t *testing.T) {
 	if stderr == "" {
 		t.Error("expected error message in stderr")
 	}
+
+	if !strings.Contains(stderr, "failed to list tests") {
+		t.Errorf("expected 'failed to list tests' in stderr, got: %s", stderr)
+	}
 }
 
 func TestTestsCmd_MissingMandatoryFlag_Output(t *testing.T) {
@@ -210,6 +219,10 @@ func TestTestsCmd_MissingMandatoryFlag_Output(t *testing.T) {
 
 	if stderr == "" {
 		t.Error("expected error message in stderr")
+	}
+
+	if !strings.Contains(stderr, "required flag") || !strings.Contains(stderr, "output") {
+		t.Errorf("expected error about required 'output' flag, got: %s", stderr)
 	}
 }
 
@@ -229,5 +242,9 @@ func TestTestsCmd_MissingMandatoryFlag_Directories(t *testing.T) {
 
 	if stderr == "" {
 		t.Error("expected error message in stderr")
+	}
+
+	if !strings.Contains(stderr, "required flag") || !strings.Contains(stderr, "directories") {
+		t.Errorf("expected error about required 'directories' flag, got: %s", stderr)
 	}
 }
