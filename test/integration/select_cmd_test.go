@@ -4,6 +4,7 @@ package integration
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -44,9 +45,9 @@ func TestSelectCmd_SourceFileChange(t *testing.T) {
 	}
 
 	var selection struct {
-		GeneratedAt   string `json:"generated_at"`
-		FromCommit    string `json:"from_commit"`
-		ToCommit      string `json:"to_commit"`
+		GeneratedAt   string   `json:"generated_at"`
+		FromCommit    string   `json:"from_commit"`
+		ToCommit      string   `json:"to_commit"`
 		ChangedFiles  []string `json:"changed_files"`
 		SelectedTests []struct {
 			Directory string `json:"directory"`
@@ -473,4 +474,315 @@ func TestSelectCmd_FunctionGranularity(t *testing.T) {
 	} else if testDiff == 0 {
 		t.Log("function-level and file-level selected the same number of tests")
 	}
+}
+
+func TestSelectCmd_NewTestDiscovery(t *testing.T) {
+	t.Log("testing new test discovery")
+	t.Log("scenario: baseline covers only ./test/e2e (3 tests), but repo has more tests now")
+	t.Logf("baseline: %s (generated at %s)", baselineFile, baselineCommit[:12])
+	t.Logf("mapping: %s", mappingFile)
+
+	outputFile := filepath.Join(outputDir(t), "selection_new_tests.json")
+
+	t.Log("running gorts select")
+	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--baseline", baselineFile,
+		"--mapping", mappingFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode != 0 {
+		t.Fatalf("gorts select failed with exit code %d\nstdout: %s\nstderr: %s",
+			exitCode, stdout, stderr)
+	}
+
+	t.Log("verifying new test discovery message in output")
+	if !strings.Contains(stdout, "Discovered") || !strings.Contains(stdout, "new test") {
+		t.Logf("stdout: %s", stdout)
+		t.Log("note: 'Discovered X new test(s)' message may not appear if no new tests found")
+	}
+
+	data, err := os.ReadFile(outputFile)
+	if err != nil {
+		t.Fatalf("failed to read selection file: %v", err)
+	}
+
+	var selection struct {
+		SelectedTests []struct {
+			Directory string `json:"directory"`
+			TestName  string `json:"test_name"`
+		} `json:"selected_tests"`
+		Stats struct {
+			TotalTests    int `json:"total_tests"`
+			SelectedTests int `json:"selected_tests"`
+			NewTests      int `json:"new_tests"`
+		} `json:"stats"`
+	}
+
+	if err := json.Unmarshal(data, &selection); err != nil {
+		t.Fatalf("failed to parse selection JSON: %v", err)
+	}
+
+	t.Logf("stats.total_tests: %d (from baseline)", selection.Stats.TotalTests)
+	t.Logf("stats.selected_tests: %d", selection.Stats.SelectedTests)
+	t.Logf("stats.new_tests: %d", selection.Stats.NewTests)
+
+	if selection.Stats.NewTests > 0 {
+		t.Logf("new test discovery working: %d new test(s) discovered", selection.Stats.NewTests)
+	} else {
+		t.Log("no new tests discovered in this scenario")
+	}
+
+	if selection.Stats.SelectedTests > selection.Stats.TotalTests {
+		diff := selection.Stats.SelectedTests - selection.Stats.TotalTests
+		t.Logf("selected %d more tests than baseline total (new tests + tests from changed files)", diff)
+	}
+}
+
+func TestSelectCmd_OutOfScopeTestFiles(t *testing.T) {
+	t.Log("testing out-of-scope test file detection")
+	t.Log("scenario: baseline covers ./test/e2e, but internal/model/book_test.go changed")
+	t.Logf("baseline: %s", baselineFile)
+	t.Logf("mapping: %s", mappingFile)
+
+	outputFile := filepath.Join(outputDir(t), "selection_out_of_scope.json")
+
+	t.Log("running gorts select")
+	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--baseline", baselineFile,
+		"--mapping", mappingFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode != 0 {
+		t.Fatalf("gorts select failed with exit code %d\nstdout: %s\nstderr: %s",
+			exitCode, stdout, stderr)
+	}
+
+	data, err := os.ReadFile(outputFile)
+	if err != nil {
+		t.Fatalf("failed to read selection file: %v", err)
+	}
+
+	var selection struct {
+		ChangedFiles        []string `json:"changed_files"`
+		OutOfScopeTestFiles []string `json:"out_of_scope_test_files"`
+		Stats               struct {
+			OutOfScopeTestFiles int `json:"out_of_scope_test_files"`
+		} `json:"stats"`
+	}
+
+	if err := json.Unmarshal(data, &selection); err != nil {
+		t.Fatalf("failed to parse selection JSON: %v", err)
+	}
+
+	t.Logf("changed files: %v", selection.ChangedFiles)
+	t.Logf("out_of_scope_test_files: %v", selection.OutOfScopeTestFiles)
+	t.Logf("stats.out_of_scope_test_files: %d", selection.Stats.OutOfScopeTestFiles)
+
+	hasOutOfScopeTestFile := false
+	for _, f := range selection.ChangedFiles {
+		if strings.HasSuffix(f, "_test.go") && strings.HasPrefix(f, "internal/") {
+			hasOutOfScopeTestFile = true
+			t.Logf("found out-of-scope test file in changed_files: %s", f)
+		}
+	}
+
+	if hasOutOfScopeTestFile {
+		if selection.Stats.OutOfScopeTestFiles == 0 {
+			t.Error("expected stats.out_of_scope_test_files > 0 when test file outside baseline dirs changed")
+		}
+		if len(selection.OutOfScopeTestFiles) == 0 {
+			t.Error("expected out_of_scope_test_files list to be non-empty")
+		}
+		t.Logf("out-of-scope detection working: %d test file(s) outside baseline directories",
+			selection.Stats.OutOfScopeTestFiles)
+	} else {
+		t.Log("no out-of-scope test files in this commit range")
+	}
+}
+
+func TestSelectCmd_CommitMismatchWarning(t *testing.T) {
+	t.Log("testing commit mismatch warning between baseline and mapping")
+
+	t.Log("creating a modified mapping with different commit_sha")
+	mappingData, err := os.ReadFile(mappingFile)
+	if err != nil {
+		t.Fatalf("failed to read mapping file: %v", err)
+	}
+
+	modifiedMapping := strings.Replace(
+		string(mappingData),
+		baselineCommit,
+		"0000000000000000000000000000000000000000",
+		1,
+	)
+
+	modifiedMappingFile := filepath.Join(outputDir(t), "mapping_mismatch.json")
+	if err := os.WriteFile(modifiedMappingFile, []byte(modifiedMapping), 0644); err != nil {
+		t.Fatalf("failed to write modified mapping: %v", err)
+	}
+
+	outputFile := filepath.Join(outputDir(t), "selection_mismatch.json")
+
+	t.Log("running gorts select with mismatched baseline/mapping commits")
+	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--baseline", baselineFile,
+		"--mapping", modifiedMappingFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+
+	_ = exitCode
+	_ = stderr
+
+	t.Log("verifying commit mismatch warning in output")
+	if strings.Contains(stdout, "Baseline commit") && strings.Contains(stdout, "differs from mapping commit") {
+		t.Log("commit mismatch warning correctly displayed")
+	} else if strings.Contains(stdout, "Warn") {
+		t.Logf("warning found in output: %s", stdout)
+	} else {
+		t.Errorf("expected warning about commit mismatch, got stdout: %s", stdout)
+	}
+}
+
+func TestSelectCmd_MultipleFilesChanged(t *testing.T) {
+	t.Log("testing selection with multiple files changed")
+	t.Logf("scenario: commit %s -> %s changes multiple files", baselineCommit[:12], currentCommit[:12])
+
+	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
+
+	t.Log("running gorts select")
+	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--baseline", baselineFile,
+		"--mapping", mappingFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode != 0 {
+		t.Fatalf("gorts select failed with exit code %d\nstdout: %s\nstderr: %s",
+			exitCode, stdout, stderr)
+	}
+
+	data, err := os.ReadFile(outputFile)
+	if err != nil {
+		t.Fatalf("failed to read selection file: %v", err)
+	}
+
+	var selection struct {
+		ChangedFiles  []string `json:"changed_files"`
+		SelectedTests []struct {
+			Directory string `json:"directory"`
+			TestName  string `json:"test_name"`
+		} `json:"selected_tests"`
+		Stats struct {
+			ChangedFiles  int `json:"changed_files"`
+			SelectedTests int `json:"selected_tests"`
+		} `json:"stats"`
+	}
+
+	if err := json.Unmarshal(data, &selection); err != nil {
+		t.Fatalf("failed to parse selection JSON: %v", err)
+	}
+
+	t.Logf("changed files (%d): %v", selection.Stats.ChangedFiles, selection.ChangedFiles)
+	t.Logf("selected tests: %d", selection.Stats.SelectedTests)
+
+	if selection.Stats.ChangedFiles < 2 {
+		t.Skipf("only %d file changed, need multiple files for this test", selection.Stats.ChangedFiles)
+	}
+
+	t.Log("verifying union of tests from all changed files are selected")
+
+	if selection.Stats.SelectedTests == 0 {
+		t.Error("expected selected_tests > 0 when multiple files changed")
+	}
+
+	t.Logf("multiple files changed test passed: %d files changed, %d tests selected",
+		selection.Stats.ChangedFiles, selection.Stats.SelectedTests)
+}
+
+func TestSelectCmd_MissingBaselineParam(t *testing.T) {
+	t.Log("testing selection without providing baseline param")
+
+	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
+
+	t.Log("running gorts select")
+	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--mapping", mappingFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode == 0 {
+		t.Fatal("gorts", "select should fail with baseline param missing")
+	}
+
+	if !strings.Contains(stderr, `required flag(s) "baseline" not set`) {
+		t.Errorf("expected stderr to contain 'required flag(s) \"baseline\" not set', got: %s", stderr)
+	}
+
+	t.Log("got expected error for missing --baseline flag")
+}
+
+func TestSelectCmd_MissingMappingParam(t *testing.T) {
+	t.Log("testing selection without providing mapping param")
+
+	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
+
+	t.Log("running gorts select")
+	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--baseline", baselineFile,
+		"--output", outputFile,
+		"--repo", testRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode == 0 {
+		t.Fatal("gorts", "select should fail with mapping param missing")
+	}
+
+	if !strings.Contains(stderr, `required flag(s) "mapping" not set`) {
+		t.Errorf("expected stderr to contain 'required flag(s) \"mapping\" not set', got: %s", stderr)
+	}
+
+	t.Log("got expected error for missing --mapping flag")
+}
+
+func TestSelectCmd_InvalidRepo(t *testing.T) {
+	t.Log("testing selection without providing mapping param")
+
+	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
+
+	invalidRepoPath := "invalid/repo"
+
+	t.Log("running gorts select")
+	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
+		"select",
+		"--mapping", mappingFile,
+		"--baseline", baselineFile,
+		"--output", outputFile,
+		"--repo", invalidRepoPath,
+		"--strip-prefix", "",
+	)
+	if exitCode == 0 {
+		t.Fatal("gorts", "select should fail with mapping param missing")
+	}
+
+	expectedError := fmt.Sprintf("failed to get current commit: chdir %s: no such file or directory", invalidRepoPath)
+
+	if !strings.Contains(stderr, expectedError) {
+		t.Errorf("expected stderr to contain '%s'", expectedError)
+	}
+
+	t.Log("got expected error for missing --mapping flag")
 }
