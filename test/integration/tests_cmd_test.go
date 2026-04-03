@@ -4,7 +4,6 @@ package integration
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,7 +11,6 @@ import (
 )
 
 func TestTestsCmd_SingleDirectory(t *testing.T) {
-	// output goes to /tmp/gorts-test/.cov/ (same folder for all test artifacts)
 	t.Log("running gorts tests with single directory: ./test/e2e")
 
 	outputFile := filepath.Join(outputDir(t), "manifest.json")
@@ -163,8 +161,7 @@ func TestTestsCmd_EmptyTestsDirectory(t *testing.T) {
 
 	emptyDirPath := filepath.Join(tempDir, "test/empty")
 	if err := os.MkdirAll(emptyDirPath, 0755); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to create empty dir: %v\n", err)
-		os.Exit(1)
+		t.Fatalf("failed to create empty dir: %v", err)
 	}
 
 	_, stderr, exitCode := runGortsInDir(t, testRepoPath,

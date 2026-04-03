@@ -5,7 +5,6 @@ package integration
 import (
 	"encoding/json"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"testing"
 )
@@ -14,37 +13,32 @@ func TestBaselineCmd_TestBinaryMode(t *testing.T) {
 	t.Log("loading manifest fixture")
 	manifestFile := fixtureFile(t, "manifest.json")
 
-	t.Log("building instrumented test binary from gorts-demo")
-	testBinary := filepath.Join(tempDir, "test.bin")
-	buildCmd := exec.Command("go", "test", "-c", "-cover", "-coverpkg=./...", "-o", testBinary, "./test/e2e")
-	buildCmd.Dir = testRepoPath
-	if output, err := buildCmd.CombinedOutput(); err != nil {
-		t.Fatalf("failed to build test binary: %v\n%s", err, output)
-	}
+	t.Log("using pre-built test binary from TestMain")
+	t.Logf("test binary: %s", testBinaryPath)
 
-	coverageDir := filepath.Join(outputDir(t), "coverage")
-	baselineFile := filepath.Join(outputDir(t), "baseline.json")
+	coverageDir := filepath.Join(outputDir(t), "coverage_test1")
+	baselineOutput := filepath.Join(outputDir(t), "baseline_test1.json")
 
 	t.Log("running gorts baseline")
 	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
 		"baseline",
 		"--manifest", manifestFile,
-		"--test-binary", testBinary,
+		"--test-binary", testBinaryPath,
 		"--coverage-dir", coverageDir,
-		"--output", baselineFile,
+		"--output", baselineOutput,
 	)
 	if exitCode != 0 {
 		t.Fatalf("gorts baseline failed with exit code %d\nstdout: %s\nstderr: %s",
 			exitCode, stdout, stderr)
 	}
 
-	t.Logf("baseline created at %s", baselineFile)
+	t.Logf("baseline created at %s", baselineOutput)
 
-	if _, err := os.Stat(baselineFile); os.IsNotExist(err) {
-		t.Fatalf("expected baseline file %s to exist", baselineFile)
+	if _, err := os.Stat(baselineOutput); os.IsNotExist(err) {
+		t.Fatalf("expected baseline file %s to exist", baselineOutput)
 	}
 
-	data, err := os.ReadFile(baselineFile)
+	data, err := os.ReadFile(baselineOutput)
 	if err != nil {
 		t.Fatalf("failed to read baseline file: %v", err)
 	}
@@ -106,24 +100,18 @@ func TestBaselineCmd_SkipTests(t *testing.T) {
 	t.Log("loading manifest fixture")
 	manifestFile := fixtureFile(t, "manifest.json")
 
-	t.Log("building instrumented test binary from gorts-demo")
-	testBinary := filepath.Join(tempDir, "test.bin")
-	buildCmd := exec.Command("go", "test", "-c", "-cover", "-coverpkg=./...", "-o", testBinary, "./test/e2e")
-	buildCmd.Dir = testRepoPath
-	if output, err := buildCmd.CombinedOutput(); err != nil {
-		t.Fatalf("failed to build test binary: %v\n%s", err, output)
-	}
+	t.Log("using pre-built test binary from TestMain")
 
-	coverageDir := filepath.Join(outputDir(t), "coverage")
-	baselineFile := filepath.Join(outputDir(t), "baseline.json")
+	coverageDir := filepath.Join(outputDir(t), "coverage_skip")
+	baselineOutput := filepath.Join(outputDir(t), "baseline_skip.json")
 
 	t.Log("running gorts baseline with --skip TestE2E_RootEndpoint")
 	stdout, stderr, exitCode := runGortsInDir(t, testRepoPath,
 		"baseline",
 		"--manifest", manifestFile,
-		"--test-binary", testBinary,
+		"--test-binary", testBinaryPath,
 		"--coverage-dir", coverageDir,
-		"--output", baselineFile,
+		"--output", baselineOutput,
 		"--skip", "TestE2E_RootEndpoint",
 	)
 	if exitCode != 0 {
@@ -131,13 +119,13 @@ func TestBaselineCmd_SkipTests(t *testing.T) {
 			exitCode, stdout, stderr)
 	}
 
-	t.Logf("baseline created at %s", baselineFile)
+	t.Logf("baseline created at %s", baselineOutput)
 
-	if _, err := os.Stat(baselineFile); os.IsNotExist(err) {
-		t.Fatalf("expected baseline file %s to exist", baselineFile)
+	if _, err := os.Stat(baselineOutput); os.IsNotExist(err) {
+		t.Fatalf("expected baseline file %s to exist", baselineOutput)
 	}
 
-	data, err := os.ReadFile(baselineFile)
+	data, err := os.ReadFile(baselineOutput)
 	if err != nil {
 		t.Fatalf("failed to read baseline file: %v", err)
 	}
@@ -199,14 +187,14 @@ func TestBaselineCmd_MutuallyExclusiveFlags(t *testing.T) {
 	t.Log("running gorts baseline with mutually exclusive flags (expecting failure)")
 
 	manifestFile := fixtureFile(t, "manifest.json")
-	baselineFile := filepath.Join(outputDir(t), "baseline.json")
+	baselineOutput := filepath.Join(outputDir(t), "baseline_exclusive.json")
 
 	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
 		"baseline",
 		"--manifest", manifestFile,
 		"--test-binary", "/some/binary",
 		"--pre-test", "echo pre",
-		"--output", baselineFile,
+		"--output", baselineOutput,
 	)
 
 	if exitCode == 0 {
@@ -223,15 +211,15 @@ func TestBaselineCmd_MissingTestBinary(t *testing.T) {
 	t.Log("running gorts baseline with nonexistent test binary (expecting failure)")
 
 	manifestFile := fixtureFile(t, "manifest.json")
-	coverageDir := filepath.Join(outputDir(t), "coverage")
-	baselineFile := filepath.Join(outputDir(t), "baseline.json")
+	coverageDir := filepath.Join(outputDir(t), "coverage_missing")
+	baselineOutput := filepath.Join(outputDir(t), "baseline_missing.json")
 
 	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
 		"baseline",
 		"--manifest", manifestFile,
 		"--test-binary", "/nonexistent/test.bin",
 		"--coverage-dir", coverageDir,
-		"--output", baselineFile,
+		"--output", baselineOutput,
 	)
 
 	if exitCode == 0 {
@@ -247,15 +235,15 @@ func TestBaselineCmd_MissingTestBinary(t *testing.T) {
 func TestBaselineCmd_MissingManifest(t *testing.T) {
 	t.Log("running gorts baseline with nonexistent manifest (expecting failure)")
 
-	coverageDir := filepath.Join(outputDir(t), "coverage")
-	baselineFile := filepath.Join(outputDir(t), "baseline.json")
+	coverageDir := filepath.Join(outputDir(t), "coverage_nomanifest")
+	baselineOutput := filepath.Join(outputDir(t), "baseline_nomanifest.json")
 
 	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
 		"baseline",
 		"--manifest", "/nonexistent/manifest.json",
 		"--test-binary", "/some/binary",
 		"--coverage-dir", coverageDir,
-		"--output", baselineFile,
+		"--output", baselineOutput,
 	)
 
 	if exitCode == 0 {
