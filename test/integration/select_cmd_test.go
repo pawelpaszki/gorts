@@ -727,8 +727,9 @@ func TestSelectCmd_MissingBaselineParam(t *testing.T) {
 		t.Fatal("gorts", "select should fail with baseline param missing")
 	}
 
-	if !strings.Contains(stderr, `required flag(s) "baseline" not set`) {
-		t.Errorf("expected stderr to contain 'required flag(s) \"baseline\" not set', got: %s", stderr)
+	expectedError := `required flag(s) "baseline" not set`
+	if !strings.Contains(stderr, expectedError) {
+		t.Errorf("expected stderr to contain '%s', got: %s", expectedError, stderr)
 	}
 
 	t.Log("got expected error for missing --baseline flag")
@@ -751,8 +752,9 @@ func TestSelectCmd_MissingMappingParam(t *testing.T) {
 		t.Fatal("gorts", "select should fail with mapping param missing")
 	}
 
-	if !strings.Contains(stderr, `required flag(s) "mapping" not set`) {
-		t.Errorf("expected stderr to contain 'required flag(s) \"mapping\" not set', got: %s", stderr)
+	expectedError := `required flag(s) "mapping" not set`
+	if !strings.Contains(stderr, expectedError) {
+		t.Errorf("expected stderr to contain '%s', got: %s", expectedError, stderr)
 	}
 
 	t.Log("got expected error for missing --mapping flag")
