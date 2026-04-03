@@ -296,7 +296,11 @@ func calculateReductionPercent(total, selected int) float64 {
 	if total <= 0 {
 		return 0.0
 	}
-	return float64(total-selected) / float64(total) * 100
+	reduction := float64(total-selected) / float64(total) * 100
+	if reduction < 0 {
+		return 0.0
+	}
+	return reduction
 }
 
 func printSelectionSummary(selection *model.Selection, outputPath string, runAll bool, triggerFile string) {

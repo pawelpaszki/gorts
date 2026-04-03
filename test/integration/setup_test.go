@@ -222,6 +222,39 @@ func checkoutCommit(t *testing.T, repoPath, commitSHA string) error {
 	return gitCheckout(repoPath, commitSHA)
 }
 
+// gitAdd stages a file for commit
+func gitAdd(repoPath, file string) error {
+	cmd := exec.Command("git", "add", file)
+	cmd.Dir = repoPath
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%v: %s", err, output)
+	}
+	return nil
+}
+
+// gitCommit creates a commit with the given message
+func gitCommit(repoPath, message string) error {
+	cmd := exec.Command("git", "commit", "-m", message)
+	cmd.Dir = repoPath
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%v: %s", err, output)
+	}
+	return nil
+}
+
+// gitResetHard resets the repository to a specific commit, discarding changes
+func gitResetHard(repoPath, commitSHA string) error {
+	cmd := exec.Command("git", "reset", "--hard", commitSHA)
+	cmd.Dir = repoPath
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%v: %s", err, output)
+	}
+	return nil
+}
+
 // runGortsInDir executes gorts from a specific working directory with specifid parameters
 func runGortsInDir(t *testing.T, workDir string, args ...string) (stdout, stderr string, exitCode int) {
 	t.Helper()

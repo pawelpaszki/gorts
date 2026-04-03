@@ -198,6 +198,18 @@ func TestCalculateReductionPercent(t *testing.T) {
 			selected: 10,
 			want:     75.0,
 		},
+		{
+			name:     "more selected than total (new tests discovered)",
+			total:    3,
+			selected: 29,
+			want:     0.0,
+		},
+		{
+			name:     "slightly more selected than total",
+			total:    100,
+			selected: 105,
+			want:     0.0,
+		},
 	}
 
 	for _, tt := range tests {
