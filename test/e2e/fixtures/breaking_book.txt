@@ -1,0 +1,27 @@
+package model
+
+import "errors"
+
+type Book struct {
+	ID        string
+	Title     string
+	Author    string
+	ISBN      string
+	Published bool
+}
+
+func NewBook(title, author string) *Book {
+	return &Book{
+		Title:  title,
+		Author: author,
+	}
+}
+
+func (b *Book) Validate() error {
+	// BREAKING CHANGE: Always return error to simulate a bug
+	return errors.New("intentional breaking change for safety test")
+}
+
+func (b *Book) IsPublished() bool {
+	return b.Published
+}
