@@ -80,6 +80,7 @@ func getFunctionName(fn *ast.FuncDecl) string {
 	}
 
 	// Method - include receiver type
+	// Format must match `go tool covdata func` output: "*Type.Method"
 	var recvType string
 	if len(fn.Recv.List) > 0 {
 		switch t := fn.Recv.List[0].Type.(type) {
@@ -93,7 +94,7 @@ func getFunctionName(fn *ast.FuncDecl) string {
 	}
 
 	if recvType != "" {
-		return "(" + recvType + ")." + fn.Name.Name
+		return recvType + "." + fn.Name.Name
 	}
 	return fn.Name.Name
 }

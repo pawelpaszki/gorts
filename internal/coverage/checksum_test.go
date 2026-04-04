@@ -66,7 +66,7 @@ func (b *Book) Validate() error {
 	return nil
 }
 `,
-			wantFuncs: []string{"(*Book).Validate"},
+			wantFuncs: []string{"*Book.Validate"},
 			wantErr:   false,
 		},
 		{
@@ -81,7 +81,7 @@ func (a Author) FullName() string {
 	return a.Name
 }
 `,
-			wantFuncs: []string{"(Author).FullName"},
+			wantFuncs: []string{"Author.FullName"},
 			wantErr:   false,
 		},
 		{
@@ -146,7 +146,7 @@ func (r *ReadingList) ContainsBook(bookID string) bool {
 	return false
 }
 `,
-			wantFuncs: []string{"(*ReadingList).AddBook", "(*ReadingList).RemoveBook", "(*ReadingList).ContainsBook"},
+			wantFuncs: []string{"*ReadingList.AddBook", "*ReadingList.RemoveBook", "*ReadingList.ContainsBook"},
 			wantErr:   false,
 		},
 		{
@@ -173,7 +173,7 @@ func validateISBN(isbn string) bool {
 	return len(isbn) == 13
 }
 `,
-			wantFuncs: []string{"NewBookService", "(*BookService).GetBook", "(BookService).ListBooks", "validateISBN"},
+			wantFuncs: []string{"NewBookService", "*BookService.GetBook", "BookService.ListBooks", "validateISBN"},
 			wantErr:   false,
 		},
 	}
@@ -238,7 +238,7 @@ func (b *Book) IsPublished() bool {
 	checksums2, err := ComputeFunctionChecksums(file2)
 	require.NoError(t, err)
 
-	assert.Equal(t, checksums1["(*Book).IsPublished"], checksums2["(*Book).IsPublished"],
+	assert.Equal(t, checksums1["*Book.IsPublished"], checksums2["*Book.IsPublished"],
 		"doc comments above function should not affect checksum")
 }
 
@@ -333,7 +333,7 @@ type AuthorService struct{}
 
 func (s *AuthorService) GetAuthor() {}
 `,
-			want: "(*AuthorService).GetAuthor",
+			want: "*AuthorService.GetAuthor",
 		},
 		{
 			name: "value receiver method",
@@ -343,7 +343,7 @@ type Book struct{}
 
 func (b Book) GetTitle() string { return "" }
 `,
-			want: "(Book).GetTitle",
+			want: "Book.GetTitle",
 		},
 		{
 			name: "single letter receiver name",
@@ -353,7 +353,7 @@ type BookRepository struct{}
 
 func (r *BookRepository) FindByID() {}
 `,
-			want: "(*BookRepository).FindByID",
+			want: "*BookRepository.FindByID",
 		},
 		{
 			name: "longer receiver name",
@@ -363,7 +363,7 @@ type AuthMiddleware struct{}
 
 func (middleware *AuthMiddleware) Authenticate() {}
 `,
-			want: "(*AuthMiddleware).Authenticate",
+			want: "*AuthMiddleware.Authenticate",
 		},
 		{
 			name: "unexported function",
@@ -381,7 +381,7 @@ type bookService struct{}
 
 func (s *bookService) findByISBN() {}
 `,
-			want: "(*bookService).findByISBN",
+			want: "*bookService.findByISBN",
 		},
 		{
 			name: "init function",
@@ -497,7 +497,7 @@ func TestBook_Validate() {}
 				require.NoError(t, err)
 				return []string{"internal/model/book.go", "internal/model/book_test.go"}
 			},
-			wantFuncs: []string{"internal/model/book.go::(*Book).Validate"},
+			wantFuncs: []string{"internal/model/book.go::*Book.Validate"},
 		},
 		{
 			name: "skip non-existent files",
@@ -556,7 +556,7 @@ func (r *BookRepository) FindByID() {}
 				require.NoError(t, err)
 				return []string{"internal/repository/book_repo.go"}
 			},
-			wantFuncs: []string{"internal/repository/book_repo.go::(*BookRepository).FindByID"},
+			wantFuncs: []string{"internal/repository/book_repo.go::*BookRepository.FindByID"},
 		},
 		{
 			name: "qualify function names with file path",
@@ -574,7 +574,7 @@ func (s *AuthorService) GetAuthor() {}
 				require.NoError(t, err)
 				return []string{"internal/service/author_service.go"}
 			},
-			wantFuncs: []string{"internal/service/author_service.go::NewAuthorService", "internal/service/author_service.go::(*AuthorService).GetAuthor"},
+			wantFuncs: []string{"internal/service/author_service.go::NewAuthorService", "internal/service/author_service.go::*AuthorService.GetAuthor"},
 		},
 	}
 
