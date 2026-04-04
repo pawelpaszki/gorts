@@ -1,6 +1,6 @@
-//go:build integration
+//go:build e2e
 
-package integration
+package e2e
 
 import (
 	"bytes"
@@ -12,20 +12,16 @@ import (
 	"testing"
 )
 
-// shared variables (across this and all other integration test files)
 var (
-	testRepoPath   string // Path to cloned gorts-demo repository
 	gortsBinary    string // Path to built gorts binary
+	testRepoPath   string // Path to cloned gorts-demo repository
 	testBinaryPath string // Path to instrumented test binary
-	baselineFile   string // Path to pre-generated baseline.json
-	mappingFile    string // Path to pre-generated mapping.json
-	coverageDir    string // Path to coverage data directory
 )
 
 // fixed temp directory (local and GitHub execution compatible)
-const tempDir = "/tmp/gorts-integration"
+const tempDir = "/tmp/gorts-e2e"
 
-// Two commits for testing: baseline is generated at the older commit,
+// Two commits for e2e testing: baseline is generated at the older commit,
 // then the newer commit is used, so select tests can detect real changes.
 const (
 	// baselineCommit: baseline and mapping are generated at this commit
@@ -35,6 +31,7 @@ const (
 )
 
 func TestMain(m *testing.M) {
+	// TODO: Setup
 	// clean up repo (if exists)
 	os.RemoveAll(tempDir)
 	if err := os.MkdirAll(tempDir, 0755); err != nil {
@@ -56,7 +53,7 @@ func TestMain(m *testing.M) {
 		os.RemoveAll(tempDir)
 		os.Exit(1)
 	}
-	fmt.Printf("checked out baseline commit: %s for integration tests\n", baselineCommit)
+	fmt.Printf("checked out baseline commit: %s for e2e tests\n", baselineCommit)
 
 	// build the gorts binary from source and place it in the temp directory
 	gortsRoot := findGortsRoot()
@@ -75,56 +72,6 @@ func TestMain(m *testing.M) {
 		os.Exit(1)
 	}
 
-	// setup output paths (inside gorts-demo repo)
-	covDir := filepath.Join(testRepoPath, ".cov")
-	os.MkdirAll(covDir, 0755)
-	coverageDir = filepath.Join(covDir, "coverage")
-	baselineFile = filepath.Join(covDir, "baseline.json")
-	mappingFile = filepath.Join(covDir, "mapping.json")
-
-	// generate baseline (runs tests, collects coverage)
-	_, thisFile, _, _ := runtime.Caller(0)
-	manifestFile := filepath.Join(filepath.Dir(thisFile), "testdata", "manifest.json")
-	if err := runGortsSetup(testRepoPath, gortsBinary,
-		"baseline",
-		"--manifest", manifestFile,
-		"--test-binary", testBinaryPath,
-		"--coverage-dir", coverageDir,
-		"--output", baselineFile,
-	); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to generate baseline: %v\n", err)
-		os.RemoveAll(tempDir)
-		os.Exit(1)
-	}
-
-	// generate mapping (parses coverage data)
-	if err := runGortsSetup(testRepoPath, gortsBinary,
-		"mapping",
-		"--baseline", baselineFile,
-		"--output", mappingFile,
-		"--module", "github.com/pawelpaszki/gorts-demo",
-		"--repo", testRepoPath,
-	); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to generate mapping: %v\n", err)
-		os.RemoveAll(tempDir)
-		os.Exit(1)
-	}
-
-	// checkout current commit (one ahead of baseline) for tests to run
-	// this allows select tests to detect real changes between commits
-	if err := gitCheckout(testRepoPath, currentCommit); err != nil {
-		fmt.Fprintf(os.Stderr, "failed to checkout current commit %s: %v\n", currentCommit, err)
-		os.RemoveAll(tempDir)
-		os.Exit(1)
-	}
-	fmt.Printf("checked out current commit: %s\n", currentCommit)
-
-	fmt.Printf("test artifacts available here: %s\n", tempDir)
-	fmt.Printf("  baseline: %s (generated at %s)\n", baselineFile, baselineCommit[:12])
-	fmt.Printf("  mapping: %s (generated at %s)\n", mappingFile, baselineCommit[:12])
-	fmt.Printf("  repo now at: %s\n", currentCommit[:12])
-
-	// run all integration tests
 	code := m.Run()
 
 	// Cleanup (skip if GORTS_KEEP_ARTIFACTS is set for debugging)
@@ -179,80 +126,23 @@ func buildTestBinary(repoPath, outputPath string) error {
 	return nil
 }
 
-// runGortsSetup runs a gorts command during TestMain setup (no *testing.T available)
-func runGortsSetup(workDir, binary string, args ...string) error {
-	cmd := exec.Command(binary, args...)
-	cmd.Dir = workDir
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("%v: %s", err, output)
-	}
-	return nil
-}
-
 // findGortsRoot returns the path to the gorts repository root
 // it navigates up from this test file's location
 func findGortsRoot() string {
-	// this file is at: gorts/test/integration/setup_test.go
+	// this file is at: gorts/test/e2e/setup_test.go
 	// so gorts root is: ../../
 	_, thisFile, _, _ := runtime.Caller(0)
 	return filepath.Join(filepath.Dir(thisFile), "..", "..")
 }
 
-// outputDir returns the shared output directory path, creating it if needed
-func outputDir(t *testing.T) string {
+// outputDir returns the output directory path for a specific test, creating it if needed
+func outputDir(t *testing.T, testName string) string {
 	t.Helper()
-	dir := filepath.Join(testRepoPath, ".cov")
+	dir := filepath.Join(testRepoPath, ".cov", testName)
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		t.Fatalf("failed to create output dir: %v", err)
 	}
 	return dir
-}
-
-// fixtureFile returns the absolute path to a fixture file in testdata/
-func fixtureFile(t *testing.T, name string) string {
-	t.Helper()
-	_, thisFile, _, _ := runtime.Caller(0)
-	return filepath.Join(filepath.Dir(thisFile), "testdata", name)
-}
-
-// checkoutCommit checks out a specific commit (for use in tests)
-func checkoutCommit(t *testing.T, repoPath, commitSHA string) error {
-	t.Helper()
-	return gitCheckout(repoPath, commitSHA)
-}
-
-// gitAdd stages a file for commit
-func gitAdd(repoPath, file string) error {
-	cmd := exec.Command("git", "add", file)
-	cmd.Dir = repoPath
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("%v: %s", err, output)
-	}
-	return nil
-}
-
-// gitCommit creates a commit with the given message
-func gitCommit(repoPath, message string) error {
-	cmd := exec.Command("git", "commit", "-m", message)
-	cmd.Dir = repoPath
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("%v: %s", err, output)
-	}
-	return nil
-}
-
-// gitResetHard resets the repository to a specific commit, discarding changes
-func gitResetHard(repoPath, commitSHA string) error {
-	cmd := exec.Command("git", "reset", "--hard", commitSHA)
-	cmd.Dir = repoPath
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("%v: %s", err, output)
-	}
-	return nil
 }
 
 // runGortsInDir executes gorts from a specific working directory with specified parameters
@@ -280,4 +170,10 @@ func runGortsInDir(t *testing.T, workDir string, args ...string) (stdout, stderr
 	}
 
 	return stdout, stderr, exitCode
+}
+
+// checkoutCommit checks out a specific commit (for use in tests)
+func checkoutCommit(t *testing.T, repoPath, commitSHA string) error {
+	t.Helper()
+	return gitCheckout(repoPath, commitSHA)
 }
