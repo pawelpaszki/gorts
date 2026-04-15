@@ -9,13 +9,14 @@ import (
 
 // OutOfScopeTestFiles contains ignored tests (not in the baseline - likely unit tests)
 type Selection struct {
-	GeneratedAt         time.Time      `json:"generated_at"`
-	FromCommit          string         `json:"from_commit"`
-	ToCommit            string         `json:"to_commit"`
-	ChangedFiles        []string       `json:"changed_files"`
-	SelectedTests       []SelectedTest `json:"selected_tests"`
-	OutOfScopeTestFiles []string       `json:"out_of_scope_test_files,omitempty"`
-	Stats               SelectionStats `json:"stats"`
+	GeneratedAt            time.Time      `json:"generated_at"`
+	FromCommit             string         `json:"from_commit"`
+	ToCommit               string         `json:"to_commit"`
+	ChangedFiles           []string       `json:"changed_files"`
+	SelectedTests          []SelectedTest `json:"selected_tests"`
+	OutOfScopeTestFiles    []string       `json:"out_of_scope_test_files,omitempty"`
+	NoCoverageDataPackages []string       `json:"no_coverage_data_packages,omitempty"`
+	Stats                  SelectionStats `json:"stats"`
 }
 
 type SelectedTest struct {

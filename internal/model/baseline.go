@@ -31,10 +31,13 @@ type TestSuiteResult struct {
 }
 
 type BaselineManifest struct {
-	GeneratedAt      time.Time         `json:"generated_at"`
-	CommitSHA        string            `json:"commit_sha"`
-	TestSuiteResults []TestSuiteResult `json:"test_suite_results"`
-	Summary          Summary           `json:"summary"`
+	GeneratedAt        time.Time         `json:"generated_at"`
+	StartedAt          time.Time         `json:"started_at"`
+	FinishedAt         time.Time         `json:"finished_at"`
+	BaselineDurationMs int64             `json:"baseline_duration_ms"`
+	CommitSHA          string            `json:"commit_sha"`
+	TestSuiteResults   []TestSuiteResult `json:"test_suite_results"`
+	Summary            Summary           `json:"summary"`
 }
 
 func ValidateBaselineManifest(m *BaselineManifest) error {

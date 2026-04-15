@@ -56,18 +56,19 @@ Examples:
 
 		r := configureRunner(cfg)
 
+		startedAt := time.Now().UTC()
 		suiteResults, overallSummary, err := runTestSuites(manifest, r, cfg.skipSet)
 		if err != nil {
 			return err
 		}
 
-		baseline := buildBaselineManifest(manifest, suiteResults, overallSummary)
+		baseline := buildBaselineManifest(manifest, suiteResults, overallSummary, startedAt)
 
 		if err := jsonutil.SaveBaseline(cfg.outputPath, baseline); err != nil {
 			return err
 		}
 
-		printBaselineSummary(overallSummary, cfg.outputPath, cfg.coverageDir)
+		printBaselineSummary(overallSummary, baseline.BaselineDurationMs, cfg.outputPath, cfg.coverageDir)
 		return nil
 	},
 }
@@ -268,23 +269,30 @@ func updateSuiteSummary(summary *model.Summary, result *model.TestResult) {
 	}
 }
 
-func buildBaselineManifest(manifest *model.TestManifest, suiteResults []model.TestSuiteResult, summary model.Summary) *model.BaselineManifest {
+func buildBaselineManifest(manifest *model.TestManifest, suiteResults []model.TestSuiteResult, summary model.Summary, startedAt time.Time) *model.BaselineManifest {
 	commitSha, _, _ := exec.Run(manifest.TestSuites[0].Directory, "git", "rev-parse", "HEAD")
 
+	finishedAt := time.Now().UTC()
+	baselineDurationMs := finishedAt.Sub(startedAt).Milliseconds()
+
 	return &model.BaselineManifest{
-		GeneratedAt:      time.Now().UTC(),
-		CommitSHA:        strings.TrimSpace(commitSha),
-		TestSuiteResults: suiteResults,
-		Summary:          summary,
+		GeneratedAt:        finishedAt,
+		StartedAt:          startedAt,
+		FinishedAt:         finishedAt,
+		BaselineDurationMs: baselineDurationMs,
+		CommitSHA:          strings.TrimSpace(commitSha),
+		TestSuiteResults:   suiteResults,
+		Summary:            summary,
 	}
 }
 
-func printBaselineSummary(summary model.Summary, outputPath, coverageDir string) {
+func printBaselineSummary(summary model.Summary, baselineDurationMs int64, outputPath, coverageDir string) {
 	fmt.Printf("\n==================================================\n")
 	fmt.Printf("Baseline Complete!\n")
 	fmt.Printf("Tests: %d passed, %d failed, %d total\n",
 		summary.Passed, summary.Failed, summary.Total)
-	fmt.Printf("Duration: %dms\n", summary.DurationMs)
+	fmt.Printf("Test Duration: %dms\n", summary.DurationMs)
+	fmt.Printf("Baseline Duration: %dms\n", baselineDurationMs)
 	fmt.Printf("Output: %s\n", outputPath)
 	if coverageDir != "" {
 		fmt.Printf("Coverage: %s\n", coverageDir)

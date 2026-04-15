@@ -40,10 +40,9 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 		result.CoveragePath = r.buildCoveragePath(directory, testName)
 	}
 
-	totalStart := time.Now()
-	lastOutput, attempt := r.executeWithRetries(directory, testName, result)
+	lastOutput, attempt, durationMs := r.executeWithRetries(directory, testName, result)
 
-	result.DurationMs = time.Since(totalStart).Milliseconds()
+	result.DurationMs = durationMs
 
 	if result.Status == "" {
 		result.Status = "fail"
@@ -58,8 +57,9 @@ func (r *Runner) RunSingleTest(directory, testName string) (*model.TestResult, e
 	return result, nil
 }
 
-func (r *Runner) executeWithRetries(directory, testName string, result *model.TestResult) (string, int) {
+func (r *Runner) executeWithRetries(directory, testName string, result *model.TestResult) (string, int, int64) {
 	var lastOutput string
+	var lastAttemptDurationMs int64
 
 	for attempt := 0; attempt <= r.MaxRetries; attempt++ {
 		if attempt > 0 {
@@ -70,20 +70,25 @@ func (r *Runner) executeWithRetries(directory, testName string, result *model.Te
 		r.runPreHook(directory, testName)
 
 		cmd := r.buildCommand(directory, testName, result.CoveragePath)
+
+		// Measure only test execution time, excluding hooks
+		testStart := time.Now()
 		output, err := cmd.CombinedOutput()
+		lastAttemptDurationMs = time.Since(testStart).Milliseconds()
+
 		lastOutput = string(output)
 
 		r.runPostHook(directory, testName, result)
 
 		if err == nil {
 			result.Status = "pass"
-			return lastOutput, attempt
+			return lastOutput, attempt, lastAttemptDurationMs
 		}
 
 		fmt.Printf("    [Attempt %d failed]\n", attempt+1)
 	}
 
-	return lastOutput, r.MaxRetries
+	return lastOutput, r.MaxRetries, lastAttemptDurationMs
 }
 
 func (r *Runner) buildCommand(directory, testName, coveragePath string) *exec.Cmd {

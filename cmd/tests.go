@@ -60,7 +60,6 @@ var testsCmd = &cobra.Command{
 		if err := jsonutil.SaveManifest(outputDir, &manifest); err != nil {
 			return fmt.Errorf("failed to save manifest: %w", err)
 		}
-		fmt.Printf("[Info] Saved manifest to %s\n", outputDir)
 		return nil
 	},
 }

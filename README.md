@@ -59,6 +59,3 @@ Notes for the future:
 ### git flow to be followed
 https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
-### experimentation cut-off
-first commit used: `d26dbfa9ed1f2f9832981ba7c43304e54c3ee1f1`
-last commit used for evaluation of kuberay is: `8fc4e2a0e644db392534927b7c03d15e3ab7bdbc`

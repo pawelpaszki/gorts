@@ -15,10 +15,11 @@ import (
 )
 
 type selectionResult struct {
-	selectedTests       []model.SelectedTest
-	outOfScopeTestFiles []string
-	changedTestFiles    int
-	newTestsCount       int
+	selectedTests          []model.SelectedTest
+	outOfScopeTestFiles    []string
+	changedTestFiles       int
+	newTestsCount          int
+	noCoverageDataPackages []string // packages with changed test files but no coverage data
 }
 
 var selectCmd = &cobra.Command{
@@ -57,7 +58,12 @@ var selectCmd = &cobra.Command{
 		}
 
 		if len(allChangedFiles) == 0 {
-			fmt.Println("No files changed between commits")
+			fmt.Println("[Info] No files changed between commits")
+			selection := buildEmptySelection(mapping.CommitSHA, currentCommit, mapping.Stats.TotalTests, "no_changes")
+			if err := jsonutil.SaveSelection(outputPath, selection); err != nil {
+				return fmt.Errorf("failed to save selection: %w", err)
+			}
+			printSelectionSummary(selection, outputPath, false, "")
 			return nil
 		}
 
@@ -65,7 +71,12 @@ var selectCmd = &cobra.Command{
 		changedGoFiles := filterGoFiles(allChangedFiles)
 
 		if !runAll && len(changedGoFiles) == 0 {
-			fmt.Println("No source files changed (only non-code files modified)")
+			fmt.Println("[Info] No source files changed (only non-code files modified)")
+			selection := buildEmptySelection(mapping.CommitSHA, currentCommit, mapping.Stats.TotalTests, "no_source_changes")
+			if err := jsonutil.SaveSelection(outputPath, selection); err != nil {
+				return fmt.Errorf("failed to save selection: %w", err)
+			}
+			printSelectionSummary(selection, outputPath, false, "")
 			return nil
 		}
 
@@ -170,21 +181,28 @@ func performTestSelection(
 
 	selectedTestsMap := make(map[string]bool)
 
-	if granularity == "function" && len(mapping.FunctionChecksums) > 0 {
-		selectByFunction(repoPath, sourceFiles, mapping, selectedTestsMap)
+	if granularity == "function" {
+		if len(mapping.FunctionChecksums) > 0 {
+			selectByFunction(repoPath, sourceFiles, mapping, selectedTestsMap)
+		} else {
+			fmt.Println("[Warn] Function-level granularity requested but no checksums in mapping")
+			fmt.Println("[Warn] Falling back to file-level (run mapping with --repo to enable function-level)")
+			selectByFile(sourceFiles, mapping, selectedTestsMap)
+		}
 	} else {
 		selectByFile(sourceFiles, mapping, selectedTestsMap)
 	}
 
-	selectFromChangedTestFiles(inScopeTestFiles, mapping, selectedTestsMap)
+	noCoveragePackages := selectFromChangedTestFiles(inScopeTestFiles, mapping, selectedTestsMap)
 
 	newTestsCount := discoverAndSelectNewTests(repoPath, mapping, baseline, selectedTestsMap)
 
 	return selectionResult{
-		selectedTests:       buildSelectedTestsSlice(selectedTestsMap),
-		outOfScopeTestFiles: outOfScopeTestFiles,
-		changedTestFiles:    len(inScopeTestFiles),
-		newTestsCount:       newTestsCount,
+		selectedTests:          buildSelectedTestsSlice(selectedTestsMap),
+		outOfScopeTestFiles:    outOfScopeTestFiles,
+		changedTestFiles:       len(inScopeTestFiles),
+		newTestsCount:          newTestsCount,
+		noCoverageDataPackages: noCoveragePackages,
 	}
 }
 
@@ -192,7 +210,7 @@ func categorizeChangedFiles(changedFiles []string, baselineDirs map[string]bool)
 	for _, file := range changedFiles {
 		if strings.HasSuffix(file, "_test.go") {
 			pkgDir := filepath.Dir(file)
-			if baselineDirs[pkgDir] {
+			if isInBaselineDirs(pkgDir, baselineDirs) {
 				inScopeTestFiles = append(inScopeTestFiles, file)
 			} else {
 				outOfScopeTestFiles = append(outOfScopeTestFiles, file)
@@ -202,6 +220,24 @@ func categorizeChangedFiles(changedFiles []string, baselineDirs map[string]bool)
 		}
 	}
 	return
+}
+
+// isInBaselineDirs checks if pkgDir matches any baseline directory using suffix matching
+// This handles cases where baseline dirs use relative paths (../../repo/test/e2e)
+// but git diff outputs repo-relative paths (test/e2e)
+func isInBaselineDirs(pkgDir string, baselineDirs map[string]bool) bool {
+	// Exact match first
+	if baselineDirs[pkgDir] {
+		return true
+	}
+	// Suffix match: check if any baseline dir ends with the changed file's directory
+	// e.g., baseline "../../repo/test/e2erayjob" ends with "/test/e2erayjob" matches "test/e2erayjob"
+	for dir := range baselineDirs {
+		if strings.HasSuffix(dir, "/"+pkgDir) || strings.HasSuffix(dir, string(filepath.Separator)+pkgDir) {
+			return true
+		}
+	}
+	return false
 }
 
 func selectByFunction(repoPath string, sourceFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) {
@@ -227,16 +263,43 @@ func selectByFile(sourceFiles []string, mapping *model.CoverageMapping, selected
 	}
 }
 
-func selectFromChangedTestFiles(inScopeTestFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) {
+func selectFromChangedTestFiles(inScopeTestFiles []string, mapping *model.CoverageMapping, selectedTestsMap map[string]bool) []string {
+	var noCoveragePackages []string
+	seenPackages := make(map[string]bool)
+
 	for _, testFile := range inScopeTestFiles {
 		pkgDir := filepath.Dir(testFile)
+		foundMatch := false
+
 		for qualifiedName := range mapping.TestToFiles {
 			dir, _ := helpers.ParseQualifiedTest(qualifiedName)
-			if dir == pkgDir {
+			if dirMatchesSuffix(dir, pkgDir) {
 				selectedTestsMap[qualifiedName] = true
+				foundMatch = true
 			}
 		}
+
+		if !foundMatch && !seenPackages[pkgDir] {
+			noCoveragePackages = append(noCoveragePackages, pkgDir)
+			seenPackages[pkgDir] = true
+		}
 	}
+
+	return noCoveragePackages
+}
+
+// dirMatchesSuffix checks if two directory paths match, accounting for different path formats
+// e.g., "../../repo/test/e2erayjob" should match "test/e2erayjob"
+func dirMatchesSuffix(baselineDir, changedDir string) bool {
+	if baselineDir == changedDir {
+		return true
+	}
+	// Check if baseline dir ends with the changed dir
+	// This handles cases where baseline uses relative paths from working directory
+	if strings.HasSuffix(baselineDir, "/"+changedDir) || strings.HasSuffix(baselineDir, string(filepath.Separator)+changedDir) {
+		return true
+	}
+	return false
 }
 
 func discoverAndSelectNewTests(repoPath string, mapping *model.CoverageMapping, baseline *model.BaselineManifest, selectedTestsMap map[string]bool) int {
@@ -269,17 +332,38 @@ func buildSelectedTestsSlice(selectedTestsMap map[string]bool) []model.SelectedT
 	return tests
 }
 
+func buildEmptySelection(fromCommit, toCommit string, totalTests int, reason string) *model.Selection {
+	return &model.Selection{
+		GeneratedAt:         time.Now().UTC(),
+		FromCommit:          fromCommit,
+		ToCommit:            toCommit,
+		ChangedFiles:        []string{},
+		SelectedTests:       []model.SelectedTest{},
+		OutOfScopeTestFiles: []string{},
+		Stats: model.SelectionStats{
+			TotalTests:          totalTests,
+			SelectedTests:       0,
+			ChangedFiles:        0,
+			ChangedTestFiles:    0,
+			OutOfScopeTestFiles: 0,
+			NewTests:            0,
+			ReductionPercent:    100.0,
+		},
+	}
+}
+
 func buildSelection(fromCommit, toCommit string, changedFiles []string, result selectionResult, totalTests int) *model.Selection {
 	selectedCount := len(result.selectedTests)
 	reductionPercent := calculateReductionPercent(totalTests, selectedCount)
 
 	return &model.Selection{
-		GeneratedAt:         time.Now().UTC(),
-		FromCommit:          fromCommit,
-		ToCommit:            toCommit,
-		ChangedFiles:        changedFiles,
-		SelectedTests:       result.selectedTests,
-		OutOfScopeTestFiles: result.outOfScopeTestFiles,
+		GeneratedAt:            time.Now().UTC(),
+		FromCommit:             fromCommit,
+		ToCommit:               toCommit,
+		ChangedFiles:           changedFiles,
+		SelectedTests:          result.selectedTests,
+		OutOfScopeTestFiles:    result.outOfScopeTestFiles,
+		NoCoverageDataPackages: result.noCoverageDataPackages,
 		Stats: model.SelectionStats{
 			TotalTests:          totalTests,
 			SelectedTests:       selectedCount,
@@ -312,6 +396,12 @@ func printSelectionSummary(selection *model.Selection, outputPath string, runAll
 
 	if selection.Stats.ChangedTestFiles > 0 {
 		fmt.Printf("  Test files:     %d (in scope, all tests in affected packages selected)\n", selection.Stats.ChangedTestFiles)
+	}
+	if len(selection.NoCoverageDataPackages) > 0 {
+		fmt.Printf("  [Warn] %d package(s) with no coverage data (tests were likely skipped during baseline):\n", len(selection.NoCoverageDataPackages))
+		for _, pkg := range selection.NoCoverageDataPackages {
+			fmt.Printf("         - %s\n", pkg)
+		}
 	}
 	if selection.Stats.OutOfScopeTestFiles > 0 {
 		fmt.Printf("  [Warn] Out-of-scope test files: %d (not in baseline, ignored by RTS)\n", selection.Stats.OutOfScopeTestFiles)
