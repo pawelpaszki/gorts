@@ -1,0 +1,10 @@
+[Info] Function-level analysis: 1 changed functions detected
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/911c3836_9fac6771/select_func.json
+==================================================
+Selection Complete!
+  From commit:    911c383645d5
+  To commit:      9fac6771afab
+  Changed files:  1
+  Selected tests: 16/50 (68.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/911c3836_9fac6771/select_func.json
+==================================================

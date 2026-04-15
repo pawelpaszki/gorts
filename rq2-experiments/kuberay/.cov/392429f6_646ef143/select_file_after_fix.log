@@ -1,0 +1,10 @@
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/392429f6_646ef143/select_file.json
+==================================================
+Selection Complete!
+  From commit:    392429f64390
+  To commit:      646ef143df5d
+  Changed files:  2
+  Test files:     2 (in scope, all tests in affected packages selected)
+  Selected tests: 7/50 (86.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/392429f6_646ef143/select_file.json
+==================================================

@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-04-13T16:05:20.604193Z",
+  "from_commit": "635a7420010ffbf68e491be2abbd448e530a4597",
+  "to_commit": "ea545e079343ca6b4d1595923fcbd7c24007e79a",
+  "changed_files": [
+    "test/e2erayservice/rayservice_upgrade_test.go"
+  ],
+  "selected_tests": [
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceRayClusterDeletionDelaySeconds"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceZeroDowntimeUpgrade"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceBecomesReadyBeforeTimeout"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestUpdateServeConfigAndRayClusterSpec"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceInPlaceUpdate"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceAuthToken"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestOldHeadPodFailDuringUpgrade"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceManagedBy"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestStaticRayService"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestAutoscalingRayService"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceGCSFaultTolerance"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceInitializingTimeoutTerminalFailure"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRayServiceValidation"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestRedeployRayServe"
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "test_name": "TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled"
+    }
+  ],
+  "stats": {
+    "total_tests": 50,
+    "selected_tests": 15,
+    "changed_files": 1,
+    "changed_test_files": 1,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 70
+  }
+}

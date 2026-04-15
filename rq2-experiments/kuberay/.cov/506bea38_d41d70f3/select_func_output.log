@@ -1,0 +1,10 @@
+[Info] No source files changed (only non-code files modified)
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/506bea38_d41d70f3/select_func.json
+==================================================
+Selection Complete!
+  From commit:    506bea38e8a7
+  To commit:      d41d70f3aaa7
+  Changed files:  0
+  Selected tests: 0/50 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/506bea38_d41d70f3/select_func.json
+==================================================

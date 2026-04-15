@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-04-11T12:57:38.412629Z",
+  "from_commit": "9488c555bc2b8b36a2f2c6884ff9c365df93778b",
+  "to_commit": "506bea38e8a7a487773f725fc493e873147c3519",
+  "changed_files": [],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 50,
+    "selected_tests": 0,
+    "changed_files": 0,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}
