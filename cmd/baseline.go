@@ -115,9 +115,6 @@ func validateBaselineFlags(cfg baselineConfig) error {
 			return fmt.Errorf("test binary not found: %s\n"+
 				"  Build it with: go test -c -cover -coverpkg=./... -o %s ./test/...", cfg.testBinary, cfg.testBinary)
 		}
-		if cfg.coverageDir == "" {
-			return fmt.Errorf("--coverage-dir is required when using --test-binary")
-		}
 	}
 
 	return nil
@@ -311,6 +308,7 @@ func init() {
 
 	// Coverage flags
 	baselineCmd.Flags().String("coverage-dir", "", "Path (directory + filename) to store per-test coverage data")
+	baselineCmd.MarkFlagRequired("coverage-dir")
 	baselineCmd.Flags().String("test-binary", "", "Path to pre-built instrumented test binary (mutually exclusive with hooks)")
 
 	// Hook flags (for kuberay-style)
