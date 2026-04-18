@@ -573,8 +573,6 @@ func init() {
 	selectCmd.Flags().String("strip-prefix", "", "Prefix to strip from git diff paths (e.g., ray-operator/)")
 	selectCmd.Flags().String("granularity", "file", "Selection granularity: 'file' or 'function'")
 	selectCmd.Flags().StringSlice("run-all-on", []string{}, "Patterns that trigger full test run (e.g., go.mod,go.sum,Makefile)")
-	selectCmd.MarkFlagRequired("baseline")
-	selectCmd.MarkFlagRequired("mapping")
 	selectCmd.MarkFlagRequired("repo")
 	selectCmd.MarkFlagRequired("strip-prefix")
 }
