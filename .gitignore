@@ -1,2 +1,3 @@
 gorts
 .DS_Store
+coverage*.out

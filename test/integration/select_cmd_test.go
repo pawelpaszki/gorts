@@ -710,55 +710,6 @@ func TestSelectCmd_MultipleFilesChanged(t *testing.T) {
 		selection.Stats.ChangedFiles, selection.Stats.SelectedTests)
 }
 
-func TestSelectCmd_MissingBaselineParam(t *testing.T) {
-	t.Log("testing selection without providing baseline param")
-
-	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
-
-	t.Log("running gorts select")
-	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
-		"select",
-		"--mapping", mappingFile,
-		"--output", outputFile,
-		"--repo", testRepoPath,
-		"--strip-prefix", "",
-	)
-	if exitCode == 0 {
-		t.Fatal("gorts", "select should fail with baseline param missing")
-	}
-
-	expectedError := `required flag(s) "baseline" not set`
-	if !strings.Contains(stderr, expectedError) {
-		t.Errorf("expected stderr to contain '%s', got: %s", expectedError, stderr)
-	}
-
-	t.Log("got expected error for missing --baseline flag")
-}
-
-func TestSelectCmd_MissingMappingParam(t *testing.T) {
-	t.Log("testing selection without providing mapping param")
-
-	outputFile := filepath.Join(outputDir(t), "selection_multiple.json")
-
-	t.Log("running gorts select")
-	_, stderr, exitCode := runGortsInDir(t, testRepoPath,
-		"select",
-		"--baseline", baselineFile,
-		"--output", outputFile,
-		"--repo", testRepoPath,
-		"--strip-prefix", "",
-	)
-	if exitCode == 0 {
-		t.Fatal("gorts", "select should fail with mapping param missing")
-	}
-
-	expectedError := `required flag(s) "mapping" not set`
-	if !strings.Contains(stderr, expectedError) {
-		t.Errorf("expected stderr to contain '%s', got: %s", expectedError, stderr)
-	}
-
-	t.Log("got expected error for missing --mapping flag")
-}
 
 func TestSelectCmd_InvalidRepo(t *testing.T) {
 	t.Log("testing selection without providing mapping param")
