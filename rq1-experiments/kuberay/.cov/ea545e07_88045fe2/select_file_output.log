@@ -1,0 +1,9 @@
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/ea545e07_88045fe2/select_file.json
+==================================================
+Selection Complete!
+  From commit:    ea545e079343
+  To commit:      88045fe25535
+  Changed files:  1
+  Selected tests: 49/50 (2.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/ea545e07_88045fe2/select_file.json
+==================================================

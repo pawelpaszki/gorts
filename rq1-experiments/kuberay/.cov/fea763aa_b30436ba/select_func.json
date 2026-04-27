@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-04-08T07:12:38.751783Z",
+  "from_commit": "fea763aaccad7fde2b8fdde3f21472af2c2b8ecc",
+  "to_commit": "b30436bae34145abcdaa675c3202b6dd1d347873",
+  "changed_files": [
+    "historyserver/pkg/eventserver/eventserver.go",
+    "historyserver/pkg/historyserver/router.go",
+    "historyserver/test/e2e/collector_test.go",
+    "historyserver/test/e2e/historyserver_test.go",
+    "historyserver/test/support/historyserver.go"
+  ],
+  "selected_tests": [],
+  "out_of_scope_test_files": [
+    "historyserver/test/e2e/collector_test.go",
+    "historyserver/test/e2e/historyserver_test.go"
+  ],
+  "stats": {
+    "total_tests": 50,
+    "selected_tests": 0,
+    "changed_files": 5,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 2,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-08T10:12:01.620043Z",
+  "from_commit": "b30436bae34145abcdaa675c3202b6dd1d347873",
+  "to_commit": "476c9021d73ce9e119c0a363c5121477930def4e",
+  "changed_files": [
+    "test/support/defaults.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 50,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

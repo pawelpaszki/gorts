@@ -1,0 +1,102 @@
+{
+  "generated_at": "2026-04-15T04:39:51.130808Z",
+  "commit_sha": "fb47c0665d39a22681241dc17e8ab6697cc70bf2",
+  "test_suites": [
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2e",
+      "tests": [
+        "TestRayClusterAuthOptions",
+        "TestRayClusterGCSFaultTolerance",
+        "TestGcsFaultToleranceOptions",
+        "TestGcsFaultToleranceAnnotations",
+        "TestRayClusterSingleHostMultiSlice",
+        "TestRayClusterMultiHostMultiSlice",
+        "TestRayClusterManagedBy",
+        "TestRayClusterSuspend",
+        "TestRayClusterWithResourceQuota",
+        "TestRayClusterScalingDown",
+        "TestRayClusterUpgradeStrategy"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler",
+      "tests": [
+        "TestRayClusterAutoscalerV2IdleTimeout",
+        "TestRayClusterAutoscalerGPUNodesForCPUTasks",
+        "TestRayClusterAutoscalerDoNotRemoveIdlesForPlacementGroup",
+        "TestRayClusterAutoscalerSDKRequestResources",
+        "TestRayClusterAutoscalerAddNewWorkerGroup",
+        "TestRayClusterAutoscalerPlacementGroup",
+        "TestRayClusterAutoscalerGCSFT",
+        "TestRayClusterAutoscaler",
+        "TestRayClusterAutoscalerWithFakeGPU",
+        "TestRayClusterAutoscalerWithCustomResource",
+        "TestRayClusterAutoscalerWithDesiredState",
+        "TestRayClusterAutoscalerMinReplicasUpdate",
+        "TestRayClusterAutoscalerMaxReplicasUpdate"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade",
+      "tests": [
+        "TestRayServiceIncrementalUpgrade",
+        "TestRayServiceIncrementalUpgradeWithLocust",
+        "TestRayServiceIncrementalUpgradeRollback"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter",
+      "tests": [
+        "TestRayJobSubmitter"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade",
+      "tests": [
+        "TestZeroDowntimeUpgradeAfterOperatorUpgrade"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml",
+      "tests": [
+        "TestRayCluster",
+        "TestRayJob",
+        "TestRayJobInteractiveMode",
+        "TestRayService"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob",
+      "tests": [
+        "TestRayJobWithClusterSelector",
+        "TestDeletionStrategy",
+        "TestRayJobLightWeightMode",
+        "TestRayJobRecovery",
+        "TestRayJobRetry",
+        "TestRayJobSidecarMode",
+        "TestRayJobSuspend",
+        "TestRayJob"
+      ]
+    },
+    {
+      "directory": "../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice",
+      "tests": [
+        "TestRayServiceAuthToken",
+        "TestStaticRayService",
+        "TestAutoscalingRayService",
+        "TestRayServiceZeroDowntimeUpgrade",
+        "TestRayServiceGCSFaultTolerance",
+        "TestRayServiceRayClusterDeletionDelaySeconds",
+        "TestRayServiceInPlaceUpdate",
+        "TestUpdateServeConfigAndRayClusterSpec",
+        "TestUpdateServeConfigAndRayClusterSpecWithUpgradeDisabled",
+        "TestRayServiceBecomesReadyBeforeTimeout",
+        "TestRayServiceInitializingTimeoutTerminalFailure",
+        "TestRedeployRayServe",
+        "TestOldHeadPodFailDuringUpgrade",
+        "TestRayServiceValidation",
+        "TestRayServiceManagedBy"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-04-10T08:29:31.814078Z",
+  "from_commit": "9db19f180e1954205a3661297ad80e547c6e335b",
+  "to_commit": "b7a69ebf91c8e9d3f295f432afd205f270e0c07a",
+  "changed_files": [
+    "test/e2eincrementalupgrade/constant.go",
+    "test/e2eincrementalupgrade/rayservice_incremental_upgrade_test.go",
+    "test/e2eincrementalupgrade/support.go",
+    "test/support/core.go"
+  ],
+  "selected_tests": [],
+  "no_coverage_data_packages": [
+    "test/e2eincrementalupgrade"
+  ],
+  "stats": {
+    "total_tests": 50,
+    "selected_tests": 0,
+    "changed_files": 4,
+    "changed_test_files": 1,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

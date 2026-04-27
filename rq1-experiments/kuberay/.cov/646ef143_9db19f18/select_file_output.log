@@ -1,0 +1,12 @@
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
+==================================================
+Selection Complete!
+  From commit:    646ef143df5d
+  To commit:      9db19f180e19
+  Changed files:  3
+  [Warn] Out-of-scope test files: 2 (not in baseline, ignored by RTS)
+         - historyserver/test/e2e/historyserver_azureblob_test.go
+         - historyserver/test/e2e/historyserver_test.go
+  Selected tests: 0/50 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
+==================================================

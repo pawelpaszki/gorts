@@ -1,0 +1,9 @@
+[Info] Found 11 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2e
+[Info] Found 13 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler
+[Info] Found 3 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade
+[Info] Found 8 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob
+[Info] Found 1 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter
+[Info] Found 15 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice
+[Info] Found 1 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade
+[Info] Found 4 tests in ../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml
+[Info] Saved test manifest to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/fb47c066_d6f94002/tests.json
