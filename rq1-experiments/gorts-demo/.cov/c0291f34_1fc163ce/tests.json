@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:42:35.121777Z",
+  "commit_sha": "c0291f34a918dd57f9d58dc216a2858a1881676a",
+  "test_suites": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "tests": [
+        "TestE2E_CreateAndGetBook",
+        "TestE2E_GetBook_NotFound",
+        "TestE2E_CreateBook_InvalidData",
+        "TestE2E_CreateBook_InvalidJSON",
+        "TestE2E_CreateBook_DuplicateISBN",
+        "TestE2E_RootEndpoint",
+        "TestE2E_HealthEndpoint"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-04-21T17:42:38.140099Z",
+  "commit_sha": "1fc163ced9d709b56245c5f97e6c2a3405e421df",
+  "test_suites": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "tests": [
+        "TestE2E_BookCRUD_FullLifecycle",
+        "TestE2E_BookCRUD_MultipleBooks",
+        "TestE2E_BookCRUD_UpdateNonExistent",
+        "TestE2E_BookCRUD_DeleteNonExistent",
+        "TestE2E_BookCRUD_UpdateWithInvalidData",
+        "TestE2E_CreateAndGetBook",
+        "TestE2E_GetBook_NotFound",
+        "TestE2E_CreateBook_InvalidData",
+        "TestE2E_CreateBook_InvalidJSON",
+        "TestE2E_CreateBook_DuplicateISBN",
+        "TestE2E_RootEndpoint",
+        "TestE2E_HealthEndpoint"
+      ]
+    }
+  ]
+}

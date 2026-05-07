@@ -1,0 +1,10 @@
+[Info] Function-level analysis: 3 changed functions detected
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1e1246d3_aba6afca/select_func.json
+==================================================
+Selection Complete!
+  From commit:    1e1246d38f72
+  To commit:      aba6afcacdf0
+  Changed files:  1
+  Selected tests: 0/31 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1e1246d3_aba6afca/select_func.json
+==================================================

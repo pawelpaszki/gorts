@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:43:15.501516Z",
+  "from_commit": "daf334ac114f3bfe8ee98a10e871e868986ecfd7",
+  "to_commit": "1e1246d38f7205b35d9277c15cf85e60ef068107",
+  "changed_files": [
+    "internal/config/config.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-04-21T17:42:37.22768Z",
+  "from_commit": "c0291f34a918dd57f9d58dc216a2858a1881676a",
+  "to_commit": "1fc163ced9d709b56245c5f97e6c2a3405e421df",
+  "changed_files": [
+    "test/e2e/book_crud_e2e_test.go"
+  ],
+  "selected_tests": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateBook_DuplicateISBN"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateBook_InvalidData"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateBook_InvalidJSON"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_GetBook_NotFound"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_HealthEndpoint"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_RootEndpoint"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateAndGetBook"
+    }
+  ],
+  "stats": {
+    "total_tests": 7,
+    "selected_tests": 7,
+    "changed_files": 1,
+    "changed_test_files": 1,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 0
+  }
+}

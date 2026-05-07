@@ -1,0 +1,10 @@
+[Info] Function-level analysis: 1 changed functions detected
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/dc764e51_49b5912f/select_func.json
+==================================================
+Selection Complete!
+  From commit:    dc764e515e6a
+  To commit:      49b5912f3ef1
+  Changed files:  1
+  Selected tests: 0/31 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/dc764e51_49b5912f/select_func.json
+==================================================

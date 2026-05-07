@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:42:50.619226Z",
+  "from_commit": "8b8b5e253effddd79f8f244bb748fd0802be2994",
+  "to_commit": "9c9aa6a819a2765a51c1ab648970211413785e25",
+  "changed_files": [
+    "internal/service/author_service.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 25,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

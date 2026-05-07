@@ -1,0 +1,45 @@
+[Info] Using test binary mode: /Users/pawelpaszki/masters/gorts-demo/gorts-demo-e2e.test
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_FullLifecycle
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_FullLifecycle: pass (535ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_MultipleBooks
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_MultipleBooks: pass (12ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateNonExistent
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateNonExistent: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_DeleteNonExistent
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_DeleteNonExistent: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateWithInvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateWithInvalidData: pass (10ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook: pass (11ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_CRUD
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_CRUD: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddRemoveBooks
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddRemoveBooks: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddNonExistentBook
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddNonExistentBook: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll: pass (7ms)
+[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/67fd7228_1f982418/baseline.json
+
+==================================================
+Baseline Complete!
+Tests: 17 passed, 0 failed, 17 total
+Test Duration: 672ms
+Baseline Duration: 695ms
+Output: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/67fd7228_1f982418/baseline.json
+Coverage: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/67fd7228_1f982418/coverage
+==================================================

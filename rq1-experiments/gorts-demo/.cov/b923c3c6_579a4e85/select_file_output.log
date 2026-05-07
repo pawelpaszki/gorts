@@ -1,0 +1,11 @@
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_file.json
+==================================================
+Selection Complete!
+  From commit:    b923c3c60a2e
+  To commit:      579a4e856c9a
+  Changed files:  2
+  [Warn] Out-of-scope test files: 1 (not in baseline, ignored by RTS)
+         - internal/model/book_test.go
+  Selected tests: 9/31 (71.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_file.json
+==================================================

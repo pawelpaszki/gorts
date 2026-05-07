@@ -1,9 +1,0 @@
-[Info] No source files changed (only non-code files modified)
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/476c9021_911c3836/select_file.json
-==================================================
-Selection Complete!
-  From commit:    476c9021d73c
-  To commit:      911c383645d5
-  Changed files:  0
-  Selected tests: 0/50 (100.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/476c9021_911c3836/select_file.json

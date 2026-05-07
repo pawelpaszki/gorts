@@ -1,0 +1,73 @@
+[Info] Using test binary mode: /Users/pawelpaszki/masters/gorts-demo/gorts-demo-e2e.test
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_PublicEndpoints
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_PublicEndpoints: pass (584ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_NoAuth
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_NoAuth: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_ValidAuth
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_ValidAuth: pass (13ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_InvalidPassword
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_InvalidPassword: pass (10ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_UnknownUser
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_UnknownUser: pass (11ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_CRUD_WithAuth
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_CRUD_WithAuth: pass (10ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_DifferentUsers
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_DifferentUsers: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_MalformedAuthHeader
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_MalformedAuthHeader: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CreateAndGet
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CreateAndGet: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CRUD_FullLifecycle
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CRUD_FullLifecycle: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_ListAll
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_ListAll: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_FilterByCountry
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_FilterByCountry: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_NotFound
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_NotFound: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_InvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_InvalidData: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_FullLifecycle
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_FullLifecycle: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_MultipleBooks
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_MultipleBooks: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateNonExistent
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateNonExistent: pass (6ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_DeleteNonExistent
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_DeleteNonExistent: pass (6ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateWithInvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateWithInvalidData: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON: pass (6ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint: pass (6ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_CRUD
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_CRUD: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddRemoveBooks
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddRemoveBooks: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddNonExistentBook
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddNonExistentBook: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList: pass (7ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll: pass (7ms)
+[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/3794ec2b_dc764e51/baseline.json
+
+==================================================
+Baseline Complete!
+Tests: 31 passed, 0 failed, 31 total
+Test Duration: 820ms
+Baseline Duration: 849ms
+Output: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/3794ec2b_dc764e51/baseline.json
+Coverage: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/3794ec2b_dc764e51/coverage
+==================================================

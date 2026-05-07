@@ -1,0 +1,9 @@
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_file.json
+==================================================
+Selection Complete!
+  From commit:    de2bd093dab8
+  To commit:      c6c460a2911f
+  Changed files:  1
+  Selected tests: 0/31 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_file.json
+==================================================

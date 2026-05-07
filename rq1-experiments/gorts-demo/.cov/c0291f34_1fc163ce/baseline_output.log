@@ -1,0 +1,25 @@
+[Info] Using test binary mode: /Users/pawelpaszki/masters/gorts-demo/gorts-demo-e2e.test
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook: pass (626ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData: pass (10ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN: pass (9ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint: pass (8ms)
+[Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint: pass (7ms)
+[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/baseline.json
+
+==================================================
+Baseline Complete!
+Tests: 7 passed, 0 failed, 7 total
+Test Duration: 678ms
+Baseline Duration: 694ms
+Output: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/baseline.json
+Coverage: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage
+==================================================

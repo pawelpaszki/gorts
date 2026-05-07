@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:43:38.849745Z",
+  "from_commit": "49b5912f3ef136134d0067810cc33bc7602ae794",
+  "to_commit": "9cee31e6f72cb9442df39f80a14d4271fcb0677f",
+  "changed_files": [
+    "pkg/stringutil/stringutil.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

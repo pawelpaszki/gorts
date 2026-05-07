@@ -1,0 +1,307 @@
+{
+  "generated_at": "2026-04-21T17:43:20.350291Z",
+  "started_at": "2026-04-21T17:43:19.750444Z",
+  "finished_at": "2026-04-21T17:43:20.350291Z",
+  "baseline_duration_ms": 599,
+  "commit_sha": "aba6afcacdf09d62cddcf04eda8bd9debcb13939",
+  "test_suite_results": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_results": [
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_PublicEndpoints",
+          "status": "pass",
+          "duration_ms": 278,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_PublicEndpoints"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_ProtectedEndpoints_NoAuth",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_ProtectedEndpoints_NoAuth"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_ProtectedEndpoints_ValidAuth",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_ProtectedEndpoints_ValidAuth"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_ProtectedEndpoints_InvalidPassword",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_ProtectedEndpoints_InvalidPassword"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_ProtectedEndpoints_UnknownUser",
+          "status": "pass",
+          "duration_ms": 12,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_ProtectedEndpoints_UnknownUser"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_CRUD_WithAuth",
+          "status": "pass",
+          "duration_ms": 11,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_CRUD_WithAuth"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_DifferentUsers",
+          "status": "pass",
+          "duration_ms": 16,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_DifferentUsers"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Auth_MalformedAuthHeader",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Auth_MalformedAuthHeader"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_CreateAndGet",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_CreateAndGet"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_CRUD_FullLifecycle",
+          "status": "pass",
+          "duration_ms": 11,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_CRUD_FullLifecycle"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_ListAll",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_ListAll"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_FilterByCountry",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_FilterByCountry"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_NotFound",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_NotFound"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_Author_InvalidData",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_Author_InvalidData"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_BookCRUD_FullLifecycle",
+          "status": "pass",
+          "duration_ms": 10,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_BookCRUD_FullLifecycle"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_BookCRUD_MultipleBooks",
+          "status": "pass",
+          "duration_ms": 11,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_BookCRUD_MultipleBooks"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_BookCRUD_UpdateNonExistent",
+          "status": "pass",
+          "duration_ms": 11,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_BookCRUD_UpdateNonExistent"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_BookCRUD_DeleteNonExistent",
+          "status": "pass",
+          "duration_ms": 11,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_BookCRUD_DeleteNonExistent"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_BookCRUD_UpdateWithInvalidData",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_BookCRUD_UpdateWithInvalidData"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_CreateAndGetBook",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_CreateAndGetBook"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_GetBook_NotFound",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_GetBook_NotFound"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_CreateBook_InvalidData",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_CreateBook_InvalidData"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_CreateBook_InvalidJSON",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_CreateBook_InvalidJSON"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_CreateBook_DuplicateISBN",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_CreateBook_DuplicateISBN"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_RootEndpoint",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_RootEndpoint"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_HealthEndpoint",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_HealthEndpoint"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_ReadingList_CRUD",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_ReadingList_CRUD"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_ReadingList_AddRemoveBooks",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_ReadingList_AddRemoveBooks"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_ReadingList_AddNonExistentBook",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_ReadingList_AddNonExistentBook"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_ReadingList_OperationsOnNonExistentList",
+          "status": "pass",
+          "duration_ms": 8,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_ReadingList_OperationsOnNonExistentList"
+        },
+        {
+          "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+          "test_name": "TestE2E_ReadingList_ListAll",
+          "status": "pass",
+          "duration_ms": 9,
+          "retries": 0,
+          "flaky": false,
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage/test_e2e/TestE2E_ReadingList_ListAll"
+        }
+      ],
+      "summary": {
+        "total": 31,
+        "passed": 31,
+        "failed": 0,
+        "flaky": 0,
+        "duration_ms": 567
+      }
+    }
+  ],
+  "summary": {
+    "total": 31,
+    "passed": 31,
+    "failed": 0,
+    "flaky": 0,
+    "duration_ms": 567
+  }
+}

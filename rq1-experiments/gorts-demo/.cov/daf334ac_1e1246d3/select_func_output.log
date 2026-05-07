@@ -1,0 +1,10 @@
+[Info] Function-level analysis: 9 changed functions detected
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/daf334ac_1e1246d3/select_func.json
+==================================================
+Selection Complete!
+  From commit:    daf334ac114f
+  To commit:      1e1246d38f72
+  Changed files:  1
+  Selected tests: 0/31 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/daf334ac_1e1246d3/select_func.json
+==================================================

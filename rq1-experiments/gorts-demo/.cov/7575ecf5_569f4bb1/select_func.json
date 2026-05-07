@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:43:07.829551Z",
+  "from_commit": "7575ecf5f0b2cc9b536e3a7eb3e73844d864f1f9",
+  "to_commit": "569f4bb183b9e08d8c217a11d8931a59cfa76464",
+  "changed_files": [
+    "internal/model/book.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

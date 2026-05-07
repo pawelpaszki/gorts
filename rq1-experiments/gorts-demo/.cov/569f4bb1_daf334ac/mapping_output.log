@@ -1,0 +1,42 @@
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_PublicEndpoints covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_NoAuth covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_ValidAuth covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_InvalidPassword covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_ProtectedEndpoints_UnknownUser covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_CRUD_WithAuth covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_DifferentUsers covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Auth_MalformedAuthHeader covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CreateAndGet covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_CRUD_FullLifecycle covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_ListAll covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_FilterByCountry covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_NotFound covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_Author_InvalidData covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_FullLifecycle covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_MultipleBooks covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateNonExistent covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_DeleteNonExistent covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_BookCRUD_UpdateWithInvalidData covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateAndGetBook covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_GetBook_NotFound covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidData covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_InvalidJSON covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_CreateBook_DuplicateISBN covers 7 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint covers 6 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_CRUD covers 10 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddRemoveBooks covers 11 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_AddNonExistentBook covers 10 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList covers 9 files
+[Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll covers 10 files
+[Info] Computed checksums for 115 functions
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/569f4bb1_daf334ac/mapping.json
+==================================================
+Mapping Complete!
+  Tests processed: 31
+  Tests skipped:   0
+  Total files:     15
+  Avg files/test:  7.1
+  Avg tests/file:  14.6
+  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/569f4bb1_daf334ac/mapping.json
+==================================================

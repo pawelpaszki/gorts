@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-04-21T17:43:07.510901Z",
+  "from_commit": "7575ecf5f0b2cc9b536e3a7eb3e73844d864f1f9",
+  "to_commit": "569f4bb183b9e08d8c217a11d8931a59cfa76464",
+  "changed_files": [
+    "internal/model/book.go"
+  ],
+  "selected_tests": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_BookCRUD_FullLifecycle"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_BookCRUD_MultipleBooks"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_BookCRUD_UpdateNonExistent"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateAndGetBook"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_ReadingList_AddRemoveBooks"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_BookCRUD_UpdateWithInvalidData"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateBook_InvalidData"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_CreateBook_DuplicateISBN"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_CRUD_WithAuth"
+    }
+  ],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 9,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 70.96774193548387
+  }
+}

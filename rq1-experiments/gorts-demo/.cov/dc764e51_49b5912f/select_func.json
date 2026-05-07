@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:43:34.668333Z",
+  "from_commit": "dc764e515e6a4dde6acb5c3c356d365b47087de4",
+  "to_commit": "49b5912f3ef136134d0067810cc33bc7602ae794",
+  "changed_files": [
+    "internal/model/reading_list.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}

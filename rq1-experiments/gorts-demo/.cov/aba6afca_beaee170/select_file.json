@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-04-21T17:43:21.330094Z",
+  "from_commit": "aba6afcacdf09d62cddcf04eda8bd9debcb13939",
+  "to_commit": "beaee1709c419ddfe1215474ca4681f1ee52e779",
+  "changed_files": [
+    "internal/middleware/auth.go"
+  ],
+  "selected_tests": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_ProtectedEndpoints_UnknownUser"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_CRUD_WithAuth"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_DifferentUsers"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_MalformedAuthHeader"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_PublicEndpoints"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_ProtectedEndpoints_NoAuth"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_ProtectedEndpoints_ValidAuth"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Auth_ProtectedEndpoints_InvalidPassword"
+    }
+  ],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 8,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 74.19354838709677
+  }
+}

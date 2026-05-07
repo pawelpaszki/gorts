@@ -1,0 +1,10 @@
+[Info] No source files changed (only non-code files modified)
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c01eb940_389b536a/select_func.json
+==================================================
+Selection Complete!
+  From commit:    c01eb9407247
+  To commit:      389b536a16ca
+  Changed files:  0
+  Selected tests: 0/31 (100.0% reduction)
+  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c01eb940_389b536a/select_func.json
+==================================================

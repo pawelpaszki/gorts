@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-04-21T17:43:04.792993Z",
+  "commit_sha": "7575ecf5f0b2cc9b536e3a7eb3e73844d864f1f9",
+  "test_suites": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "tests": [
+        "TestE2E_Auth_PublicEndpoints",
+        "TestE2E_Auth_ProtectedEndpoints_NoAuth",
+        "TestE2E_Auth_ProtectedEndpoints_ValidAuth",
+        "TestE2E_Auth_ProtectedEndpoints_InvalidPassword",
+        "TestE2E_Auth_ProtectedEndpoints_UnknownUser",
+        "TestE2E_Auth_CRUD_WithAuth",
+        "TestE2E_Auth_DifferentUsers",
+        "TestE2E_Auth_MalformedAuthHeader",
+        "TestE2E_Author_CreateAndGet",
+        "TestE2E_Author_CRUD_FullLifecycle",
+        "TestE2E_Author_ListAll",
+        "TestE2E_Author_FilterByCountry",
+        "TestE2E_Author_NotFound",
+        "TestE2E_Author_InvalidData",
+        "TestE2E_BookCRUD_FullLifecycle",
+        "TestE2E_BookCRUD_MultipleBooks",
+        "TestE2E_BookCRUD_UpdateNonExistent",
+        "TestE2E_BookCRUD_DeleteNonExistent",
+        "TestE2E_BookCRUD_UpdateWithInvalidData",
+        "TestE2E_CreateAndGetBook",
+        "TestE2E_GetBook_NotFound",
+        "TestE2E_CreateBook_InvalidData",
+        "TestE2E_CreateBook_InvalidJSON",
+        "TestE2E_CreateBook_DuplicateISBN",
+        "TestE2E_RootEndpoint",
+        "TestE2E_HealthEndpoint",
+        "TestE2E_ReadingList_CRUD",
+        "TestE2E_ReadingList_AddRemoveBooks",
+        "TestE2E_ReadingList_AddNonExistentBook",
+        "TestE2E_ReadingList_OperationsOnNonExistentList",
+        "TestE2E_ReadingList_ListAll"
+      ]
+    }
+  ]
+}

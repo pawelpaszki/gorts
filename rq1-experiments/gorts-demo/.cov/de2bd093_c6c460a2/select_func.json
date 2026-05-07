@@ -1,0 +1,18 @@
+{
+  "generated_at": "2026-04-21T17:43:01.235396Z",
+  "from_commit": "de2bd093dab85eb6bfda3dbcd10f8545dd70f41a",
+  "to_commit": "c6c460a2911f3c1192c49d4ee279a37dafe06436",
+  "changed_files": [
+    "pkg/validator/validator.go"
+  ],
+  "selected_tests": [],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 0,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 100
+  }
+}
