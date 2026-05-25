@@ -1,42 +1,28 @@
-## Kuberay experiments (WiP)
+# KubeRay experiments
 
-### docker machine setup
-```
-colima start --memory 32 --cpu 8 --disk 70 --arch arm64
-```
+RQ1 evaluation artefacts for [KubeRay ray-operator](https://github.com/ray-project/kuberay): adjacent commit pairs run through the full GoRTS pipeline (`tests` -> `baseline` -> `mapping` -> `select`).
 
-### Kuberay commits to inspect
-Repo: https://github.com/ray-project/kuberay
+**Baseline mode:** hook-based coverage (`--pre-test` / `--post-test`, `kubectl cp` from operator pod), module `github.com/ray-project/kuberay/ray-operator`.
 
-first commit used: `fea763aaccad7fde2b8fdde3f21472af2c2b8ecc`
-last commit used for evaluation of kuberay is: `3636b4e179cdc7346953acb109da85a2c1b53191`
+## Contents
 
-### all commits
-```
-3636b4e179cdc7346953acb109da85a2c1b53191
-83e587d80f577a0fe73c5af9996a359e8d5de8ce
-d6f9400252d1802b1907e49fb227326d8e172241
-fb47c0665d39a22681241dc17e8ab6697cc70bf2
-a1ec4e94172c06d0ac0fdeebbe6dc2b50d5713bb
-c7a50c768e483c6675cb42b1f3a1e429468c6093
-88045fe25535479f11c48768b713e34dc3bb8bb4
-ea545e079343ca6b4d1595923fcbd7c24007e79a
-635a7420010ffbf68e491be2abbd448e530a4597
-273d1371c81a1f5e3c589bba7dfd7a46815850fe
-4b11aa1d0bcf0c51f3629c0638f07c05eba7a77b
-12b4cc74dab207a430accaf2d6012f67768d4fc9
-3a3e634037813bebaa8e28d99041b284c2068e13
-d41d70f3aaa7ddb17f2929c8eec9d41b795a997f
-506bea38e8a7a487773f725fc493e873147c3519
-9488c555bc2b8b36a2f2c6884ff9c365df93778b
-b80c782c8e8920de942286cb9dbdc2e2bd153abe
-b7a69ebf91c8e9d3f295f432afd205f270e0c07a
-9db19f180e1954205a3661297ad80e547c6e335b
-646ef143df5de2cf81577812b108f15de80a1dbf
-392429f64390d8e78c17b6e6419b58281472b648
-9fac6771afabd84f51ad66b25017c261808c2036
-911c383645d5dd1cb6c085344fdf9a266da456a9
-476c9021d73ce9e119c0a363c5121477930def4e
-b30436bae34145abcdaa675c3202b6dd1d347873
-fea763aaccad7fde2b8fdde3f21472af2c2b8ecc
-```
+| Path | Description |
+|------|-------------|
+| `.cov/<old>_<new>/` | One folder per commit pair (baseline commit -> next commit) |
+| `kuberay_scripts/` | Cluster setup helpers (`setup-kuberay.sh`, `patch-deployment.sh`, `cleanup_namespace.sh`) |
+| `init_baseline_results/` | Early baseline JSON snapshots from initial runs |
+
+## Per-pair artefacts (`.cov/<pair>/`)
+
+- `tests.json`, `baseline.json`, `mapping.json`
+- `select_file.json`, `select_func.json` — file- vs function-level selection
+- `coverage/` — raw per-test Go coverage data
+- `*_output.log`, `commands.md` — run logs and command templates used for that pair
+
+## Commit range
+
+25 commits, 24 adjacent pairs — from `fea763aa` through `3636b4e1`.
+
+## Environment notes
+
+Runs used a local Kubernetes cluster (e.g. Colima/kind) with a coverage-instrumented KubeRay operator deployment. Paths in `commands.md` and JSON files reflect the machine where experiments were executed; adjust when re-running locally.

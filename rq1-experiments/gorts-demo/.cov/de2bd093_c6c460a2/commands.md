@@ -14,7 +14,7 @@ go build -o gorts
 
 ```bash
 ./gorts tests --directories ~/masters/gorts-demo/test/e2e \
-  --output ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/tests.json
+  --output ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/tests.json
 ```
 
 ---
@@ -34,9 +34,9 @@ go test -c -cover -covermode=atomic \
 
 ```bash
 ./gorts baseline \
-  --manifest ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/tests.json \
-  --output ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
-  --coverage-dir ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/coverage \
+  --manifest ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/tests.json \
+  --output ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
+  --coverage-dir ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/coverage \
   --retry 1 \
   --test-binary ~/masters/gorts-demo/gorts-demo-e2e.test
 ```
@@ -47,10 +47,10 @@ go test -c -cover -covermode=atomic \
 
 ```bash
 ./gorts mapping \
-  --baseline ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
+  --baseline ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
   --module "github.com/pawelpaszki/gorts-demo" \
   --repo ~/masters/gorts-demo \
-  --output ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json
+  --output ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json
 ```
 
 ---
@@ -65,20 +65,20 @@ git checkout c6c460a2911f3c1192c49d4ee279a37dafe06436
 
 ```bash
 ./gorts select \
-  --baseline ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
-  --mapping ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json \
+  --baseline ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
+  --mapping ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json \
   --repo ~/masters/gorts-demo \
   --strip-prefix "" \
   --granularity file \
-  --output ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_file.json
+  --output ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_file.json
 ```
 
 ```bash
 ./gorts select \
-  --baseline ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
-  --mapping ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json \
+  --baseline ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/baseline.json \
+  --mapping ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/mapping.json \
   --repo ~/masters/gorts-demo \
   --strip-prefix "" \
   --granularity function \
-  --output ~/masters/gorts/rq2-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_func.json
+  --output ~/masters/gorts/rq1-experiments/gorts-demo/.cov/de2bd093_c6c460a2/select_func.json
 ```

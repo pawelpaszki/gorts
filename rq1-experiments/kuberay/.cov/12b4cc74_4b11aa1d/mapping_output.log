@@ -49,7 +49,7 @@
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml/TestRayJobInteractiveMode covers 27 files
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml/TestRayService covers 28 files
 [Info] Computed checksums for 466 functions
-[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/12b4cc74_4b11aa1d/mapping.json
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/12b4cc74_4b11aa1d/mapping.json
 ==================================================
 Mapping Complete!
   Tests processed: 50
@@ -57,5 +57,5 @@ Mapping Complete!
   Total files:     31
   Avg files/test:  27.0
   Avg tests/file:  43.5
-  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/12b4cc74_4b11aa1d/mapping.json
+  Output:          /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/12b4cc74_4b11aa1d/mapping.json
 ==================================================

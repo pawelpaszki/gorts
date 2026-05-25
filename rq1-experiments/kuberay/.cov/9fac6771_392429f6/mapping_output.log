@@ -49,7 +49,7 @@
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob/TestRayJobSuspend covers 29 files
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob/TestRayJob covers 29 files
 [Info] Computed checksums for 466 functions
-[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/9fac6771_392429f6/mapping.json
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/9fac6771_392429f6/mapping.json
 ==================================================
 Mapping Complete!
   Tests processed: 50
@@ -57,5 +57,5 @@ Mapping Complete!
   Total files:     31
   Avg files/test:  27.4
   Avg tests/file:  44.1
-  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/9fac6771_392429f6/mapping.json
+  Output:          /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/9fac6771_392429f6/mapping.json
 ==================================================

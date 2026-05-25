@@ -6,5 +6,5 @@
 [Info] Found 15 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice
 [Info] Found 1 tests in ../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade
 [Info] Found 4 tests in ../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml
-[Info] Saved test manifest to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/911c3836_9fac6771/tests.json
-[Info] Saved manifest to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/911c3836_9fac6771/tests.json
+[Info] Saved test manifest to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/911c3836_9fac6771/tests.json
+[Info] Saved manifest to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/911c3836_9fac6771/tests.json

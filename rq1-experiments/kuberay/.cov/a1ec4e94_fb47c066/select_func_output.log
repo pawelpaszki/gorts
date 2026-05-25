@@ -1,5 +1,5 @@
 [Info] Function-level analysis: 7 changed functions detected
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/a1ec4e94_fb47c066/select_func.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/a1ec4e94_fb47c066/select_func.json
 ==================================================
 Selection Complete!
   From commit:    a1ec4e94172c
@@ -8,5 +8,5 @@ Selection Complete!
   [Warn] Out-of-scope test files: 1 (not in baseline, ignored by RTS)
          - controllers/ray/utils/validation_test.go
   Selected tests: 0/50 (100.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/a1ec4e94_fb47c066/select_func.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/a1ec4e94_fb47c066/select_func.json
 ==================================================

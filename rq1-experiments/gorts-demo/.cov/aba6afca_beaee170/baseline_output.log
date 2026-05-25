@@ -61,13 +61,13 @@
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_OperationsOnNonExistentList: pass (8ms)
 [Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_ReadingList_ListAll: pass (9ms)
-[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/baseline.json
+[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/aba6afca_beaee170/baseline.json
 
 ==================================================
 Baseline Complete!
 Tests: 31 passed, 0 failed, 31 total
 Test Duration: 567ms
 Baseline Duration: 599ms
-Output: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/baseline.json
-Coverage: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage
+Output: /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/aba6afca_beaee170/baseline.json
+Coverage: /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/aba6afca_beaee170/coverage
 ==================================================

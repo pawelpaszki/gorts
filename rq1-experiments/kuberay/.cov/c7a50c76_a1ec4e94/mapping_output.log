@@ -49,7 +49,7 @@
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler/TestRayClusterAutoscalerMinReplicasUpdate covers 27 files
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler/TestRayClusterAutoscalerMaxReplicasUpdate covers 27 files
 [Info] Computed checksums for 466 functions
-[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/c7a50c76_a1ec4e94/mapping.json
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/c7a50c76_a1ec4e94/mapping.json
 ==================================================
 Mapping Complete!
   Tests processed: 50
@@ -57,5 +57,5 @@ Mapping Complete!
   Total files:     31
   Avg files/test:  27.0
   Avg tests/file:  43.6
-  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/c7a50c76_a1ec4e94/mapping.json
+  Output:          /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/c7a50c76_a1ec4e94/mapping.json
 ==================================================

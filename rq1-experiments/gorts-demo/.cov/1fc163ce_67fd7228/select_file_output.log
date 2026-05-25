@@ -1,4 +1,4 @@
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/select_file.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/select_file.json
 ==================================================
 Selection Complete!
   From commit:    1fc163ced9d7
@@ -6,5 +6,5 @@ Selection Complete!
   Changed files:  2
   Test files:     1 (in scope, all tests in affected packages selected)
   Selected tests: 12/12 (0.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/select_file.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/select_file.json
 ==================================================

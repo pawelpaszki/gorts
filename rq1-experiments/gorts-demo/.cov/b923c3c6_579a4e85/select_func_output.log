@@ -1,5 +1,5 @@
 [Info] Function-level analysis: 1 changed functions detected
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_func.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_func.json
 ==================================================
 Selection Complete!
   From commit:    b923c3c60a2e
@@ -8,5 +8,5 @@ Selection Complete!
   [Warn] Out-of-scope test files: 1 (not in baseline, ignored by RTS)
          - internal/model/book_test.go
   Selected tests: 9/31 (71.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_func.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/b923c3c6_579a4e85/select_func.json
 ==================================================

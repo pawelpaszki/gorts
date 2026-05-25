@@ -49,7 +49,7 @@
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice/TestRayServiceValidation covers 20 files
 [Info] ../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice/TestRayServiceManagedBy covers 28 files
 [Info] Computed checksums for 466 functions
-[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/635a7420_ea545e07/mapping.json
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/635a7420_ea545e07/mapping.json
 ==================================================
 Mapping Complete!
   Tests processed: 50
@@ -57,5 +57,5 @@ Mapping Complete!
   Total files:     31
   Avg files/test:  27.0
   Avg tests/file:  43.6
-  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/635a7420_ea545e07/mapping.json
+  Output:          /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/635a7420_ea545e07/mapping.json
 ==================================================

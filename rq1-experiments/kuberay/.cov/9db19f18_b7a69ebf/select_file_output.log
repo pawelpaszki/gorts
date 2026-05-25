@@ -1,4 +1,4 @@
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/9db19f18_b7a69ebf/select_file.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/9db19f18_b7a69ebf/select_file.json
 ==================================================
 Selection Complete!
   From commit:    9db19f180e19
@@ -8,5 +8,5 @@ Selection Complete!
   [Warn] 1 package(s) with no coverage data (tests were likely skipped during baseline):
          - test/e2eincrementalupgrade
   Selected tests: 0/50 (100.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/9db19f18_b7a69ebf/select_file.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/9db19f18_b7a69ebf/select_file.json
 ==================================================

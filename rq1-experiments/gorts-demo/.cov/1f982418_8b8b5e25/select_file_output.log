@@ -1,9 +1,9 @@
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1f982418_8b8b5e25/select_file.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1f982418_8b8b5e25/select_file.json
 ==================================================
 Selection Complete!
   From commit:    1f982418f2d2
   To commit:      8b8b5e253eff
   Changed files:  1
   Selected tests: 25/25 (0.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1f982418_8b8b5e25/select_file.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1f982418_8b8b5e25/select_file.json
 ==================================================

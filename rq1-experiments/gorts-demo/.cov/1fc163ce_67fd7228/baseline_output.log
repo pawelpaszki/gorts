@@ -23,13 +23,13 @@
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint: pass (10ms)
 [Info] Running: /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint: pass (12ms)
-[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/baseline.json
+[Info] Saved baseline to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/baseline.json
 
 ==================================================
 Baseline Complete!
 Tests: 12 passed, 0 failed, 12 total
 Test Duration: 717ms
 Baseline Duration: 741ms
-Output: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/baseline.json
-Coverage: /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/coverage
+Output: /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/baseline.json
+Coverage: /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/coverage
 ==================================================

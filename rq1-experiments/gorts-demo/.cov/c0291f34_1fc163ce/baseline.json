@@ -15,7 +15,7 @@
           "duration_ms": 626,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateAndGetBook"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateAndGetBook"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -24,7 +24,7 @@
           "duration_ms": 9,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_GetBook_NotFound"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_GetBook_NotFound"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -33,7 +33,7 @@
           "duration_ms": 10,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_InvalidData"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_InvalidData"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -42,7 +42,7 @@
           "duration_ms": 9,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_InvalidJSON"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_InvalidJSON"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -51,7 +51,7 @@
           "duration_ms": 9,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_DuplicateISBN"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_CreateBook_DuplicateISBN"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -60,7 +60,7 @@
           "duration_ms": 8,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_RootEndpoint"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_RootEndpoint"
         },
         {
           "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
@@ -69,7 +69,7 @@
           "duration_ms": 7,
           "retries": 0,
           "flaky": false,
-          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_HealthEndpoint"
+          "coverage_path": "/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/c0291f34_1fc163ce/coverage/test_e2e/TestE2E_HealthEndpoint"
         }
       ],
       "summary": {

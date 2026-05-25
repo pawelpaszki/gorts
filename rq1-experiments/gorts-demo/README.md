@@ -1,29 +1,32 @@
-### gorts-demo
-first commit: `c0291f34a918dd57f9d58dc216a2858a1881676a`
-last commit: `579a4e856c9aa4752637ffad15b4b7a296927f22`
+# gorts-demo experiments
 
-## commits
+RQ1 evaluation artefacts for [gorts-demo](https://github.com/pawelpaszki/gorts-demo): adjacent commit pairs run through the full GoRTS pipeline (`tests` -> `baseline` -> `mapping` -> `select`).
 
-c0291f34a918dd57f9d58dc216a2858a1881676a
-1fc163ced9d709b56245c5f97e6c2a3405e421df
-67fd722898c0be3769005ab8d7506f9f912bbb40
-1f982418f2d2f8b6489ec3bb00d9be116e5b8208
-8b8b5e253effddd79f8f244bb748fd0802be2994
-9c9aa6a819a2765a51c1ab648970211413785e25
-de2bd093dab85eb6bfda3dbcd10f8545dd70f41a
-c6c460a2911f3c1192c49d4ee279a37dafe06436
-7575ecf5f0b2cc9b536e3a7eb3e73844d864f1f9
-569f4bb183b9e08d8c217a11d8931a59cfa76464
-daf334ac114f3bfe8ee98a10e871e868986ecfd7
-1e1246d38f7205b35d9277c15cf85e60ef068107
-aba6afcacdf09d62cddcf04eda8bd9debcb13939
-beaee1709c419ddfe1215474ca4681f1ee52e779
-3794ec2bd500490c263c4194e77240de406c0485
-dc764e515e6a4dde6acb5c3c356d365b47087de4
-49b5912f3ef136134d0067810cc33bc7602ae794
-9cee31e6f72cb9442df39f80a14d4271fcb0677f
-c01eb940724741d581deceb12fd408348c5cabd4
-389b536a16ca59b5b8c3df3a52b40d61fa7e26ff
-854c42058f0a84e1cf0502c42c397b4d8d5707a1
-b923c3c60a2e1c3ee1dd396f0be9f4174d62a57f
-579a4e856c9aa4752637ffad15b4b7a296927f22
+**Baseline mode:** instrumented test binary (`--test-binary`), module `github.com/pawelpaszki/gorts-demo`.
+
+## Contents
+
+| Path | Description |
+|------|-------------|
+| `.cov/<old8>_<new8>/` | One folder per commit pair (baseline commit -> next commit) |
+| `run_all_pairs.sh` | Regenerates all pair artefacts (override paths via env vars below) |
+
+## Per-pair artefacts (`.cov/<pair>/`)
+
+- `tests.json`, `baseline.json`, `mapping.json`
+- `select_file.json`, `select_func.json` — file- vs function-level selection
+- `coverage/` — raw per-test Go coverage data
+- `*_output.log`, `commands.md` — run logs and command templates
+
+## Commit range
+
+24 commits, 22 adjacent pairs — from `c0291f34` through `579a4e85`.
+
+## Regenerating
+
+```bash
+export GORTS_ROOT=/path/to/gorts
+export DEMO=/path/to/gorts-demo
+export COV_ROOT=/path/to/gorts/rq1-experiments/gorts-demo/.cov
+./run_all_pairs.sh
+```

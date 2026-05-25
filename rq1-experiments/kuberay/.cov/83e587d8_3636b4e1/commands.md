@@ -12,15 +12,15 @@ go build -o gorts # build the binary
 
 ## tests command
 ```
-./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json
+./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json
 ```
 
 ## baseline command
 ```
 ./gorts baseline \
-  --manifest ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json \
-  --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
-  --coverage-dir ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/coverage \
+  --manifest ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json \
+  --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
+  --coverage-dir ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/coverage \
   --retry 1 \
   --skip TestZeroDowntimeUpgradeAfterOperatorUpgrade --skip TestRayServiceIncrementalUpgradeRollback \
   --skip TestRayServiceIncrementalUpgrade --skip TestRayServiceIncrementalUpgradeWithLocust \
@@ -34,10 +34,10 @@ go build -o gorts # build the binary
 ## mapping command
 ```
 ./gorts mapping \
-  --baseline ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
+  --baseline ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
   --module "github.com/ray-project/kuberay/ray-operator" \
   --repo ~/rhoai/upstream/kuberay/ray-operator \
-  --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json
+  --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json
 ```
 
 ## select command (previous commit +1)
@@ -52,27 +52,27 @@ to be executed from gorts root
 ### file level
 ```
 ./gorts select \
-  --baseline ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
-  --mapping ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json \
+  --baseline ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
+  --mapping ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json \
   --repo ~/rhoai/upstream/kuberay/ray-operator \
   --strip-prefix ray-operator/ \
   --granularity file \
-  --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/select_file.json
+  --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/select_file.json
 ```
 
 ### func level
 ```
 ./gorts select \
-  --baseline ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
-  --mapping ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json \
+  --baseline ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/baseline.json \
+  --mapping ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/mapping.json \
   --repo ~/rhoai/upstream/kuberay/ray-operator \
   --strip-prefix ray-operator/ \
   --granularity function \
-  --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/select_func.json
+  --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/select_func.json
 ```
 
 
 
 ##############
 
-./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/rq2-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json
+./gorts tests --directories ../../rhoai/upstream/kuberay/ray-operator/test/e2e,../../rhoai/upstream/kuberay/ray-operator/test/e2eautoscaler,../../rhoai/upstream/kuberay/ray-operator/test/e2eincrementalupgrade,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjob,../../rhoai/upstream/kuberay/ray-operator/test/e2erayjobsubmitter,../../rhoai/upstream/kuberay/ray-operator/test/e2erayservice,../../rhoai/upstream/kuberay/ray-operator/test/e2eupgrade,../../rhoai/upstream/kuberay/ray-operator/test/sampleyaml --output ~/masters/gorts/rq1-experiments/kuberay/.cov/83e587d8_3636b4e1/tests.json

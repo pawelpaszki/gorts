@@ -1,4 +1,4 @@
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
 ==================================================
 Selection Complete!
   From commit:    646ef143df5d
@@ -8,5 +8,5 @@ Selection Complete!
          - historyserver/test/e2e/historyserver_azureblob_test.go
          - historyserver/test/e2e/historyserver_test.go
   Selected tests: 0/50 (100.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/646ef143_9db19f18/select_file.json
 ==================================================

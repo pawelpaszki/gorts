@@ -11,7 +11,7 @@
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_RootEndpoint covers 6 files
 [Info] /Users/pawelpaszki/masters/gorts-demo/test/e2e/TestE2E_HealthEndpoint covers 6 files
 [Info] Computed checksums for 53 functions
-[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/mapping.json
+[Info] Saved mapping to /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/mapping.json
 ==================================================
 Mapping Complete!
   Tests processed: 12
@@ -19,5 +19,5 @@ Mapping Complete!
   Total files:     7
   Avg files/test:  6.6
   Avg tests/file:  11.3
-  Output:          /Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov/1fc163ce_67fd7228/mapping.json
+  Output:          /Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov/1fc163ce_67fd7228/mapping.json
 ==================================================

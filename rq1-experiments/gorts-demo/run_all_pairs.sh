@@ -6,7 +6,7 @@ set -euo pipefail
 
 GORTS_ROOT="${GORTS_ROOT:-/Users/pawelpaszki/masters/gorts}"
 DEMO="${DEMO:-/Users/pawelpaszki/masters/gorts-demo}"
-COV_ROOT="${COV_ROOT:-/Users/pawelpaszki/masters/gorts/rq2-experiments/gorts-demo/.cov}"
+COV_ROOT="${COV_ROOT:-/Users/pawelpaszki/masters/gorts/rq1-experiments/gorts-demo/.cov}"
 GORTS_BIN="$GORTS_ROOT/gorts"
 TEST_BIN="$DEMO/gorts-demo-e2e.test"
 MODULE="github.com/pawelpaszki/gorts-demo"

@@ -1,10 +1,10 @@
 [Info] No source files changed (only non-code files modified)
-[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/b80c782c_9488c555/select_func.json
+[Info] Saved selection to /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/b80c782c_9488c555/select_func.json
 ==================================================
 Selection Complete!
   From commit:    b80c782c8e89
   To commit:      9488c555bc2b
   Changed files:  0
   Selected tests: 0/50 (100.0% reduction)
-  Output:         /Users/pawelpaszki/masters/gorts/rq2-experiments/kuberay/.cov/b80c782c_9488c555/select_func.json
+  Output:         /Users/pawelpaszki/masters/gorts/rq1-experiments/kuberay/.cov/b80c782c_9488c555/select_func.json
 ==================================================
