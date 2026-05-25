@@ -250,6 +250,13 @@ func TestSelectCmd_NoChanges(t *testing.T) {
 }
 
 func TestSelectCmd_RunAllTrigger(t *testing.T) {
+	t.Cleanup(func() {
+		t.Log("restoring repository state")
+		if err := gitResetHard(testRepoPath, currentCommit); err != nil {
+			t.Errorf("failed to reset to current commit: %v", err)
+		}
+	})
+
 	t.Log("using pre-generated baseline and mapping from TestMain")
 	t.Logf("baseline: %s", baselineFile)
 	t.Logf("mapping: %s", mappingFile)
@@ -278,14 +285,6 @@ func TestSelectCmd_RunAllTrigger(t *testing.T) {
 	if err := gitCommit(testRepoPath, "trigger run-all test"); err != nil {
 		t.Fatalf("failed to commit go.mod change: %v", err)
 	}
-
-	defer func() {
-		t.Log("restoring repository state")
-		if err := gitResetHard(testRepoPath, currentCommit); err != nil {
-			t.Errorf("failed to reset to current commit: %v", err)
-		}
-		t.Log("restored to current commit")
-	}()
 
 	outputFile := filepath.Join(outputDir(t), "selection_run_all.json")
 
