@@ -48,6 +48,11 @@ func TestMain(m *testing.M) {
 		os.RemoveAll(tempDir)
 		os.Exit(1)
 	}
+	if err := configureGitIdentity(testRepoPath); err != nil {
+		fmt.Fprintf(os.Stderr, "failed to configure git identity: %v\n", err)
+		os.RemoveAll(tempDir)
+		os.Exit(1)
+	}
 	if err := gitCheckout(testRepoPath, baselineCommit); err != nil {
 		fmt.Fprintf(os.Stderr, "failed to checkout baseline commit %s: %v\n", baselineCommit, err)
 		os.RemoveAll(tempDir)
@@ -86,6 +91,25 @@ func TestMain(m *testing.M) {
 // gitClone clones desired directory into the specified location
 func gitClone(url, dest string) error {
 	cmd := exec.Command("git", "clone", url, dest)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("%v: %s", err, output)
+	}
+	return nil
+}
+
+// configureGitIdentity sets a local git author for tests that create commits.
+// CI runners often have no global user.name/user.email configured.
+func configureGitIdentity(repoPath string) error {
+	if err := gitConfigLocal(repoPath, "user.email", "gorts-test@example.com"); err != nil {
+		return err
+	}
+	return gitConfigLocal(repoPath, "user.name", "GoRTS Test")
+}
+
+func gitConfigLocal(repoPath, key, value string) error {
+	cmd := exec.Command("git", "config", key, value)
+	cmd.Dir = repoPath
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return fmt.Errorf("%v: %s", err, output)
