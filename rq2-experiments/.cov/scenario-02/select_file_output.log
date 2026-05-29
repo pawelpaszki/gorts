@@ -1,0 +1,9 @@
+[Info] Saved selection to rq2-experiments/.cov/scenario-02/select_file.json
+==================================================
+Selection Complete!
+  From commit:    579a4e856c9a
+  To commit:      79cfad9145c3
+  Changed files:  1
+  Selected tests: 5/31 (83.9% reduction)
+  Output:         rq2-experiments/.cov/scenario-02/select_file.json
+==================================================

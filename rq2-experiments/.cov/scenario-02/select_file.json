@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-05-27T16:43:58.820852Z",
+  "from_commit": "579a4e856c9aa4752637ffad15b4b7a296927f22",
+  "to_commit": "79cfad9145c3280d95c4db4eda03b49bbd79e30f",
+  "changed_files": [
+    "internal/model/author.go"
+  ],
+  "selected_tests": [
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Author_FilterByCountry"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Author_InvalidData"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Author_CreateAndGet"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Author_CRUD_FullLifecycle"
+    },
+    {
+      "directory": "/Users/pawelpaszki/masters/gorts-demo/test/e2e",
+      "test_name": "TestE2E_Author_ListAll"
+    }
+  ],
+  "stats": {
+    "total_tests": 31,
+    "selected_tests": 5,
+    "changed_files": 1,
+    "changed_test_files": 0,
+    "out_of_scope_test_files": 0,
+    "new_tests": 0,
+    "reduction_percent": 83.87096774193549
+  }
+}

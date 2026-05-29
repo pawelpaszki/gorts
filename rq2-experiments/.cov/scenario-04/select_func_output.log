@@ -1,0 +1,11 @@
+[Info] Function-level analysis: 0 changed functions detected
+[Info] Saved selection to rq2-experiments/.cov/scenario-04/select_func.json
+==================================================
+Selection Complete!
+  From commit:    579a4e856c9a
+  To commit:      066b7e6e394a
+  Changed files:  1
+  Test files:     1 (in scope, all tests in affected packages selected)
+  Selected tests: 31/31 (0.0% reduction)
+  Output:         rq2-experiments/.cov/scenario-04/select_func.json
+==================================================
